@@ -1,13 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <meta charset="UTF-8">
+        <title>{% block title %}Calendar{% endblock %}</title>
+        {% block stylesheets %}
+            <link rel="stylesheet" type="text/css" href="{{ asset("assets/css/calendar.css") }}">
+        {% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset("favicon.ico") }}">
     </head>
     <body>
         {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+
+        {% block javascripts %}
+            <script type="text/javascript" src="{{ asset("assets/js/vendor.js") }}"></script>
+            <script type="text/javascript" src="{{ asset("assets/js/calendar.js") }}"></script>
+        {% endblock %}
     </body>
 </html>

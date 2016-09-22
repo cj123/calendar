@@ -1,0 +1,45 @@
+version: "2"
+
+services:
+  web:
+    image: seeruk/docker-nginx:latest
+    environment:
+      NGINX_TEMPLATE: default-php-symfony2
+      PHP_INDEX: app_dev.php
+    ports:
+    - 80:8080
+    - 443:4430
+    volumes:
+    - .:/opt/www
+    links:
+    - php:php.docker
+
+  php:
+    image: seeruk/php-fpm:7.0-dev
+    environment:
+      PHP_UID: 501
+      PHP_GID: 20
+    volumes:
+    - .:/opt/www
+    links:
+    - db:db.docker
+
+  db:
+    image: mysql:latest
+    volumes:
+    - dbdata:/var/lib/mysql
+    environment:
+    - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    - MYSQL_DATABASE=auth
+
+  node:
+    image: node:4.5
+    volumes:
+    - .:/app
+    working_dir: /app
+    command: 'npm install && node_modules/.bin/gulp watch'
+    entrypoint: /bin/sh -c
+
+volumes:
+  dbdata:
+    driver: local
