@@ -1,0 +1,108 @@
+Calendar [v2.0]
+Appt [
+    Start [540]
+    Length [30]
+    Uid [vbox_7f0101_52ac_0]
+    Owner [callum]
+    Contents [Callum says hi]
+    Remind [1]
+    Hilite [always]
+    Dates [Single 20/9/2016 End]
+]
+Appt [
+Start [660]
+Length [30]
+Uid [vbox_7f0101_52ac_1]
+Owner [callum]
+Contents []
+Remind [1]
+Hilite [always]
+Dates [Single 20/9/2016 End
+]
+]
+Appt [
+Start [510]
+Length [30]
+Uid [vbox_7f0101_cc2_2]
+Owner [callum]
+Contents [test event 3
+]
+Remind [1]
+Hilite [always]
+Dates [Single 30/9/2016 End
+]
+]
+Appt [
+Start [870]
+Length [30]
+Uid [vbox_7f0101_cc2_3]
+Owner [callum]
+Contents [this is some other event
+]
+Remind [1]
+Hilite [always]
+Dates [Single 30/9/2016 End
+]
+]
+Appt [
+Start [990]
+Length [30]
+Uid [vbox_7f0101_cc2_4]
+Owner [callum]
+Contents [how does it cope with stuff?]
+Remind [1]
+Hilite [always]
+Dates [Single 30/9/2016 End
+]
+]
+Appt [
+Start [630]
+Length [240]
+Uid [vbox_7f0101_cc2_5]
+Owner [callum]
+Contents [busy morning yo]
+Remind [1]
+Hilite [always]
+Dates [Single 30/9/2016 End
+]
+]
+Note [
+Uid [vbox_7f0101_cc2_6]
+Owner [callum]
+Contents [Are these notes? what is this for?
+
+
+]
+Remind [1]
+Hilite [always]
+Dates [Single 30/9/2016 End
+]
+]
+Note [
+Uid [vbox_7f0101_cc2_7]
+Owner [callum]
+Contents [Ah, looks like they could be all day events
+]
+Remind [1]
+Hilite [always]
+Dates [Single 30/9/2016 End
+]
+]
+Note [
+Uid [vbox_7f0101_cc2_8]
+Owner [callum]
+Contents []
+Remind [1]
+Hilite [always]
+Dates [Single 30/9/2016 End
+]
+]
+Note [
+Uid [vbox_7f0101_cc2_9]
+Owner [callum]
+Contents []
+Remind [1]
+Hilite [always]
+Dates [Single 30/9/2016 End
+]
+]
