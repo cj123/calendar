@@ -30,15 +30,17 @@ services:
     - dbdata:/var/lib/mysql
     environment:
     - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-    - MYSQL_DATABASE=auth
+    - MYSQL_DATABASE=calendar
 
   node:
     image: node:4.5
     volumes:
     - .:/app
+    # keep these off the machine, eases permissions.
+    - /app/.npm
+    - /app/node_modules
     working_dir: /app
-    command: 'npm install && node_modules/.bin/gulp watch'
-    entrypoint: /bin/sh -c
+    command: bash -c "npm install && node_modules/.bin/gulp watch"
 
 volumes:
   dbdata:

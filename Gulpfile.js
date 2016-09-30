@@ -25,6 +25,13 @@ var paths = {
     build: {
         css: "web/assets/css/",
         js: "web/assets/js/"
+    },
+    watch: {
+        sass:  "./assets/sass/**/*.scss",
+        js: {
+            app: "./assets/js/**/*.js",
+            vendor: "./node_modules/**/*.js"
+        }
     }
 };
 
@@ -47,7 +54,7 @@ gulp.task("compile-sass", function() {
 });
 
 gulp.task("watch-sass", function() {
-    return gulp.watch("./assets/sass/**/*.scss", function() {
+    return gulp.watch(paths.watch.sass, function() {
         gulp.start("compile-sass");
     });
 });
@@ -86,7 +93,7 @@ gulp.task("js", function() {
 });
 
 gulp.task("watch-js", function() {
-    return gulp.watch(paths.src.js.app, function() {
+    return gulp.watch(paths.watch.js.app, function() {
         gulp.start("js");
     });
 });
