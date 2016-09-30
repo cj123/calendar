@@ -169,6 +169,9 @@ class ICalLexer implements LexerInterface
             return "";
         }
 
+        // identifiers cannot be whitespace, so we can safely skip it.
+        $this->skipWhitespace();
+
         if (!$this->isLetter($this->buf[$this->index])) {
             throw new LexerException("illegal character, was expecting ID");
         }
