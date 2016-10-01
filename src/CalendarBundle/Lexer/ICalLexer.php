@@ -15,7 +15,7 @@ namespace CalendarBundle\Lexer;
  */
 class ICalLexer implements LexerInterface
 {
-    const OPEN_STRING = "[";
+    const OPEN_STRING  = "[";
     const CLOSE_STRING = "]";
 
     /**
