@@ -348,4 +348,30 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($lexer->getString(), "");
     }
+
+    public function testGetNumber()
+    {
+        $data = "Start
+        [510]";
+
+        $lexer = new ICalLexer($data);
+        $lexer->getId(); // skip identifier
+        $lexer->skipWhitespace();
+        $lexer->skip("[");
+
+        $this->assertEquals($lexer->getNumber(), 510);
+    }
+
+    public function testGetNumberNoNumber()
+    {
+        $data = "Start
+        [tomorrow]";
+
+        $lexer = new ICalLexer($data);
+        $lexer->getId(); // skip identifier
+        $lexer->skipWhitespace();
+        $lexer->skip("[");
+
+        $this->assertEquals($lexer->getNumber(), 0);
+    }
 }

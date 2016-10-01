@@ -231,13 +231,13 @@ class ICalLexer implements LexerInterface
     }
 
     /**
-     * Read Number.
+     * Read a Number.
      *
      * @return int
      */
     public function getNumber(): int
     {
-        // @TODO
+        return (int) $this->getString();
     }
 
     /**

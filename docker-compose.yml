@@ -31,6 +31,8 @@ services:
     environment:
     - MYSQL_ALLOW_EMPTY_PASSWORD=yes
     - MYSQL_DATABASE=calendar
+    ports:
+    - 3306:3306
 
   node:
     image: node:4.5
