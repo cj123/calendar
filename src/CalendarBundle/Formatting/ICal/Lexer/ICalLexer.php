@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace CalendarBundle\Lexer;
+namespace CalendarBundle\Formatting\ICal\Lexer;
 
 /**
  * iCal-Tcl Lexer.
@@ -10,7 +10,7 @@ namespace CalendarBundle\Lexer;
  *
  * @source https://fossies.org/dox/ical-3.0.2/lexer_8h_source.html (accessed 30th September 2016)
  *
- * @package CalendarBundle\Lexer
+ * @package CalendarBundle\Formatting\ICal\Lexer
  * @author Callum Jones <cj@icj.me>
  */
 class ICalLexer implements LexerInterface

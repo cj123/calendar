@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace CalendarBundle\Lexer;
+namespace CalendarBundle\Formatting\ICal\Lexer;
 
 /**
  * Lexer Interface
@@ -11,7 +11,7 @@ namespace CalendarBundle\Lexer;
  * Copyright (c) 1993 by Sanjay Ghemawat
  *
  * @source https://fossies.org/dox/ical-3.0.2/lexer_8h_source.html (accessed 30th September 2016)
- * @package CalendarBundle\Lexer
+ * @package CalendarBundle\Formatting\ICal\Lexer
  *
  * @author Sanjay Ghemawat
  * @author Callum Jones <cj@icj.me>

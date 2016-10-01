@@ -1,14 +1,14 @@
 <?php
 
-namespace CalendarBundle\Tests\Lexer;
+namespace CalendarBundle\Tests\Formatting\ICal\Lexer;
 
-use CalendarBundle\Lexer\ICalLexer;
-use CalendarBundle\Lexer\LexerException;
-use CalendarBundle\Lexer\LexerInterface;
+use CalendarBundle\Formatting\ICal\Lexer\ICalLexer;
+use CalendarBundle\Formatting\ICal\Lexer\LexerException;
+use CalendarBundle\Formatting\ICal\Lexer\LexerInterface;
 
 /**
  * Class ICalLexerTest
- * @package CalendarBundle\Tests\Lexer
+ * @package CalendarBundle\Tests\Formatting\ICal\Lexer
  * @author Callum Jones <cj@icj.me>
  */
 class ICalLexerTest extends \PHPUnit_Framework_TestCase
