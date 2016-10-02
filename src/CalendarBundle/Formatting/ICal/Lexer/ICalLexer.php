@@ -115,24 +115,23 @@ class ICalLexer implements LexerInterface
     }
 
     /**
-     * Move position over expected text (character only)
+     * Move position over expected text
      *
-     * @param string $char
+     * @param string $skip
      *
      * @throws LexerException
      */
-    public function skip(string $char)
+    public function skip(string $skip)
     {
-        if (strlen($char) > 1) {
-            throw new LexerException("can only skip over characters");
-        }
+        $skipLen = strlen($skip);
+        $str = substr($this->buf, $this->index, $skipLen);
 
-        if (($this->index < $this->length) && ($this->buf[$this->index] === $char)) {
-            $this->index++;
+        if (($this->index < $this->length) && ($str === $skip)) {
+            $this->index += $skipLen;
             return;
         }
 
-        throw new LexerException("unexpected character: " . $char);
+        throw new LexerException("unexpected string: " . $skip . ", found " . $str . " at index " . $this->index);
     }
 
     /**
@@ -173,7 +172,7 @@ class ICalLexer implements LexerInterface
         $this->skipWhitespace();
 
         if (!$this->isLetter($this->buf[$this->index])) {
-            throw new LexerException("illegal character, was expecting ID");
+            throw new LexerException("illegal character, was expecting ID, got: " . $this->buf[$this->index]);
         }
 
         $begin = $this->index;
@@ -233,11 +232,11 @@ class ICalLexer implements LexerInterface
     /**
      * Read a Number.
      *
-     * @return int
+     * @return float
      */
-    public function getNumber(): int
+    public function getNumber(): float
     {
-        return (int) $this->getString();
+        return (float) $this->getString();
     }
 
     /**

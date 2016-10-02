@@ -23,6 +23,7 @@ class ItemParser implements ParserInterface
      */
     public function __construct()
     {
+        // create the item to be parsed into.
         $this->item = new Item();
     }
 
@@ -85,7 +86,9 @@ class ItemParser implements ParserInterface
 
             case "Dates":
 
-                print "DATES ARE STILL @TODO";
+                print "DATES ARE STILL @TODO"; // @TODO
+
+                $lexer->getUntil("]"); // @TODO may not need this.
 
                 break;
 

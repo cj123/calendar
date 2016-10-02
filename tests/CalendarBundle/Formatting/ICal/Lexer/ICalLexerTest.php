@@ -159,6 +159,35 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
         $lexer = new ICalLexer($data);
 
         try {
+            $lexer->skip("this");
+        } catch (LexerException $e) {
+            $this->fail("exception caught");
+        }
+    }
+
+    public function testSkipWordNotAtIndex()
+    {
+        $data = "-this is a test of skipping";
+
+        $lexer = new ICalLexer($data);
+
+        try {
+            $lexer->skip("this");
+        } catch (LexerException $e) {
+            return;
+        }
+
+        $this->fail("exception not caught");
+    }
+
+
+    public function testSkipWordNotFound()
+    {
+        $data = "this is a test of skipping";
+
+        $lexer = new ICalLexer($data);
+
+        try {
             $lexer->skip("word"); // should fail
         } catch (LexerException $e) {
             return;

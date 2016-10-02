@@ -23,6 +23,11 @@ class ItemReader
      */
     private $parser;
 
+    /**
+     * ItemReader constructor.
+     * @param LexerInterface $lexer
+     * @param ParserInterface $parser
+     */
     public function __construct(LexerInterface $lexer, ParserInterface $parser)
     {
         $this->lexer = $lexer;
@@ -45,7 +50,7 @@ class ItemReader
             }
 
             // end of input?
-            if ($char = "]") {
+            if ($char === "]") {
                 return;
             }
 
@@ -56,6 +61,12 @@ class ItemReader
 
             // read property
             $this->parser->parse($this->lexer, $keyword);
+
+            $this->lexer->skipWhitespace();
+            $this->lexer->skip("]");
+
+            // @TODO detect err here? item.C:78
+            // @TODO can maybe let it fall through.
         }
     }
 }

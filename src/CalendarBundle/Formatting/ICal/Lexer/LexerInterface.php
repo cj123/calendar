@@ -89,9 +89,9 @@ interface LexerInterface
     /**
      * Read Number.
      *
-     * @return int
+     * @return float
      */
-    public function getNumber(): int;
+    public function getNumber(): float;
 
     /**
      * Read a string. This is terminated at the first ']'. Backslashes can be used
