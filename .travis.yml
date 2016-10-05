@@ -25,6 +25,7 @@ script:
 
 before_deploy:
   - tar czf ./calendar-$TRAVIS_BUILD_NUMBER.tar.gz -C ./ ./app ./bin ./src ./vendor ./web ./var
+  - ssh-keyscan $DEPLOY_SERVER >> ~/.ssh/known_hosts
 
 deploy:
   provider: script
