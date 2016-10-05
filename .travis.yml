@@ -24,6 +24,7 @@ before_deploy:
   - tar czf ./calendar-$TRAVIS_BUILD_NUMBER.tar.gz -C ./ ./app ./bin ./src ./vendor ./web ./var
 
 deploy:
+  provider: script
   skip_cleanup: true
   script: bin/deploy ./calendar-$TRAVIS_BUILD_NUMBER.tar.gz $DEPLOY_USER $DEPLOY_SERVER $DEPLOY_PATH $TRAVIS_BUILD_NUMBER
   on:
