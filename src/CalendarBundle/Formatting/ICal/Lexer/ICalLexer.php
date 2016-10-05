@@ -15,9 +15,6 @@ namespace CalendarBundle\Formatting\ICal\Lexer;
  */
 class ICalLexer implements LexerInterface
 {
-    const OPEN_STRING  = "[";
-    const CLOSE_STRING = "]";
-
     /**
      * Entire File Contents
      *
@@ -328,5 +325,25 @@ class ICalLexer implements LexerInterface
     public function length(): int
     {
         return $this->length;
+    }
+
+    /**
+     * Skip the opening delimiter
+     *
+     * @throws LexerException
+     */
+    public function skipOpeningDelimiter()
+    {
+        $this->skip(static::OPEN_STRING);
+    }
+
+    /**
+     * Skip the closing delimiter
+     *
+     * @throws LexerException
+     */
+    public function skipClosingDelimiter()
+    {
+        $this->skip(static::CLOSE_STRING);
     }
 }

@@ -5,6 +5,7 @@ namespace CalendarBundle\Formatting\ICal\Parser;
 use CalendarBundle\Entity\Item;
 use CalendarBundle\Formatting\ICal\Lexer\LexerException;
 use CalendarBundle\Formatting\ICal\Lexer\LexerInterface;
+use CalendarBundle\Formatting\ICal\Reader\DateReader;
 
 /**
  * Class ItemParser
@@ -86,7 +87,12 @@ class ItemParser implements ParserInterface
 
             case "Dates":
 
-                print "DATES ARE STILL @TODO"; // @TODO
+                $dateReader = new DateReader($lexer);
+                $date = $dateReader->read();
+
+                if ($date instanceof \DateTime) {
+                    $this->item->setDate($date);
+                }
 
                 $lexer->getUntil("]"); // @TODO may not need this.
 
@@ -111,6 +117,10 @@ class ItemParser implements ParserInterface
             case "Done":
                 $this->item->setDone(true);
 
+                break;
+
+            default:
+                // @TODO default case?
                 break;
         }
     }

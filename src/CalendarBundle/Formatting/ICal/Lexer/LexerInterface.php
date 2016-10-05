@@ -22,6 +22,9 @@ interface LexerInterface
     const EOF = 1;
     const ERROR = 2;
 
+    const OPEN_STRING  = "[";
+    const CLOSE_STRING = "]";
+
     /**
      * Get the current status
      *
@@ -58,6 +61,20 @@ interface LexerInterface
      * @throws LexerException
      */
     public function skip(string $char);
+
+    /**
+     * Skip the opening delimiter
+     *
+     * @throws LexerException
+     */
+    public function skipOpeningDelimiter();
+
+    /**
+     * Skip the closing delimiter
+     *
+     * @throws LexerException
+     */
+    public function skipClosingDelimiter();
 
     /**
      * Skip all whitespace

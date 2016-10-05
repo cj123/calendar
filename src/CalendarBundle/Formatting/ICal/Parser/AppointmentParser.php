@@ -49,7 +49,7 @@ class AppointmentParser extends ItemParser
                     throw new ParserException("unable to read appointment start time");
                 }
 
-                $this->item->setStart(new \DateTime("@" . $start));
+                $this->item->setStart($start);
 
                 break;
 

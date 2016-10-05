@@ -22,9 +22,9 @@ class Appointment extends Item
     private $id;
 
     /**
-     * @var \DateTime
+     * @var int
      *
-     * @ORM\Column(name="start", type="datetime")
+     * @ORM\Column(name="start", type="integer")
      */
     private $start;
 
@@ -63,7 +63,7 @@ class Appointment extends Item
     /**
      * Set start
      *
-     * @param \DateTime $start
+     * @param int $start
      *
      * @return Appointment
      */
@@ -77,7 +77,7 @@ class Appointment extends Item
     /**
      * Get start
      *
-     * @return \DateTime
+     * @return int
      */
     public function getStart()
     {

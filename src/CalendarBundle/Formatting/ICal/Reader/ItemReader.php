@@ -50,20 +50,20 @@ class ItemReader
             }
 
             // end of input?
-            if ($char === "]") {
+            if ($char === LexerInterface::CLOSE_STRING) {
                 return;
             }
 
             // get property name
             $keyword = $this->lexer->getId();
             $this->lexer->skipWhitespace();
-            $this->lexer->skip("[");
+            $this->lexer->skipOpeningDelimiter();
 
             // read property
             $this->parser->parse($this->lexer, $keyword);
 
             $this->lexer->skipWhitespace();
-            $this->lexer->skip("]");
+            $this->lexer->skipClosingDelimiter();
 
             // @TODO detect err here? item.C:78
             // @TODO can maybe let it fall through.

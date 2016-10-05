@@ -58,7 +58,7 @@ class CalendarReader
 
         try {
             $this->lexer->skipWhitespace();
-            $this->lexer->skip("[");
+            $this->lexer->skipOpeningDelimiter();
             $this->lexer->skip("v");
 
             $version = $this->lexer->getNumber();
@@ -67,8 +67,8 @@ class CalendarReader
                 throw new LexerException(); // we only support v2.x
             }
 
-            $this->lexer->getUntil("]");
-            $this->lexer->skip("]");
+            $this->lexer->getUntil(LexerInterface::CLOSE_STRING);
+            $this->lexer->skipClosingDelimiter();
         } catch (LexerException $e) {
             throw new ReaderException("unsupported/invalid ical version");
         }
@@ -95,7 +95,7 @@ class CalendarReader
                 $keyword = $this->lexer->getId();
 
                 $this->lexer->skipWhitespace();
-                $this->lexer->skip("[");
+                $this->lexer->skipOpeningDelimiter();
             } catch (LexerException $e) {
                 throw new ReaderException("caught lexer exception: {$e->getMessage()}");
             }
@@ -106,12 +106,18 @@ class CalendarReader
                     $reader = new ItemReader($this->lexer, $parser);
                     $reader->read();
 
+                    $appointment = $parser->getAppointment();
+
+                    var_dump($appointment);
+
                     break;
+                default:
+                    throw new \Exception("unknown calendar item type: " . $keyword);
             }
 
             try {
                 $this->lexer->skipWhitespace();
-                $this->lexer->skip("]");
+                $this->lexer->skipClosingDelimiter();
             } catch (LexerException $e) {
                 throw new ReaderException("incomplete item");
             }
