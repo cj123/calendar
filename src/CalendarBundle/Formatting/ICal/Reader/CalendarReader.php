@@ -5,6 +5,7 @@ namespace CalendarBundle\Formatting\ICal\Reader;
 use CalendarBundle\Formatting\ICal\Lexer\LexerException;
 use CalendarBundle\Formatting\ICal\Lexer\LexerInterface;
 use CalendarBundle\Formatting\ICal\Parser\AppointmentParser;
+use CalendarBundle\Formatting\ICal\Parser\NoteParser;
 
 /**
  * Class CalendarReader
@@ -97,6 +98,11 @@ class CalendarReader
                 $this->lexer->skipWhitespace();
                 $this->lexer->skipOpeningDelimiter();
             } catch (LexerException $e) {
+                if ($this->lexer->status() === LexerInterface::EOF) {
+                    // end of file. stop reading.
+                    return;
+                }
+
                 throw new ReaderException("caught lexer exception: {$e->getMessage()}");
             }
 
@@ -111,6 +117,16 @@ class CalendarReader
                     var_dump($appointment);
 
                     break;
+                case "Note":
+                    $parser = new NoteParser();
+                    $reader = new ItemReader($this->lexer, $parser);
+                    $reader->read();
+
+                    $note = $parser->getNote();
+
+                    var_dump($note);
+
+                    break;
                 default:
                     throw new \Exception("unknown calendar item type: " . $keyword);
             }
@@ -121,6 +137,6 @@ class CalendarReader
             } catch (LexerException $e) {
                 throw new ReaderException("incomplete item");
             }
-        }
+        } // while (true)
     }
 }

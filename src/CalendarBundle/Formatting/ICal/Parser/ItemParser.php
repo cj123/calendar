@@ -90,6 +90,8 @@ class ItemParser implements ParserInterface
                 $dateReader = new DateReader($lexer);
                 $date = $dateReader->read();
 
+                var_dump($date);
+
                 if ($date instanceof \DateTime) {
                     $this->item->setDate($date);
                 }
