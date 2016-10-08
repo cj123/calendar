@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace CalendarBundle\Formatting\ICal\Reader;
 
@@ -7,7 +7,6 @@ use CalendarBundle\Formatting\ICal\Lexer\LexerException;
 use CalendarBundle\Formatting\ICal\Lexer\LexerInterface;
 use Recurr\Frequency;
 use Recurr\Rule;
-use Recurr\Transformer\TextTransformer;
 
 /**
  * Class DateReader
@@ -70,12 +69,11 @@ class DateReader
      * @return DateSet
      * @throws DateReaderException
      */
-    public function read()
+    public function read(): DateSet
     {
         $this->lexer->skipWhitespace();
         $dateType = $this->lexer->getId();
 
-        // generate a recurrence rule.
         $recurrenceRule = new Rule();
 
         switch ($dateType) {
@@ -92,6 +90,7 @@ class DateReader
                 $recurrenceRule->setFreq(Frequency::DAILY);
                 $recurrenceRule->setStartDate($anchor);
                 $recurrenceRule->setInterval($interval);
+
                 break;
 
             case "Months":
@@ -103,6 +102,7 @@ class DateReader
                 $recurrenceRule->setFreq(Frequency::MONTHLY);
                 $recurrenceRule->setStartDate($anchor);
                 $recurrenceRule->setInterval($interval);
+
                 break;
 
             case "ComplexMonths":
@@ -154,6 +154,7 @@ class DateReader
 
                 $recurrenceRule->setStartDate($anchor);
                 $recurrenceRule->setInterval($interval);
+
                 break;
 
             case "WeekDays":
@@ -234,10 +235,15 @@ class DateReader
     }
 
     /**
+     * Create a DateTime instance from string representation of that date.
+     *
+     * Set to midnight by default.
+     *
      * @param string $str
+     *
      * @return \DateTime
      */
-    private function createDateTimeFromString(string $str)
+    private function createDateTimeFromString(string $str): \DateTime
     {
         $date = \DateTime::createFromFormat(static::DATE_FORMAT, $str);
         $date->setTime(0, 0); // reset to midnight, times are handled elsewhere.

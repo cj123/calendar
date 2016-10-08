@@ -49,6 +49,14 @@ class Appointment extends Item
      */
     private $timezone;
 
+    /**
+     * @var Calendar
+     *
+     * @ORM\ManyToOne(targetEntity="Calendar", inversedBy="appointments")
+     * @ORM\JoinColumn(name="calendar_id", referencedColumnName="id")
+     */
+    private $calendar;
+
 
     /**
      * Get id
@@ -154,6 +162,25 @@ class Appointment extends Item
     public function getTimezone()
     {
         return $this->timezone;
+    }
+
+    /**
+     * @param Calendar $calendar
+     * @return Appointment
+     */
+    public function setCalendar($calendar)
+    {
+        $this->calendar = $calendar;
+
+        return $this;
+    }
+
+    /**
+     * @return Calendar
+     */
+    public function getCalendar()
+    {
+        return $this->calendar;
     }
 }
 

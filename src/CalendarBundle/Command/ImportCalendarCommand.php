@@ -45,6 +45,8 @@ class ImportCalendarCommand extends Command
         $contents = file_get_contents($filename);
 
         $calendarReader = new CalendarReader(new ICalLexer($contents));
-        $calendarReader->read();
+        $calendar = $calendarReader->read();
+
+        var_dump($calendar);
     }
 }

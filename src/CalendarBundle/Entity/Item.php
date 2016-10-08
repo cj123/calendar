@@ -2,13 +2,12 @@
 
 namespace CalendarBundle\Entity;
 
-use Doctrine\ORM\Mapping\MappedSuperclass;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Item
  *
- * @MappedSuperclass
+ * @ORM\MappedSuperclass
  */
 class Item
 {
@@ -55,9 +54,10 @@ class Item
     protected $remindStart;
 
     /**
-     * @var \DateTime
+     * @var DateSet
      *
-     * @ORM\Column(name="date", type="datetime")
+     * @ORM\ManyToOne(targetEntity="DateSet")
+     * @ORM\JoinColumn(name="date_set_id", referencedColumnName="id")
      */
     protected $date;
 
@@ -240,11 +240,11 @@ class Item
     /**
      * Set date
      *
-     * @param \DateTime $date
+     * @param DateSet $date
      *
      * @return Item
      */
-    public function setDate($date)
+    public function setDate(DateSet $date)
     {
         $this->date = $date;
 
@@ -254,7 +254,7 @@ class Item
     /**
      * Get date
      *
-     * @return \DateTime
+     * @return DateSet
      */
     public function getDate()
     {

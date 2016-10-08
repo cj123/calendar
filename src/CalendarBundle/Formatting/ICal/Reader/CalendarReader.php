@@ -1,11 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace CalendarBundle\Formatting\ICal\Reader;
 
+use CalendarBundle\Entity\Calendar;
 use CalendarBundle\Formatting\ICal\Lexer\LexerException;
 use CalendarBundle\Formatting\ICal\Lexer\LexerInterface;
 use CalendarBundle\Formatting\ICal\Parser\AppointmentParser;
 use CalendarBundle\Formatting\ICal\Parser\NoteParser;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Class CalendarReader
@@ -47,7 +49,7 @@ class CalendarReader
      *
      * @throws ReaderException
      */
-    private function checkCalendarVersion()
+    private function checkCalendarVersion(): float
     {
         // skip preamble
         try {
@@ -70,6 +72,8 @@ class CalendarReader
 
             $this->lexer->getUntil(LexerInterface::CLOSE_STRING);
             $this->lexer->skipClosingDelimiter();
+
+            return $version;
         } catch (LexerException $e) {
             throw new ReaderException("unsupported/invalid ical version");
         }
@@ -80,13 +84,17 @@ class CalendarReader
      *
      * @throws ReaderException
      */
-    public function read()
+    public function read(): Calendar
     {
         if ($this->lexer->status() === LexerInterface::ERROR) {
             throw new ReaderException("invalid calendar input");
         }
 
-        $this->checkCalendarVersion();
+        $calendar = new Calendar();
+        $calendar->setVersion($this->checkCalendarVersion());
+
+        $appointments = [];
+        $notes = [];
 
         while (true) {
             try {
@@ -100,7 +108,7 @@ class CalendarReader
             } catch (LexerException $e) {
                 if ($this->lexer->status() === LexerInterface::EOF) {
                     // end of file. stop reading.
-                    return;
+                    break;
                 }
 
                 throw new ReaderException("caught lexer exception: {$e->getMessage()}");
@@ -112,9 +120,7 @@ class CalendarReader
                     $reader = new ItemReader($this->lexer, $parser);
                     $reader->read();
 
-                    $appointment = $parser->getAppointment();
-
-                    var_dump($appointment);
+                    $appointments[] = $parser->getAppointment();
 
                     break;
                 case "Note":
@@ -122,9 +128,7 @@ class CalendarReader
                     $reader = new ItemReader($this->lexer, $parser);
                     $reader->read();
 
-                    $note = $parser->getNote();
-
-                    var_dump($note);
+                    $notes[] = $parser->getNote();
 
                     break;
                 default:
@@ -138,5 +142,11 @@ class CalendarReader
                 throw new ReaderException("incomplete item");
             }
         } // while (true)
+
+        $calendar->setImportedDate(new \DateTime());
+        $calendar->setAppointments(new ArrayCollection($appointments));
+        $calendar->setNotes(new ArrayCollection($notes));
+
+        return $calendar;
     }
 }

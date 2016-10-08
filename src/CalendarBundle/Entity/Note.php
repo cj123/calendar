@@ -22,6 +22,14 @@ class Note extends Item
     private $id;
 
     /**
+     * @var Calendar
+     *
+     * @ORM\ManyToOne(targetEntity="Calendar", inversedBy="notes")
+     * @ORM\JoinColumn(name="calendar_id", referencedColumnName="id")
+     */
+    private $calendar;
+
+    /**
      * Get ID
      *
      * @return int
@@ -43,5 +51,24 @@ class Note extends Item
         $this->id = $id;
 
         return $this;
+    }
+
+    /**
+     * @param Calendar $calendar
+     * @return Note
+     */
+    public function setCalendar($calendar)
+    {
+        $this->calendar = $calendar;
+
+        return $this;
+    }
+
+    /**
+     * @return Calendar
+     */
+    public function getCalendar()
+    {
+        return $this->calendar;
     }
 }
