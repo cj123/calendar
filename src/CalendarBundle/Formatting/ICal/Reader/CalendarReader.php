@@ -51,7 +51,7 @@ class CalendarReader
      *
      * @throws ReaderException
      */
-    private function checkCalendarVersion(): float
+    public function checkCalendarVersion(): float
     {
         // skip preamble
         try {
@@ -68,7 +68,7 @@ class CalendarReader
 
             $version = $this->lexer->getNumber();
 
-            if ($version < static::MIN_VERSION || $version > static::MAX_VERSION) {
+            if ($version < static::MIN_VERSION || $version >= static::MAX_VERSION) {
                 throw new LexerException(); // we only support v2.x
             }
 

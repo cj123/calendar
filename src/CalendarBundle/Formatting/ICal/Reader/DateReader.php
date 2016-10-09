@@ -104,7 +104,6 @@ class DateReader
                 break;
 
             case "ComplexMonths":
-                // month based date set
                 $this->lexer->skipWhitespace();
                 $interval = (int) $this->lexer->getUntil(" ");
 
@@ -165,15 +164,15 @@ class DateReader
                 $keyword = $this->lexer->getId();
 
                 if ($keyword !== "Months") {
-                    throw new DateReaderException("invalid weekdays identifier");
+                    throw new DateReaderException("invalid ${keyword} identifier");
                 }
 
                 $this->lexer->skipWhitespace();
                 $months = $this->readMonths();
 
-                if ($keyword === "WeekDays") {
+                if ($dateType === "WeekDays") {
                     $recurrenceRule->setFreq(Frequency::WEEKLY);
-                } elseif ($keyword ===  "MonthDays") {
+                } elseif ($dateType === "MonthDays") {
                     $recurrenceRule->setFreq(Frequency::MONTHLY);
                 }
 
@@ -207,6 +206,7 @@ class DateReader
             switch ($keyword) {
                 case "End":
                     return $dateSet;
+
                 case "Start":
                     $this->lexer->skipWhitespace();
                     $dateSet->setStart($this->lexer->getDate());
@@ -251,7 +251,7 @@ class DateReader
             $day = $this->lexer->getNumber();
 
             if ($day > 7 || $day < 1) {
-                break;
+                continue;
             }
 
             $days[] = self::$days[$day];
@@ -281,7 +281,7 @@ class DateReader
             $month = $this->lexer->getNumber();
 
             if ($month > 12 || $month < 1) {
-                break;
+                continue;
             }
 
             $months[] = $month;
