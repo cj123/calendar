@@ -75,6 +75,7 @@ class DateReader
             case "Single":
                 $this->lexer->skipWhitespace();
                 $date = $this->lexer->getDate();
+                $recurrenceRule = null; // never recur
                 $dateSet->setStart($date);
                 break;
 
@@ -186,7 +187,12 @@ class DateReader
         }
 
         // read the recurrence rule out to a string as it can be parsed back later
-        $dateSet->setRecurrenceRule($recurrenceRule->getString());
+        if ($recurrenceRule) {
+            $dateSet->setRecurrenceRule($recurrenceRule->getString());
+        } else {
+            $dateSet->setRecurrenceRule("");
+        }
+
 
         // read the rest of the definition
         while (true) {

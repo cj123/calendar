@@ -154,6 +154,8 @@ class CalendarReader
             if (!$note->getDate()->getStart() instanceof \DateTime) {
                 printf("note %s has no start date\n", $note->getText());
             }
+
+            $note->setCalendar($calendar);
         }
 
         foreach ($calendar->getAppointments()->toArray() as $appointment) {
@@ -161,6 +163,8 @@ class CalendarReader
             if (!$appointment->getDate()->getStart() instanceof \DateTime) {
                 printf("appointment %s has no start date\n", $appointment->getText());
             }
+
+            $appointment->setCalendar($calendar);
         }
 
         return $calendar;
