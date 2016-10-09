@@ -2,6 +2,7 @@
 
 namespace CalendarBundle\Formatting\ICal\Parser;
 
+use CalendarBundle\Entity\DateSet;
 use CalendarBundle\Entity\Item;
 use CalendarBundle\Formatting\ICal\Lexer\LexerException;
 use CalendarBundle\Formatting\ICal\Lexer\LexerInterface;
@@ -81,7 +82,7 @@ class ItemParser implements ParserInterface
                 break;
 
             case "Contents":
-                $this->item->setText($lexer->getString());
+                $this->item->setText(trim($lexer->getString())); // @TODO check on trim, but i think it's better.
 
                 break;
 
@@ -90,7 +91,7 @@ class ItemParser implements ParserInterface
                 $dateReader = new DateReader($lexer);
                 $date = $dateReader->read();
 
-                if ($date instanceof \DateTime) {
+                if ($date instanceof DateSet) {
                     $this->item->setDate($date);
                 }
 
@@ -117,10 +118,6 @@ class ItemParser implements ParserInterface
             case "Done":
                 $this->item->setDone(true);
 
-                break;
-
-            default:
-                // @TODO default case?
                 break;
         }
     }

@@ -39,14 +39,14 @@ class Calendar
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Appointment", mappedBy="calendar")
+     * @ORM\OneToMany(targetEntity="Appointment", mappedBy="calendar",cascade={"persist"})
      */
     private $appointments;
 
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Note", mappedBy="calendar")
+     * @ORM\OneToMany(targetEntity="Note", mappedBy="calendar",cascade={"persist"})
      */
     private $notes;
 

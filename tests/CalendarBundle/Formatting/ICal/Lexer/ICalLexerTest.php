@@ -17,7 +17,7 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
     {
         $lexer = new ICalLexer("some data");
 
-        $this->assertEquals($lexer->index(), 0);
+        $this->assertEquals(0, $lexer->index());
     }
 
     public function testLengthOnConstruct()
@@ -26,7 +26,7 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
 
         $lexer = new ICalLexer($data);
 
-        $this->assertEquals($lexer->length(), strlen($data));
+        $this->assertEquals(strlen($data), $lexer->length());
     }
 
     public function testPeek()
@@ -50,7 +50,7 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
         $lexer = new ICalLexer($data);
         $char = $lexer->peek();
 
-        $this->assertEquals($char, "");
+        $this->assertEquals("", $char);
     }
 
     public function testNext()
@@ -61,7 +61,7 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
 
         for ($i = 0; $i < strlen($data); $i++) {
             $char = $lexer->next();
-            $this->assertEquals($char, $data[$i]);
+            $this->assertEquals($data[$i], $char);
         }
     }
 
@@ -73,10 +73,10 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
 
         for ($i = 0; $i < strlen($data); $i++) {
             $char = $lexer->next();
-            $this->assertEquals($char, $data[$i]);
+            $this->assertEquals($data[$i], $char);
         }
 
-        $this->assertEquals($lexer->next(), "");
+        $this->assertEquals("", $lexer->next());
         $this->assertGreaterThanOrEqual($lexer->index(), $lexer->length());
     }
 
@@ -85,22 +85,22 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
         $data = "Hello World";
 
         $lexer = new ICalLexer($data);
-        $this->assertEquals($lexer->status(), ICalLexer::VALID);
+        $this->assertEquals(ICalLexer::VALID, $lexer->status());
 
         for ($i = 0; $i < strlen($data); $i++) {
             $lexer->next();
         }
 
-        $this->assertEquals($lexer->status(), ICalLexer::EOF);
+        $this->assertEquals(ICalLexer::EOF, $lexer->status());
 
         $lexer->next();
         $lexer->next();
 
-        $this->assertEquals($lexer->status(), ICalLexer::EOF);
+        $this->assertEquals(ICalLexer::EOF, $lexer->status());
 
         $lexer->reset(strlen($data) + 1);
 
-        $this->assertEquals($lexer->status(), ICalLexer::ERROR);
+        $this->assertEquals(ICalLexer::ERROR, $lexer->status());
     }
 
     public function testAdvance()
@@ -109,8 +109,8 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
 
         $lexer = new ICalLexer($data);
 
-        $this->assertEquals($lexer->advance(), $data[1]);
-        $this->assertEquals($lexer->index(), 1);
+        $this->assertEquals($data[1], $lexer->advance());
+        $this->assertEquals(1, $lexer->index());
     }
 
     public function testAdvanceCannotAdvance()
@@ -123,7 +123,7 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
             $lexer->next();
         }
 
-        $this->assertEquals($lexer->advance(), "");
+        $this->assertEquals("", $lexer->advance());
         $this->assertEquals($lexer->length(), $lexer->index());
     }
 
@@ -134,7 +134,7 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
         $lexer = new ICalLexer($data);
 
         $lexer->skip("t");
-        $this->assertEquals($lexer->next(), $data[1]);
+        $this->assertEquals($data[1], $lexer->next());
     }
 
     public function testSkipLetterNotFound()
@@ -220,7 +220,7 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
         // now skip whitespace
         $lexer->skipWhitespace();
 
-        $this->assertEquals($lexer->peek(), "5");
+        $this->assertEquals("5", $lexer->peek());
     }
 
     public function testGetUntil()
@@ -229,10 +229,10 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
 
         $lexer = new ICalLexer($data);
 
-        $this->assertEquals($lexer->getUntil("."), "This is a test sentence");
+        $this->assertEquals("This is a test sentence", $lexer->getUntil("."));
         $lexer->next(); // pop over the "."
 
-        $this->assertEquals($lexer->getUntil("."), " 0000000");
+        $this->assertEquals(" 0000000", $lexer->getUntil("."));
     }
 
     public function testGetUntilNoOccurrence()
@@ -240,7 +240,7 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
         $data = "This is a test sentence. 0000000. 1234. 123333999.";
         $lexer = new ICalLexer($data);
 
-        $this->assertEquals($lexer->getUntil(":"), $data);
+        $this->assertEquals($data, $lexer->getUntil(":"));
     }
 
     public function testGetUntilAtEndOfString()
@@ -250,7 +250,7 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
 
         $this->lexerToEnd($lexer);
 
-        $this->assertEquals($lexer->getUntil("."), "");
+        $this->assertEquals("", $lexer->getUntil("."));
     }
 
     /**
@@ -270,7 +270,7 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
         $data = "Owner [callum]";
 
         $lexer = new ICalLexer($data);
-        $this->assertEquals($lexer->getId(), "Owner");
+        $this->assertEquals("Owner", $lexer->getId());
     }
 
     public function testGetIdFirstCharNotLetter()
@@ -294,7 +294,7 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
 
         $this->lexerToEnd($lexer);
 
-        $this->assertEquals($lexer->getId(), "");
+        $this->assertEquals("", $lexer->getId());
     }
 
     public function testReset()
@@ -309,10 +309,10 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
         }
 
         $lexer->reset(2);
-        $this->assertEquals($lexer->index(), 2);
+        $this->assertEquals(2, $lexer->index());
 
         $lexer->reset(0);
-        $this->assertEquals($lexer->index(), 0);
+        $this->assertEquals(0, $lexer->index());
     }
 
     public function testPutString()
@@ -320,7 +320,7 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
         $str = "";
         $add = "This is my string adsd           2222222&&&&@^^^@^!";
 
-        $this->assertEquals(ICalLexer::putString($str, $add), $str . $add);
+        $this->assertEquals($str . $add, ICalLexer::putString($str, $add));
     }
 
     public function testPutStringWithEscape()
@@ -329,7 +329,7 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
         $add = "This is my string adsd           222222[2&&&&@^^^@^!\\";
         $expected = "test: This is my string adsd           222222\\[2&&&&@^^^@^!\\\\";
 
-        $this->assertEquals(ICalLexer::putString($str, $add), $expected);
+        $this->assertEquals($expected, ICalLexer::putString($str, $add));
     }
 
     public function testGetString()
@@ -341,7 +341,7 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
         $lexer->skipWhitespace();
         $lexer->skip("[");
 
-        $this->assertEquals($lexer->getString(), "callum");
+        $this->assertEquals("callum", $lexer->getString());
     }
 
     public function testGetStringEscaped()
@@ -353,7 +353,7 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
         $lexer->skipWhitespace();
         $lexer->skip("[");
 
-        $this->assertEquals($lexer->getString(), "callum");
+        $this->assertEquals("callum", $lexer->getString());
     }
 
     public function testGetStringEscapedAtEnd()
@@ -365,7 +365,7 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
         $lexer->skipWhitespace();
         $lexer->skip("[");
 
-        $this->assertEquals($lexer->getString(), "");
+        $this->assertEquals("", $lexer->getString());
     }
 
     public function testGetStringAtEndOfBuffer()
@@ -375,7 +375,7 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
         $lexer = new ICalLexer($data);
         $this->lexerToEnd($lexer);
 
-        $this->assertEquals($lexer->getString(), "");
+        $this->assertEquals("", $lexer->getString());
     }
 
     public function testGetNumber()
@@ -388,7 +388,7 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
         $lexer->skipWhitespace();
         $lexer->skip("[");
 
-        $this->assertEquals($lexer->getNumber(), 510);
+        $this->assertEquals(510, $lexer->getNumber());
     }
 
     public function testGetNumberNoNumber()
@@ -401,6 +401,6 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
         $lexer->skipWhitespace();
         $lexer->skip("[");
 
-        $this->assertEquals($lexer->getNumber(), 0);
+        $this->assertEquals(0, $lexer->getNumber());
     }
 }

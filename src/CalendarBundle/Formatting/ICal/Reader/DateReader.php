@@ -16,12 +16,6 @@ use Recurr\Rule;
 class DateReader
 {
     /**
-     * Given Date format.
-     * @var string
-     */
-    const DATE_FORMAT = "j/n/Y";
-
-    /**
      * @var LexerInterface
      */
     private $lexer;
@@ -75,15 +69,18 @@ class DateReader
         $dateType = $this->lexer->getId();
 
         $recurrenceRule = new Rule();
+        $dateSet = new DateSet();
 
         switch ($dateType) {
             case "Single":
-                // single occurrence. no rule required.
+                $this->lexer->skipWhitespace();
+                $date = $this->lexer->getDate();
+                $dateSet->setStart($date);
                 break;
 
             case "Days":
                 $this->lexer->skipWhitespace();
-                $anchor = $this->createDateTimeFromString($this->lexer->getUntil(" "));
+                $anchor = $this->lexer->getDate();
                 $this->lexer->skipWhitespace();
                 $interval = $this->lexer->getNumber();
 
@@ -95,7 +92,7 @@ class DateReader
 
             case "Months":
                 $this->lexer->skipWhitespace();
-                $anchor = $this->createDateTimeFromString($this->lexer->getUntil(" "));
+                $anchor = $this->lexer->getDate();
                 $this->lexer->skipWhitespace();
                 $interval = $this->lexer->getNumber();
 
@@ -114,7 +111,7 @@ class DateReader
                 $count = (int) $this->lexer->getUntil(" ");
 
                 $this->lexer->skipWhitespace();
-                $anchor = $this->createDateTimeFromString($this->lexer->getUntil(" "));
+                $anchor = $this->lexer->getDate();
 
                 $this->lexer->skipWhitespace();
                 $direction = $this->lexer->getId();
@@ -141,6 +138,7 @@ class DateReader
                     $recurrenceRule->setBySetPosition([ $sign * $count ]);
                 } elseif ($repetition === "ByWeek") {
                     // set based on a day of the week, e.g. 3rd last tuesday.
+                    $this->lexer->skipWhitespace();
                     $weekDay = (int) $this->lexer->getNumber();
 
                     if ($weekDay > 7 || $weekDay < 1) {
@@ -187,15 +185,13 @@ class DateReader
                 throw new DateReaderException("invalid date type: " . $dateType);
         }
 
-        $dateSet = new DateSet();
-
         // read the recurrence rule out to a string as it can be parsed back later
         $dateSet->setRecurrenceRule($recurrenceRule->getString());
 
         // read the rest of the definition
         while (true) {
-            $this->lexer->skipWhitespace();
             try {
+                $this->lexer->skipWhitespace();
                 $keyword = $this->lexer->getId();
             } catch (LexerException $e) {
                 // it is likely that we're at the end of the current one. move on.
@@ -207,23 +203,17 @@ class DateReader
                     return $dateSet;
                 case "Start":
                     $this->lexer->skipWhitespace();
-                    $dateSet->setStart(
-                        $this->createDateTimeFromString($this->lexer->getUntil(" "))
-                    );
+                    $dateSet->setStart($this->lexer->getDate());
                     break;
 
                 case "Finish":
                     $this->lexer->skipWhitespace();
-                    $dateSet->setFinish(
-                        $this->createDateTimeFromString($this->lexer->getUntil(" "))
-                    );
+                    $dateSet->setFinish($this->lexer->getDate());
                     break;
 
                 case "Deleted":
                     $this->lexer->skipWhitespace();
-                    $dateSet->addDeleted(
-                        $this->createDateTimeFromString($this->lexer->getUntil(" "))
-                    );
+                    $dateSet->addDeleted($this->lexer->getDate());
                     break;
 
                 default:
@@ -232,22 +222,6 @@ class DateReader
         }
 
         return $dateSet;
-    }
-
-    /**
-     * Create a DateTime instance from string representation of that date.
-     *
-     * Set to midnight by default.
-     *
-     * @param string $str
-     *
-     * @return \DateTime
-     */
-    private function createDateTimeFromString(string $str): \DateTime
-    {
-        $date = \DateTime::createFromFormat(static::DATE_FORMAT, $str);
-        $date->setTime(0, 0); // reset to midnight, times are handled elsewhere.
-        return $date;
     }
 
     /**
@@ -268,7 +242,7 @@ class DateReader
                 break;
             }
 
-            $day = (int) $this->lexer->getUntil(" ");
+            $day = $this->lexer->getNumber();
 
             if ($day > 7 || $day < 1) {
                 break;
@@ -298,7 +272,7 @@ class DateReader
                 break;
             }
 
-            $month = (int) $this->lexer->getUntil(" ");
+            $month = $this->lexer->getNumber();
 
             if ($month > 12 || $month < 1) {
                 break;

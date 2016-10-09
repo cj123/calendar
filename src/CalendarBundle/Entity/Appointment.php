@@ -45,9 +45,9 @@ class Appointment extends Item
     /**
      * @var string
      *
-     * @ORM\Column(name="timezone", type="string", length=255)
+     * @ORM\Column(name="timezone", type="string", length=255, nullable=true)
      */
-    private $timezone;
+    private $timezone = null;
 
     /**
      * @var Calendar

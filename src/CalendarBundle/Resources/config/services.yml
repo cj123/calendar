@@ -1,4 +1,6 @@
 services:
-#    calendar.example:
-#        class: CalendarBundle\Example
-#        arguments: ["@service_id", "plain_value", %parameter%]
+    calendar.command.import:
+        class: CalendarBundle\Command\ImportCalendarCommand
+        tags:
+            - { name: console.command }
+        arguments: [ null, "@doctrine.orm.entity_manager", "@logger" ]

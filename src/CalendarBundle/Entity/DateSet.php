@@ -3,8 +3,6 @@
 namespace CalendarBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Recurr\Rule;
-use Recurr\Transformer\ArrayTransformer;
 
 /**
  * DateSet

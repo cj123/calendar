@@ -2,7 +2,9 @@
 
 namespace CalendarBundle\Formatting\ICal\Reader;
 
+use CalendarBundle\Entity\Appointment;
 use CalendarBundle\Entity\Calendar;
+use CalendarBundle\Entity\Note;
 use CalendarBundle\Formatting\ICal\Lexer\LexerException;
 use CalendarBundle\Formatting\ICal\Lexer\LexerInterface;
 use CalendarBundle\Formatting\ICal\Parser\AppointmentParser;
@@ -146,6 +148,20 @@ class CalendarReader
         $calendar->setImportedDate(new \DateTime());
         $calendar->setAppointments(new ArrayCollection($appointments));
         $calendar->setNotes(new ArrayCollection($notes));
+
+        foreach ($calendar->getNotes()->toArray() as $note) {
+            /** @var $note Note */
+            if (!$note->getDate()->getStart() instanceof \DateTime) {
+                printf("note %s has no start date\n", $note->getText());
+            }
+        }
+
+        foreach ($calendar->getAppointments()->toArray() as $appointment) {
+            /** @var $appointment Appointment */
+            if (!$appointment->getDate()->getStart() instanceof \DateTime) {
+                printf("appointment %s has no start date\n", $appointment->getText());
+            }
+        }
 
         return $calendar;
     }

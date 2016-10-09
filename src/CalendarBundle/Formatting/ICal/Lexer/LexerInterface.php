@@ -26,6 +26,12 @@ interface LexerInterface
     const CLOSE_STRING = "]";
 
     /**
+     * Given Date format.
+     * @var string
+     */
+    const DATE_FORMAT = "j/n/Y";
+
+    /**
      * Get the current status
      *
      * @return int
@@ -104,11 +110,22 @@ interface LexerInterface
     public function getUntil(string $char): string;
 
     /**
-     * Read Number.
+     * Read a Number.
      *
-     * @return float
+     * @return int
+     *
+     * @throws LexerException
      */
-    public function getNumber(): float;
+    public function getNumber(): int;
+
+    /**
+     * Reads the next date into a datetime.
+     *
+     * @return \DateTime
+     *
+     * @throws LexerException
+     */
+    public function getDate(): \DateTime;
 
     /**
      * Read a string. This is terminated at the first ']'. Backslashes can be used

@@ -44,7 +44,7 @@ class Item
      *
      * @ORM\Column(name="deleted", type="boolean")
      */
-    protected $deleted;
+    protected $deleted = false;
 
     /**
      * @var int
@@ -56,7 +56,7 @@ class Item
     /**
      * @var DateSet
      *
-     * @ORM\ManyToOne(targetEntity="DateSet")
+     * @ORM\ManyToOne(targetEntity="DateSet", cascade={"persist"})
      * @ORM\JoinColumn(name="date_set_id", referencedColumnName="id")
      */
     protected $date;
@@ -71,14 +71,14 @@ class Item
     /**
      * @var bool
      *
-     * @ORM\Column(name="todo", type="boolean")
+     * @ORM\Column(name="todo", type="boolean", nullable=true)
      */
     protected $todo;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="done", type="boolean")
+     * @ORM\Column(name="done", type="boolean", nullable=true)
      */
     protected $done;
 

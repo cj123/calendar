@@ -229,11 +229,24 @@ class ICalLexer implements LexerInterface
     /**
      * Read a Number.
      *
-     * @return float
+     * @return int
+     *
+     * @throws LexerException
      */
-    public function getNumber(): float
+    public function getNumber(): int
     {
-        return (float) $this->getString();
+        if ($this->index >= $this->length) {
+            throw new LexerException("invalid index");
+        }
+
+        $out = "";
+
+        while (($this->index < $this->length) && (preg_match('/[0-9]/', $this->buf[$this->index]))) {
+            $out .= $this->buf[$this->index++];
+        }
+
+
+        return (int) $out;
     }
 
     /**
@@ -345,5 +358,34 @@ class ICalLexer implements LexerInterface
     public function skipClosingDelimiter()
     {
         $this->skip(static::CLOSE_STRING);
+    }
+
+    /**
+     * Reads the next date into a datetime.
+     *
+     * @return \DateTime
+     *
+     * @throws LexerException
+     */
+    public function getDate(): \DateTime
+    {
+        $this->skipWhitespace();
+        $day = $this->getNumber();
+
+        $this->skip("/");
+
+        $month = $this->getNumber();
+
+        $this->skip("/");
+        $year = $this->getNumber();
+
+        if ($month > 12 || $month < 1 || $day < 1 || $day > 31) {
+            throw new LexerException("invalid date");
+        }
+
+        $date = \DateTime::createFromFormat(static::DATE_FORMAT, "$day/$month/$year");
+        $date->setTime(0, 0); // reset to midnight, times are handled elsewhere.
+
+        return $date;
     }
 }
