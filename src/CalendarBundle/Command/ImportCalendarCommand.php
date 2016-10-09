@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace CalendarBundle\Command;
 
@@ -32,6 +32,7 @@ class ImportCalendarCommand extends Command
      * ImportCalendarCommand constructor.
      * @param null|string $name
      * @param EntityManagerInterface $entityManager
+     * @param LoggerInterface $logger
      */
     public function __construct($name = null, EntityManagerInterface $entityManager, LoggerInterface $logger)
     {
