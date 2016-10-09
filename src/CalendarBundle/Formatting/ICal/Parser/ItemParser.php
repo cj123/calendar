@@ -47,11 +47,6 @@ class ItemParser implements ParserInterface
             case "Remind":
                 $lexer->skipWhitespace();
                 $remindStart = $lexer->getNumber();
-
-                if (!$remindStart) {
-                    throw new ParserException("unable to read remind level");
-                }
-
                 $this->item->setRemindStart($remindStart);
 
                 break;

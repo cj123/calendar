@@ -4,6 +4,7 @@ namespace CalendarBundle\Tests\Formatting\ICal\Parser;
 
 use CalendarBundle\Entity\DateSet;
 use CalendarBundle\Formatting\ICal\Lexer\ICalLexer;
+use CalendarBundle\Formatting\ICal\Lexer\LexerException;
 use CalendarBundle\Formatting\ICal\Lexer\LexerInterface;
 use CalendarBundle\Formatting\ICal\Parser\ItemParser;
 use CalendarBundle\Formatting\ICal\Parser\ParserException;
@@ -49,11 +50,12 @@ class ItemParserTest extends \PHPUnit_Framework_TestCase
         $parser = new ItemParser();
         try {
             $parser->parse($lexer, $keyword);
-        } catch (ParserException $e) {
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(LexerException::class, $e);
             return;
         }
 
-        $this->fail("did not catch parser exception for invalid remind value");
+        $this->fail("no exception caught");
     }
 
     public function testParseOwner()

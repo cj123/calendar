@@ -391,6 +391,28 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(510, $lexer->getNumber());
     }
 
+    public function testGetNumberIndexPastLength()
+    {
+        $data = "Start
+        [510]";
+
+        $lexer = new ICalLexer($data);
+        $lexer->getId(); // skip identifier
+        $lexer->skipWhitespace();
+        $lexer->skip("[");
+
+        $lexer->reset(200);
+
+        try {
+            $lexer->getNumber();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(LexerException::class, $e);
+            return;
+        }
+
+        $this->fail("no exception caught");
+    }
+
     public function testGetNumberNoNumber()
     {
         $data = "Start
@@ -401,6 +423,28 @@ class ICalLexerTest extends \PHPUnit_Framework_TestCase
         $lexer->skipWhitespace();
         $lexer->skip("[");
 
-        $this->assertEquals(0, $lexer->getNumber());
+        try {
+            $lexer->getNumber();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(LexerException::class, $e);
+            return;
+        }
+
+        $this->fail("no exception caught");
+    }
+
+    public function testGetDateInvalidNumber()
+    {
+        $data = "42/10/1995";
+
+        $lexer = new ICalLexer($data);
+        try {
+            $lexer->getDate();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(LexerException::class, $e);
+            return;
+        }
+
+        $this->fail("no exception caught");
     }
 }

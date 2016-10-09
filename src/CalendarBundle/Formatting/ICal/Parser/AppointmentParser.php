@@ -45,10 +45,6 @@ class AppointmentParser extends ItemParser
                 $lexer->skipWhitespace();
                 $start = $lexer->getNumber();
 
-                if (!$start) {
-                    throw new ParserException("unable to read appointment start time");
-                }
-
                 $time = new \DateTime("@0");
                 $time->add(new \DateInterval("PT" . $start . "M"));
 
@@ -59,10 +55,6 @@ class AppointmentParser extends ItemParser
             case "Length":
                 $lexer->skipWhitespace();
                 $length = $lexer->getNumber();
-
-                if (!$length) {
-                    throw new ParserException("unable to read appointment length");
-                }
 
                 $this->item->setLength($length);
 
@@ -90,7 +82,7 @@ class AppointmentParser extends ItemParser
                         throw new ParserException("unable to read alarm list");
                     }
 
-                    if (!is_int($char)) {
+                    if (!preg_match("/[0-9]+/", $char)) {
                         break;
                     }
 

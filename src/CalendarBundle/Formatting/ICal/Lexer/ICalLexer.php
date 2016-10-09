@@ -245,6 +245,9 @@ class ICalLexer implements LexerInterface
             $out .= $this->buf[$this->index++];
         }
 
+        if ($out === "") {
+            throw new LexerException("no number found");
+        }
 
         return (int) $out;
     }
