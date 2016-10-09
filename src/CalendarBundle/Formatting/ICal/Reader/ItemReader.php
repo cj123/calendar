@@ -64,9 +64,6 @@ class ItemReader
 
             $this->lexer->skipWhitespace();
             $this->lexer->skipClosingDelimiter();
-
-            // @TODO detect err here? item.C:78
-            // @TODO can maybe let it fall through.
         }
     }
 }
