@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f3219b8604e8ea2f364623981e4c7e44",
-    "content-hash": "00c5964ea48859b0d9fede564e30b785",
+    "hash": "eecad12218578fd00be4056ed0b94dff",
+    "content-hash": "9655f4c6437013fdf782f38467a4875a",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1243,6 +1243,60 @@
             ],
             "description": "A security checker for your composer.lock",
             "time": "2015-11-07 08:07:40"
+        },
+        {
+            "name": "simshaun/recurr",
+            "version": "v1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/simshaun/recurr.git",
+                "reference": "b213787ce902eac2a86413875a0ec194c6d11997"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/simshaun/recurr/zipball/b213787ce902eac2a86413875a0ec194c6d11997",
+                "reference": "b213787ce902eac2a86413875a0ec194c6d11997",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/collections": "~1.3",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Recurr": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Shaun Simmons",
+                    "email": "shaun@envysphere.com",
+                    "homepage": "http://envysphere.com"
+                }
+            ],
+            "description": "PHP library for working with recurrence rules",
+            "homepage": "https://github.com/simshaun/recurr",
+            "keywords": [
+                "dates",
+                "events",
+                "recurrence",
+                "recurring",
+                "rrule"
+            ],
+            "time": "2016-09-22 18:01:47"
         },
         {
             "name": "swiftmailer/swiftmailer",

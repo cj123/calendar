@@ -21,7 +21,7 @@ install:
 
 script:
   - ./node_modules/.bin/gulp build
-  - phpunit
+  - phpunit --coverage-text
 
 before_deploy:
   - tar czf ./calendar-$TRAVIS_BUILD_NUMBER.tar.gz -C ./ ./app ./bin ./src ./vendor ./web ./var
