@@ -10,7 +10,6 @@ use CalendarBundle\Formatting\ICal\Lexer\LexerException;
 use CalendarBundle\Formatting\ICal\Lexer\LexerInterface;
 use CalendarBundle\Formatting\ICal\Parser\AppointmentParser;
 use CalendarBundle\Formatting\ICal\Parser\NoteParser;
-use CalendarBundle\Formatting\ICal\Parser\OptionParser;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
