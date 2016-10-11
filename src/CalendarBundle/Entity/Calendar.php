@@ -39,16 +39,23 @@ class Calendar
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Appointment", mappedBy="calendar",cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Appointment", mappedBy="calendar", cascade={"persist"})
      */
     private $appointments;
 
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Note", mappedBy="calendar",cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Note", mappedBy="calendar", cascade={"persist"})
      */
     private $notes;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="CalendarOption", mappedBy="calendar", cascade={"persist"})
+     */
+    private $options;
 
     /**
      * Get id
@@ -144,6 +151,25 @@ class Calendar
     public function getNotes()
     {
         return $this->notes;
+    }
+
+    /**
+     * @param ArrayCollection $options
+     * @return Calendar
+     */
+    public function setOptions($options)
+    {
+        $this->options = $options;
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getOptions()
+    {
+        return $this->options;
     }
 }
 

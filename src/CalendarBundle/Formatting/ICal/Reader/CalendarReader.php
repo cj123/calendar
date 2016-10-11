@@ -4,11 +4,13 @@ namespace CalendarBundle\Formatting\ICal\Reader;
 
 use CalendarBundle\Entity\Appointment;
 use CalendarBundle\Entity\Calendar;
+use CalendarBundle\Entity\CalendarOption;
 use CalendarBundle\Entity\Note;
 use CalendarBundle\Formatting\ICal\Lexer\LexerException;
 use CalendarBundle\Formatting\ICal\Lexer\LexerInterface;
 use CalendarBundle\Formatting\ICal\Parser\AppointmentParser;
 use CalendarBundle\Formatting\ICal\Parser\NoteParser;
+use CalendarBundle\Formatting\ICal\Parser\OptionParser;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -96,7 +98,8 @@ class CalendarReader
         $calendar->setVersion($this->checkCalendarVersion());
 
         $appointments = [];
-        $notes = [];
+        $notes        = [];
+        $options      = [];
 
         while (true) {
             try {
@@ -125,6 +128,7 @@ class CalendarReader
                     $appointments[] = $parser->getAppointment();
 
                     break;
+
                 case "Note":
                     $parser = new NoteParser();
                     $reader = new ItemReader($this->lexer, $parser);
@@ -133,8 +137,25 @@ class CalendarReader
                     $notes[] = $parser->getNote();
 
                     break;
+
+                case "IncludeCalendar":
+                    // @TODO include calendars not yet supported
+                    break;
+
+                case "Hide":
+                    // @TODO hide not yet supported
+
+                    break;
+
                 default:
-                    throw new \Exception("unknown calendar item type: " . $keyword);
+                    $option = new CalendarOption();
+
+                    $option->setName($keyword);
+                    $option->setValue($this->lexer->getString());
+
+                    $options[] = $option;
+
+                    break;
             }
 
             try {
@@ -145,27 +166,25 @@ class CalendarReader
             }
         } // while (true)
 
-        $calendar->setImportedDate(new \DateTime());
-        $calendar->setAppointments(new ArrayCollection($appointments));
-        $calendar->setNotes(new ArrayCollection($notes));
-
-        foreach ($calendar->getNotes()->toArray() as $note) {
+        foreach ($notes as $note) {
             /** @var $note Note */
-            if (!$note->getDate()->getStart() instanceof \DateTime) {
-                printf("note %s has no start date\n", $note->getText());
-            }
-
             $note->setCalendar($calendar);
         }
 
-        foreach ($calendar->getAppointments()->toArray() as $appointment) {
+        foreach ($appointments as $appointment) {
             /** @var $appointment Appointment */
-            if (!$appointment->getDate()->getStart() instanceof \DateTime) {
-                printf("appointment %s has no start date\n", $appointment->getText());
-            }
-
             $appointment->setCalendar($calendar);
         }
+
+        foreach ($options as $option) {
+            /** @var $option CalendarOption */
+            $option->setCalendar($calendar);
+        }
+
+        $calendar->setImportedDate(new \DateTime());
+        $calendar->setAppointments(new ArrayCollection($appointments));
+        $calendar->setNotes(new ArrayCollection($notes));
+        $calendar->setOptions(new ArrayCollection($options));
 
         return $calendar;
     }
