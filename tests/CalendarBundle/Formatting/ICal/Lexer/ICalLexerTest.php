@@ -5,13 +5,14 @@ namespace CalendarBundle\Tests\Formatting\ICal\Lexer;
 use CalendarBundle\Formatting\ICal\Lexer\ICalLexer;
 use CalendarBundle\Formatting\ICal\Lexer\LexerException;
 use CalendarBundle\Formatting\ICal\Lexer\LexerInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class ICalLexerTest
  * @package CalendarBundle\Tests\Formatting\ICal\Lexer
  * @author Callum Jones <cj@icj.me>
  */
-class ICalLexerTest extends \PHPUnit_Framework_TestCase
+class ICalLexerTest extends TestCase
 {
     public function testIndexOnConstruct()
     {

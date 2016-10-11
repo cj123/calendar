@@ -51,7 +51,7 @@ class ItemReader
 
             // end of input?
             if ($char === LexerInterface::CLOSE_STRING) {
-                return;
+                break;
             }
 
             // get property name

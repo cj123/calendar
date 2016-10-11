@@ -5,6 +5,7 @@ namespace CalendarBundle\Tests\Formatting\ICal\Reader;
 use CalendarBundle\Formatting\ICal\Lexer\ICalLexer;
 use CalendarBundle\Formatting\ICal\Reader\DateReader;
 use CalendarBundle\Formatting\ICal\Reader\DateReaderException;
+use PHPUnit\Framework\TestCase;
 use Recurr\Frequency;
 use Recurr\Rule;
 use Recurr\Transformer\ArrayTransformer;
@@ -13,7 +14,7 @@ use Recurr\Transformer\ArrayTransformer;
  * Class DateReaderTest
  * @package CalendarBundle\Tests\Formatting\ICal\Reader
  */
-class DateReaderTest extends \PHPUnit_Framework_TestCase
+class DateReaderTest extends TestCase
 {
     public function testReadSingleDate()
     {

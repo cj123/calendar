@@ -4,13 +4,14 @@ namespace CalendarBundle\Tests\Formatting\ICal\Parser;
 
 use CalendarBundle\Entity\Note;
 use CalendarBundle\Formatting\ICal\Parser\NoteParser;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class NoteParserTest
  * @package CalendarBundle\Tests\Formatting\ICal\Parser
  * @author Callum Jones <cj@icj.me>
  */
-class NoteParserTest extends \PHPUnit_Framework_TestCase
+class NoteParserTest extends TestCase
 {
     public function testNoteParser()
     {

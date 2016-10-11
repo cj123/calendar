@@ -8,13 +8,14 @@ use CalendarBundle\Formatting\ICal\Lexer\LexerException;
 use CalendarBundle\Formatting\ICal\Lexer\LexerInterface;
 use CalendarBundle\Formatting\ICal\Parser\ItemParser;
 use CalendarBundle\Formatting\ICal\Parser\ParserException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class ItemParserTest
  * @package CalendarBundle\Tests\Formatting\ICal\Parser
  * @author Callum Jones <cj@icj.me>
  */
-class ItemParserTest extends \PHPUnit_Framework_TestCase
+class ItemParserTest extends TestCase
 {
     /**
      * get a keyword from the lexer.
