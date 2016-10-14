@@ -19,7 +19,7 @@ namespace CalendarBundle\Formatting\ICal\Lexer;
 interface LexerInterface
 {
     const VALID = 0;
-    const EOF = 1;
+    const EOF   = 1;
     const ERROR = 2;
 
     const OPEN_STRING  = "[";
@@ -144,11 +144,10 @@ interface LexerInterface
      *
      * No terminating "]" is output.
      *
-     * @param string $existing
      * @param string $append
      * @return string
      */
-    public static function putString(string $existing, string $append): string;
+    public static function putString(string $append): string;
 
     /**
      * Get the current position in a file.

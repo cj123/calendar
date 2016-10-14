@@ -290,26 +290,27 @@ class ICalLexer implements LexerInterface
      *
      * No terminating "]" is output.
      *
-     * @param string $existing
      * @param string $append
      * @return string
      */
-    public static function putString(string $existing, string $append): string
+    public static function putString(string $append): string
     {
         $escapeChars = [ "\\" , static::OPEN_STRING, static::CLOSE_STRING ];
+
+        $str = "";
 
         for ($i = 0; $i < strlen($append); $i++) {
             $char = $append[$i];
 
             if (in_array($char, $escapeChars)) {
                 // prepend them with \
-                $existing .= "\\";
+                $str .= "\\";
             }
 
-            $existing .= $char;
+            $str .= $char;
         }
 
-        return $existing;
+        return $str;
     }
 
     /**

@@ -318,19 +318,17 @@ class ICalLexerTest extends TestCase
 
     public function testPutString()
     {
-        $str = "";
         $add = "This is my string adsd           2222222&&&&@^^^@^!";
 
-        $this->assertEquals($str . $add, ICalLexer::putString($str, $add));
+        $this->assertEquals($add, ICalLexer::putString($add));
     }
 
     public function testPutStringWithEscape()
     {
-        $str = "test: ";
         $add = "This is my string adsd           222222[2&&&&@^^^@^!\\";
-        $expected = "test: This is my string adsd           222222\\[2&&&&@^^^@^!\\\\";
+        $expected = "This is my string adsd           222222\\[2&&&&@^^^@^!\\\\";
 
-        $this->assertEquals($expected, ICalLexer::putString($str, $add));
+        $this->assertEquals($expected, ICalLexer::putString($add));
     }
 
     public function testGetString()
