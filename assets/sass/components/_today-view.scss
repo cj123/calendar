@@ -1,0 +1,25 @@
+.today-view {
+  max-height: 100%;
+  overflow-y: auto;
+
+  table {
+    border: 1px solid $gray-lighter;
+    width: 100%;
+
+    tr {
+      width: 100%;
+
+      td.time {
+        width: 50px;
+        font-weight: bold;
+        text-align: center;
+      }
+    }
+
+    tr, td {
+      border: 1px solid $gray-lighter;
+
+      padding: 20px;
+    }
+  }
+}

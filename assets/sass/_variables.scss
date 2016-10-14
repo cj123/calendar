@@ -1,0 +1,26 @@
+@import "bootstrap/variables";
+
+//
+// colours
+//
+$white: #fff;
+
+$gray-light:   darken($gray-lighter, 8%);
+$gray-lighter: lighten($gray-lighter, 2%);
+
+//
+// fonts
+//
+$font-family-sans-serif:  "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-family-base: $font-family-sans-serif;
+
+//
+// navigation
+//
+$navbar-height: ($navbar-height + 10px);
+$navbar-padding-vertical: (($navbar-height - $line-height-computed) / 2); // needs recalculating due to above change
+$navbar-padding-horizontal: 20px;
+$navbar-default-link-color: $white;
+$navbar-default-color: $white;
+$navbar-default-brand-color: $white;
+$navbar-default-bg: #cc2936;

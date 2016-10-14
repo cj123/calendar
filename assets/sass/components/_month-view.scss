@@ -1,0 +1,58 @@
+.month-view {
+  height: auto;
+  border-bottom: 1px solid $gray-light;
+
+  &__controls {
+    text-align: center;
+    margin: 30px;
+
+    .month-controls, .year-controls {
+      display: inline-block;
+      font-size: 1.2em;
+
+      .month, .year {
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+    }
+  }
+
+  table {
+    margin: 0 auto;
+    font-size: 1em;
+
+    tr {
+      th {
+        text-align: center;
+        font-weight: bold;
+      }
+
+      td {
+        text-align: right;
+        padding: 15px;
+
+        &:nth-child(6), &:nth-child(7) {
+          color: red;
+        }
+
+        &.has-appointments {
+          color: blue;
+
+          &:nth-child(6), &:nth-child(7) {
+            color: purple;
+          }
+        }
+      }
+    }
+  }
+
+  &__skip {
+    text-align: center;
+    margin: 30px;
+
+    a.btn {
+      position: relative;
+      width: ((100% / 3) - 5);
+    }
+  }
+}

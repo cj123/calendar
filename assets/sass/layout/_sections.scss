@@ -1,0 +1,27 @@
+.calendar {
+  padding-top: $navbar-height;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  .left {
+    @include make-xs-column(12, 0);
+    @include make-sm-column(6, 0);
+    @include make-md-column(4, 0);
+    @include make-lg-column(4, 0);
+
+    height: 100%;
+    background: $gray-lighter;
+
+    border-right: 1px solid $gray-light;
+  }
+
+  .right {
+    @include make-sm-column(6, 0);
+    @include make-xs-column(12, 0);
+    @include make-md-column(8, 0);
+    @include make-lg-column(8, 0);
+
+    height: 100%;
+  }
+}

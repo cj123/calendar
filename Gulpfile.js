@@ -18,13 +18,16 @@ var paths = {
         js: {
             app: "./assets/js/calendar.js",
             vendor: [
-                "./node_modules/jquery/dist/jquery.min.js"
+                "./node_modules/jquery/dist/jquery.min.js",
+                "./node_modules/bootstrap-sass/assets/javascripts/bootstrap.min.js"
             ]
-        }
+        },
+        fonts: "./node_modules/font-awesome/fonts/*"
     },
     build: {
         css: "web/assets/css/",
-        js: "web/assets/js/"
+        js: "web/assets/js/",
+        fonts: "web/assets/fonts/"
     },
     watch: {
         sass:  "./assets/sass/**/*.scss",
@@ -36,7 +39,7 @@ var paths = {
 };
 
 gulp.task("default", [ "watch" ]);
-gulp.task("build", [ "js-deps", "js", "compile-sass" ]);
+gulp.task("build", [ "js-deps", "js", "compile-sass", "fonts" ]);
 gulp.task("watch", [ "build", "watch-js-deps", "watch-js", "watch-sass" ]);
 
 gulp.task("compile-sass", function() {
@@ -45,7 +48,9 @@ gulp.task("compile-sass", function() {
         .pipe(sass({
             outputStyle: 'compressed',
             includePaths: [
-                "./node_modules/bootstrap-sass/assets/stylesheets"
+                "./node_modules/bootstrap-sass/assets/stylesheets",
+                "./node_modules/normalize-scss/sass",
+                "./node_modules/font-awesome/scss"
             ]
         }))
         .pipe(sourcemaps.write())
@@ -96,4 +101,10 @@ gulp.task("watch-js", function() {
     return gulp.watch(paths.watch.js.app, function() {
         gulp.start("js");
     });
+});
+
+gulp.task("fonts", function() {
+    return gulp.src(paths.src.fonts)
+        .pipe(gulp.dest(paths.build.fonts))
+    ;
 });
