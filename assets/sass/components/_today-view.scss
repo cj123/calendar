@@ -9,6 +9,14 @@
     tr {
       width: 100%;
 
+      &.time-slot {
+        height: 60px;
+
+        td {
+          padding: 5px;
+        }
+      }
+
       td.time {
         width: 50px;
         font-weight: bold;
@@ -19,7 +27,7 @@
     tr, td {
       border: 1px solid $gray-lighter;
 
-      padding: 20px;
+      padding: 5px 20px;
     }
   }
 }

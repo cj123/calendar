@@ -19,7 +19,9 @@ var paths = {
             app: "./assets/js/calendar.js",
             vendor: [
                 "./node_modules/jquery/dist/jquery.min.js",
-                "./node_modules/bootstrap-sass/assets/javascripts/bootstrap.min.js"
+                "./node_modules/bootstrap-sass/assets/javascripts/bootstrap.min.js",
+                "./node_modules/sprintf-js/dist/sprintf.min.js",
+                "./node_modules/moment/min/moment.min.js"
             ]
         },
         fonts: "./node_modules/font-awesome/fonts/*"

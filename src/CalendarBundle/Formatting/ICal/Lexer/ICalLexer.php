@@ -187,7 +187,8 @@ class ICalLexer implements LexerInterface
      * @param string $char
      * @return bool
      */
-    private function isLetter(string $char): bool {
+    private function isLetter(string $char): bool
+    {
         return (bool) preg_match('/[a-z_]/i', $char);
     }
 
@@ -197,7 +198,8 @@ class ICalLexer implements LexerInterface
      * @param string $char
      * @return bool
      */
-    private function isNumOrLetter(string $char): bool {
+    private function isNumOrLetter(string $char): bool
+    {
         return (bool) preg_match('/[a-z0-9_]/i', $char);
     }
 

@@ -13,6 +13,15 @@
       .month, .year {
         margin-left: 10px;
         margin-right: 10px;
+        display: inline-block;
+      }
+
+      .month {
+        width: 140px;
+      }
+
+      .year {
+        width: 60px;
       }
     }
   }
@@ -31,8 +40,15 @@
         text-align: right;
         padding: 15px;
 
+        // weekend highlighting
         &:nth-child(6), &:nth-child(7) {
           color: red;
+        }
+
+        &.day {
+          &--selected {
+            background: $gray-light;
+          }
         }
 
         &.has-appointments {

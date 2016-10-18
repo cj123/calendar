@@ -32,7 +32,9 @@
     "gulp-uglify": "^2.0.0",
     "jquery": "^3.1.0",
     "jshint": "^2.9.3",
+    "moment": "^2.15.1",
     "normalize-scss": "^5.0.3",
+    "sprintf-js": "^1.0.3",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   }

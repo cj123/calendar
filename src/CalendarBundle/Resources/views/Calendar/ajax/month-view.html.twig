@@ -1,0 +1,32 @@
+<table>
+    <tr class="days">
+        <th>Mon</th>
+        <th>Tue</th>
+        <th>Wed</th>
+        <th>Thu</th>
+        <th>Fri</th>
+        <th>Sat</th>
+        <th>Sun</th>
+    </tr>
+
+    {% set totalDays = 0 %}
+
+    {% for week in 0..5 %}
+        <tr>
+            {% for day in 1..7 %}
+                {% if days[totalDays] is defined and days[totalDays]|length > 0 %}
+                    {% set monthDay = days[totalDays]["num"] %}
+
+                    <td class="day day-{{ monthDay }}">
+                        {{ monthDay }}
+                    </td>
+                {% else %}
+                        {# padding table cell #}
+                    <td></td>
+                {% endif %}
+
+                {% set totalDays = totalDays + 1 %}
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
