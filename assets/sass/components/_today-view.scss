@@ -1,8 +1,21 @@
-.today-view {
-    max-height: 100%;
-    overflow-y: auto;
+$time-cell-width: 50px;
 
-    table {
+.today-view {
+    overflow-y: auto;
+    z-index: 0;
+    position: absolute;
+    width: 100%;
+    padding-top: 10px;
+
+    @media screen and (min-width: $screen-sm-min) {
+        max-height: 100%;
+    }
+
+    @media screen and (max-width: $screen-xs-max) {
+        overflow-y: hidden;
+    }
+    
+    &__grid {
         border: 1px solid $gray-lighter;
         width: 100%;
 
@@ -18,7 +31,9 @@
             }
 
             td.time {
-                width: 50px;
+                padding-top: 2px;
+                vertical-align: top;
+                width: $time-cell-width;
                 font-weight: bold;
                 text-align: center;
             }
@@ -28,6 +43,34 @@
             border: 1px solid $gray-lighter;
 
             padding: 5px 20px;
+        }
+    }
+
+    &__appointments {
+        position: absolute;
+        z-index: 10;
+        width: 100%;
+
+        padding-left: ($time-cell-width);
+
+        .appointment {
+            display: block;
+            position: absolute;
+            margin-left: auto;
+            margin-right: auto;
+
+            padding: 5px;
+
+            border: 1px solid green;
+            background: green;
+            color: $white;
+            width: calc(100% - #{$time-cell-width});
+            opacity: 0.8;
+
+            time {
+                float: right;
+                font-size: 0.8em;
+            }
         }
     }
 }

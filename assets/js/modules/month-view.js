@@ -14,7 +14,6 @@ var $nextYear;
 var $year;
 
 var $dayControls;
-
 var $today;
 var $previousDay;
 var $nextDay;

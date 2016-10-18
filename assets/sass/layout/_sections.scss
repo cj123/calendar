@@ -14,6 +14,10 @@
         background: $gray-lighter;
 
         border-right: 1px solid $gray-light;
+
+        @media screen and (max-width: $screen-xs-max) {
+            height: auto;
+        }
     }
 
     .right {

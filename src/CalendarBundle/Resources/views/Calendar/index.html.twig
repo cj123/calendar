@@ -42,17 +42,41 @@
 
         <div class="right">
             <div class="today-view">
-                <table>
-                {% for i in 0..23 %}
-                    <tr class="time-slot">
-                        <td class="time">
-                            {{ "%02d:00"|format(i) }}
-                        </td>
+                <div class="today-view__appointments">
+                    <div class="appointment" style="top: 450px; height: 220px; background: red; border-color: red;">
+                        <strong>Eat some chocolate</strong>
 
-                        <td>
-                        </td>
-                    </tr>
-                {% endfor %}
+                        <time>07:30 - 11:10</time>
+                    </div>
+                    <div class="appointment" style="top: 840px; height: 120px;">
+                        <strong>NOW HAVE SOME CAKE</strong>
+
+                        <time>14:00 - 16:00</time>
+                    </div>
+
+                    <div class="appointment" style="top: 720px; height: 30px; background: purple; border-color: purple;">
+                        <strong>Lunch!</strong>
+
+                        <time>12:00 - 12:30</time>
+                    </div>
+
+                    <div class="appointment" style="top: 1260px; height: 60px; background: blue; border-color: blue">
+                        <strong>VIDEO GAMES</strong>
+
+                        <time>21:00 - 22:00</time>
+                    </div>
+                </div>
+
+                <table class="today-view__grid">
+                    {% for i in 0..23 %}
+                        <tr class="time-slot">
+                            <td class="time">
+                                {{ "%02d:00"|format(i) }}
+                            </td>
+
+                            <td></td>
+                        </tr>
+                    {% endfor %}
                 </table>
             </div>
         </div>
