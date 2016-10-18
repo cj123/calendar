@@ -1,74 +1,85 @@
 .month-view {
-  height: auto;
-  border-bottom: 1px solid $gray-light;
+    height: auto;
+    border-bottom: 1px solid $gray-light;
 
-  &__controls {
-    text-align: center;
-    margin: 30px;
-
-    .month-controls, .year-controls {
-      display: inline-block;
-      font-size: 1.2em;
-
-      .month, .year {
-        margin-left: 10px;
-        margin-right: 10px;
-        display: inline-block;
-      }
-
-      .month {
-        width: 140px;
-      }
-
-      .year {
-        width: 60px;
-      }
-    }
-  }
-
-  table {
-    margin: 0 auto;
-    font-size: 1em;
-
-    tr {
-      th {
+    &__controls {
         text-align: center;
-        font-weight: bold;
-      }
+        margin: 30px;
 
-      td {
-        text-align: right;
-        padding: 15px;
+        .month-controls, .year-controls {
+            display: inline-block;
+            font-size: 1.2em;
 
-        // weekend highlighting
-        &:nth-child(6), &:nth-child(7) {
-          color: red;
+            .month, .year {
+                margin-left: 10px;
+                margin-right: 10px;
+                display: inline-block;
+            }
+
+            .month {
+                width: 140px;
+            }
+
+            .year {
+                width: 60px;
+            }
         }
-
-        &.day {
-          &--selected {
-            background: $gray-light;
-          }
-        }
-
-        &.has-appointments {
-          color: blue;
-
-          &:nth-child(6), &:nth-child(7) {
-            color: purple;
-          }
-        }
-      }
     }
-  }
 
-  &__skip {
-    text-align: center;
-    margin: 30px;
+    table {
+        margin: 0 auto;
+        font-size: 1em;
 
-    a.btn {
-      position: relative;
-      width: ((100% / 3) - 5);
+        tr {
+            th {
+                text-align: center;
+                font-weight: bold;
+            }
+
+            td {
+                text-align: right;
+
+                a.day {
+                    padding: 15px;
+                    display: block;
+                    color: inherit;
+                    border-radius: 3px;
+                    border: 1px solid transparent;
+                    text-decoration: none;
+
+                    &:hover, &:active {
+                        background: $gray-light;
+                        text-decoration: none;
+                    }
+
+                    &--selected {
+                        border: 1px solid $gray-light;
+                    }
+
+                    &--has-appointments {
+                        color: blue;
+
+                        &:nth-child(6), &:nth-child(7) {
+                            color: purple;
+                        }
+                    }
+                }
+
+                // weekend highlighting
+                &:nth-child(6), &:nth-child(7) {
+                    color: $brand-primary;
+                }
+            }
+        }
     }
-  }
+
+    &__skip {
+        text-align: center;
+        margin: 30px;
+
+        a.btn {
+            position: relative;
+            width: ((100% / 3) - 5);
+        }
+    }
 }

@@ -17,8 +17,8 @@
                 {% if days[totalDays] is defined and days[totalDays]|length > 0 %}
                     {% set monthDay = days[totalDays]["num"] %}
 
-                    <td class="day day-{{ monthDay }}">
-                        {{ monthDay }}
+                    <td>
+                        <a href="#" class="day" data-day="{{ monthDay }}">{{ monthDay }}</a>
                     </td>
                 {% else %}
                         {# padding table cell #}

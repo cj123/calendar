@@ -65,7 +65,7 @@ function loadMonthView() {
         $dayGrid.html(response);
 
         $dayGrid.find(".day").removeClass("day--selected");
-        $dayGrid.find(".day-" + currentDate.date()).addClass("day--selected");
+        $dayGrid.find(".day[data-day='" + currentDate.date() + "']").addClass("day--selected");
     });
 }
 
@@ -90,6 +90,15 @@ function attachControlEvents() {
 
     $previousYear.click(function() {
         currentDate.subtract(1, "years");
+
+        loadMonthView();
+    });
+
+    $dayGrid.on("click", ".day", function(e) {
+        e.preventDefault();
+
+        var day = $(this).attr("data-day");
+        currentDate.date(day);
 
         loadMonthView();
     });
