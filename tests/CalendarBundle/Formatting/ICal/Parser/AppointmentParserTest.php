@@ -47,7 +47,7 @@ class AppointmentParserTest extends TestCase
         $parser = new AppointmentParser();
         $parser->parse($lexer, $keyword);
 
-        $this->assertEquals(new \DateTime("@" . 750 * 60), $parser->getAppointment()->getStart());
+        $this->assertEquals(750, $parser->getAppointment()->getStartTime());
     }
 
     public function testParseStartAllowZero()
@@ -58,7 +58,7 @@ class AppointmentParserTest extends TestCase
         $parser = new AppointmentParser();
         $parser->parse($lexer, $keyword);
 
-        $this->assertEquals(new \DateTime("@0"), $parser->getAppointment()->getStart());
+        $this->assertEquals(0, $parser->getAppointment()->getStartTime());
     }
 
     public function testParseStartNoTime()

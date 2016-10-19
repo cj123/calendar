@@ -109,6 +109,6 @@ EOF;
         $this->assertEquals("cj", $appt->getOwner());
         $this->assertEquals(1, $appt->getRemindStart());
         $actual = \DateTime::createFromFormat(LexerInterface::DATE_FORMAT, "16/11/2016")->setTime(0, 0);
-        $this->assertEquals($actual, $appt->getDate()->getStart());
+        $this->assertEquals($actual, $appt->getStart());
     }
 }

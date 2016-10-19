@@ -1,6 +1,8 @@
 "use strict";
 
 var moment = require("moment");
+var calendarData = require("../model/calendar-data");
+var dayView = require("./day-view");
 
 var $monthView;
 var $dayGrid;
@@ -18,8 +20,6 @@ var $today;
 var $previousDay;
 var $nextDay;
 
-// current date in the day view.
-var currentDate;
 
 module.exports = {
     init: function() {
@@ -28,8 +28,6 @@ module.exports = {
         if (!$monthView.length) {
             return;
         }
-
-        currentDate = moment();
 
         $controls      = $monthView.find(".month-view__controls");
         $previousMonth = $controls.find(".previous-month");
@@ -56,6 +54,9 @@ module.exports = {
 
 function loadMonthView() {
     // @TODO: only make request if month/year changes. NOT DAY
+    var currentDate = calendarData.currentDate;
+    dayView.loadAppointments();
+
     $.ajax({
         url: "/ajax/month-view?year=" + currentDate.format("Y") + "&month=" + currentDate.format("M")
     }).done(function(response) {
@@ -70,25 +71,25 @@ function loadMonthView() {
 
 function attachControlEvents() {
     $nextMonth.click(function() {
-        currentDate.add(1, "months");
+        calendarData.currentDate.add(1, "months");
 
         loadMonthView();
     });
 
     $previousMonth.click(function() {
-        currentDate.subtract(1, "months");
+        calendarData.currentDate.subtract(1, "months");
 
         loadMonthView();
     });
 
     $nextYear.click(function() {
-        currentDate.add(1, "years");
+        calendarData.currentDate.add(1, "years");
 
         loadMonthView();
     });
 
     $previousYear.click(function() {
-        currentDate.subtract(1, "years");
+        calendarData.currentDate.subtract(1, "years");
 
         loadMonthView();
     });
@@ -97,7 +98,7 @@ function attachControlEvents() {
         e.preventDefault();
 
         var day = $(this).attr("data-day");
-        currentDate.date(day);
+        calendarData.currentDate.date(day);
 
         loadMonthView();
     });
@@ -105,19 +106,19 @@ function attachControlEvents() {
 
 function attachDayControlEvents() {
     $previousDay.click(function() {
-        currentDate.subtract(1, "days");
+        calendarData.currentDate.subtract(1, "days");
 
         loadMonthView();
     });
 
     $today.click(function() {
-        currentDate = moment();
+        calendarData.currentDate = moment();
 
         loadMonthView();
     });
 
     $nextDay.click(function() {
-        currentDate.add(1, "days");
+        calendarData.currentDate.add(1, "days");
 
         loadMonthView();
     });

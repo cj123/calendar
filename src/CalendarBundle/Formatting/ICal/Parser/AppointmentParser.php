@@ -44,11 +44,7 @@ class AppointmentParser extends ItemParser
             case "Start":
                 $lexer->skipWhitespace();
                 $start = $lexer->getNumber();
-
-                $time = new \DateTime("@0");
-                $time->add(new \DateInterval("PT" . $start . "M"));
-
-                $this->item->setStart($time);
+                $this->item->setStartTime($start);
 
                 break;
 

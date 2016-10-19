@@ -2,7 +2,7 @@
 
 namespace CalendarBundle\Formatting\ICal\Parser;
 
-use CalendarBundle\Entity\DateSet;
+use CalendarBundle\Formatting\ICal\DateSet;
 use CalendarBundle\Entity\Item;
 use CalendarBundle\Formatting\ICal\Lexer\LexerException;
 use CalendarBundle\Formatting\ICal\Lexer\LexerInterface;
@@ -87,7 +87,10 @@ class ItemParser implements ParserInterface
                 $date = $dateReader->read();
 
                 if ($date instanceof DateSet) {
-                    $this->item->setDate($date);
+                    $this->item->setStart($date->getStart());
+                    $this->item->setFinish($date->getFinish());
+                    $this->item->setDeleted($date->getDeleted());
+                    $this->item->setRecurrenceRule($date->getRecurrenceRule());
                 }
 
                 $lexer->getUntil("]"); // @TODO may not need this.

@@ -22,13 +22,6 @@ class Appointment extends Item
     private $id;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="start", type="time")
-     */
-    private $start;
-
-    /**
      * @var int
      *
      * @ORM\Column(name="length", type="integer")
@@ -57,6 +50,12 @@ class Appointment extends Item
      */
     private $calendar;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="startTime", type="integer")
+     */
+    private $startTime;
 
     /**
      * Get id
@@ -66,30 +65,6 @@ class Appointment extends Item
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set start
-     *
-     * @param \DateTime $start
-     *
-     * @return Appointment
-     */
-    public function setStart($start)
-    {
-        $this->start = $start;
-
-        return $this;
-    }
-
-    /**
-     * Get start
-     *
-     * @return \DateTime
-     */
-    public function getStart()
-    {
-        return $this->start;
     }
 
     /**
@@ -181,6 +156,25 @@ class Appointment extends Item
     public function getCalendar()
     {
         return $this->calendar;
+    }
+
+    /**
+     * @param int $startTime
+     * @return Appointment
+     */
+    public function setStartTime($startTime)
+    {
+        $this->startTime = $startTime;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStartTime()
+    {
+        return $this->startTime;
     }
 }
 

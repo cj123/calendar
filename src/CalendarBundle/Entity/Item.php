@@ -40,26 +40,11 @@ class Item
     protected $uidPersistent;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="deleted", type="boolean")
-     */
-    protected $deleted = false;
-
-    /**
      * @var int
      *
      * @ORM\Column(name="remindStart", type="integer")
      */
     protected $remindStart;
-
-    /**
-     * @var DateSet
-     *
-     * @ORM\ManyToOne(targetEntity="DateSet", cascade={"persist"})
-     * @ORM\JoinColumn(name="date_set_id", referencedColumnName="id")
-     */
-    protected $date;
 
     /**
      * @var string
@@ -82,15 +67,153 @@ class Item
      */
     protected $done;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="start", type="datetime")
+     */
+    protected $start;
 
     /**
-     * Get id
+     * @var \DateTime
      *
-     * @return int
+     * @ORM\Column(name="finish", type="datetime", nullable=true)
      */
-    public function getId()
+    protected $finish;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="deleted", type="array")
+     */
+    protected $deleted;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="recurrence_rule", type="string", length=255)
+     */
+    protected $recurrenceRule;
+
+
+    /**
+     * Set start
+     *
+     * @param \DateTime $start
+     *
+     * @return Item
+     */
+    public function setStart($start)
     {
-        return $this->id;
+        $this->start = $start;
+
+        return $this;
+    }
+
+    /**
+     * Get start
+     *
+     * @return \DateTime
+     */
+    public function getStart()
+    {
+        return $this->start;
+    }
+
+    /**
+     * Set finish
+     *
+     * @param \DateTime $finish
+     *
+     * @return Item
+     */
+    public function setFinish($finish)
+    {
+        $this->finish = $finish;
+
+        return $this;
+    }
+
+    /**
+     * Get finish
+     *
+     * @return \DateTime
+     */
+    public function getFinish()
+    {
+        return $this->finish;
+    }
+
+    /**
+     * Set deleted
+     *
+     * @param array $deleted
+     *
+     * @return Item
+     */
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Get deleted
+     *
+     * @return array
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
+
+    /**
+     * Add a deleted date to the array set
+     *
+     * @param \DateTime $date
+     */
+    public function addDeleted(\DateTime $date)
+    {
+        $this->deleted[] = $date;
+    }
+
+    /**
+     * Remove a deleted date from the array set
+     *
+     * @param \DateTime $date
+     */
+    public function removeDeleted(\DateTime $date)
+    {
+        foreach ($this->deleted as $index => $deleted) {
+            if ($deleted === $date) {
+                unset($this->deleted[$index]);
+            }
+        }
+    }
+
+    /**
+     * Get Recurrence Rule
+     *
+     * @return string
+     */
+    public function getRecurrenceRule()
+    {
+        return $this->recurrenceRule;
+    }
+
+    /**
+     * Set Recurrence Rule
+     *
+     * @param string $recurrenceRule
+     *
+     * @return Item
+     */
+    public function setRecurrenceRule($recurrenceRule)
+    {
+        $this->recurrenceRule = $recurrenceRule;
+
+        return $this;
     }
 
     /**
@@ -187,30 +310,6 @@ class Item
     public function getUidPersistent()
     {
         return $this->uidPersistent;
-    }
-
-    /**
-     * Set deleted
-     *
-     * @param boolean $deleted
-     *
-     * @return Item
-     */
-    public function setDeleted($deleted)
-    {
-        $this->deleted = $deleted;
-
-        return $this;
-    }
-
-    /**
-     * Get deleted
-     *
-     * @return bool
-     */
-    public function getDeleted()
-    {
-        return $this->deleted;
     }
 
     /**

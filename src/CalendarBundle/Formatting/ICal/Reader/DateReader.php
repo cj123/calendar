@@ -2,7 +2,7 @@
 
 namespace CalendarBundle\Formatting\ICal\Reader;
 
-use CalendarBundle\Entity\DateSet;
+use CalendarBundle\Formatting\ICal\DateSet;
 use CalendarBundle\Formatting\ICal\Lexer\LexerException;
 use CalendarBundle\Formatting\ICal\Lexer\LexerInterface;
 use Recurr\Frequency;

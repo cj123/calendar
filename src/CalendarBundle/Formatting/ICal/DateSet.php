@@ -1,64 +1,34 @@
 <?php
 
-namespace CalendarBundle\Entity;
-
-use Doctrine\ORM\Mapping as ORM;
+namespace CalendarBundle\Formatting\ICal;
 
 /**
- * DateSet
- *
- * @ORM\Table(name="date_set")
- * @ORM\Entity(repositoryClass="CalendarBundle\Repository\DateSetRepository")
+ * Class DateSet
+ * @package CalendarBundle\Formatting\ICal
+ * @author Callum Jones <cj@icj.me>
  */
 class DateSet
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="start", type="datetime")
      */
     private $start;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="finish", type="datetime", nullable=true)
      */
     private $finish;
 
     /**
      * @var array
-     *
-     * @ORM\Column(name="deleted", type="array")
      */
     private $deleted;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="recurrence_rule", type="string", length=255)
      */
     private $recurrenceRule;
 
-
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set start
@@ -180,4 +150,3 @@ class DateSet
         return $this;
     }
 }
-

@@ -2,7 +2,6 @@
 
 namespace CalendarBundle\Tests\Formatting\ICal\Parser;
 
-use CalendarBundle\Entity\DateSet;
 use CalendarBundle\Formatting\ICal\Lexer\ICalLexer;
 use CalendarBundle\Formatting\ICal\Lexer\LexerException;
 use CalendarBundle\Formatting\ICal\Lexer\LexerInterface;
@@ -151,10 +150,9 @@ and here's some text on a newline but with some trailing newlines too", $parser-
         $parser = new ItemParser();
         $parser->parse($lexer, $keyword);
 
-        $dateSet = $parser->getItem()->getDate();
+        $item = $parser->getItem();
 
-        $this->assertInstanceOf(DateSet::class, $dateSet);
-        $this->assertEquals($dateSet->getStart()->format(LexerInterface::DATE_FORMAT), "30/9/2016");
+        $this->assertEquals($item->getStart()->format(LexerInterface::DATE_FORMAT), "30/9/2016");
     }
 
     public function testParseHilite()

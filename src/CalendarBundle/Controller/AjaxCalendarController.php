@@ -2,7 +2,9 @@
 
 namespace CalendarBundle\Controller;
 
+use CalendarBundle\Repository\AppointmentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -35,7 +37,8 @@ class AjaxCalendarController extends Controller
 
         $days = [];
 
-        // make firstWeekday in the range 1..7
+        // make firstWeekday in the range 1..7 by swapping sunday to be last
+        // @TODO use options to determine whether to do this or not.
         if ($firstWeekday === 0) {
             $firstWeekday = 7;
         }
@@ -54,6 +57,44 @@ class AjaxCalendarController extends Controller
 
         return $this->render("CalendarBundle:Calendar:ajax/month-view.html.twig", [
             "days" => $days,
+        ]);
+    }
+
+    /**
+     * Day View.
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function dayViewAction(Request $request): Response
+    {
+        $date = \DateTime::createFromFormat("Y-m-d", $request->get("date"));
+
+        if (!$date) {
+            throw new BadRequestHttpException();
+        }
+
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var AppointmentRepository $appointmentRepository */
+        $appointmentRepository = $em->getRepository("CalendarBundle:Appointment");
+        $results = $appointmentRepository->findByDate($date);
+
+        // @TODO temp
+        $data = [];
+
+        foreach ($results as $result) {
+            $data[] = [
+                "id" => $result->getId(),
+                "length" => $result->getLength(),
+                "name" => $result->getText(),
+                "start" => $result->getStartTime(),
+            ];
+        }
+
+        return new JsonResponse([
+            "count" => count($data),
+            "data" => $data,
         ]);
     }
 }

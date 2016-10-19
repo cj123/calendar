@@ -7,6 +7,7 @@ $white:                               #fff;
 $black:                               #000;
 $gray-light:                          darken($gray-lighter, 8%);
 $gray-lighter:                        lighten($gray-lighter, 2%);
+$blue:                                #016FB9;
 
 // brand
 $brand-primary:                       #cc2936;
@@ -28,6 +29,7 @@ $navbar-default-color:                $white;
 $navbar-default-link-color:           $navbar-default-color;
 $navbar-default-brand-color:          $navbar-default-color;
 $navbar-default-bg:                   $brand-primary;
+$navbar-default-border:               $navbar-default-bg;
 $navbar-default-link-hover-color:     $black;
 $navbar-default-brand-hover-color:    $navbar-default-link-hover-color;
 $navbar-default-toggle-icon-bar-bg:   $navbar-default-color;

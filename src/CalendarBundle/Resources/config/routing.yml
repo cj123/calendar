@@ -5,3 +5,7 @@ calendar_homepage:
 calendar_ajax_month-view:
     path:     /ajax/month-view
     defaults: { _controller: CalendarBundle:AjaxCalendar:monthView }
+
+calendar_ajax_day-view:
+    path:     /ajax/day-view
+    defaults: { _controller: CalendarBundle:AjaxCalendar:dayView }
