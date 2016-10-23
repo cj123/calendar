@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "eecad12218578fd00be4056ed0b94dff",
-    "content-hash": "9655f4c6437013fdf782f38467a4875a",
+    "hash": "3966169478d43e32b138527d87634c1b",
+    "content-hash": "92836c5cd2c4353ccaac32e5dfdfa9b2",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2005,6 +2005,60 @@
                 "templating"
             ],
             "time": "2016-09-01 17:50:53"
+        },
+        {
+            "name": "u01jmg3/ics-parser",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/u01jmg3/ics-parser.git",
+                "reference": "27939236fc7c2cfe6dd9440feb309225f82ab879"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/u01jmg3/ics-parser/zipball/27939236fc7c2cfe6dd9440feb309225f82ab879",
+                "reference": "27939236fc7c2cfe6dd9440feb309225f82ab879",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "squizlabs/php_codesniffer": "^2.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "ICal": "src/",
+                    "ICal\\Tests": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Martin Thoma",
+                    "email": "info@martin-thoma.de",
+                    "role": "Original Developer"
+                },
+                {
+                    "name": "John Grogg",
+                    "email": "john.grogg@gmail.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Jonathan Goode",
+                    "role": "Maintainer/Developer"
+                }
+            ],
+            "description": "ICS file parser",
+            "keywords": [
+                "ical",
+                "ics"
+            ],
+            "time": "2016-08-20 21:27:46"
         }
     ],
     "packages-dev": [

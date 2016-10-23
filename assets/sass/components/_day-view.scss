@@ -67,10 +67,14 @@ $time-cell-width: 50px;
             color: $white;
             width: calc(100% - #{$time-cell-width});
             opacity: 0.9;
+            white-space: pre;
 
             time {
                 float: right;
                 font-size: 0.8em;
+                position: absolute;
+                top: 5px;
+                right: 5px;
             }
         }
     }

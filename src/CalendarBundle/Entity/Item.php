@@ -44,14 +44,14 @@ class Item
      *
      * @ORM\Column(name="remindStart", type="integer")
      */
-    protected $remindStart;
+    protected $remindStart = 0;
 
     /**
      * @var string
      *
      * @ORM\Column(name="hilite", type="string", length=255)
      */
-    protected $hilite;
+    protected $hilite = "";
 
     /**
      * @var bool
@@ -93,7 +93,7 @@ class Item
      *
      * @ORM\Column(name="recurrence_rule", type="string", length=255)
      */
-    protected $recurrenceRule;
+    protected $recurrenceRule = "";
 
 
     /**

@@ -26,11 +26,11 @@ module.exports = {
         $.ajax({
             url: "/ajax/day-view?date=" + currentDate.format("Y-M-D")
         }).done(function(response) {
+            $appointments.empty();
+
             if (!response.count) {
                 return;
             }
-
-            $appointments.empty();
 
             for (var appointmentIndex = 0; appointmentIndex < response.data.length; appointmentIndex++) {
                 $appointments.append(createAppointment(response.data[appointmentIndex]));
@@ -40,13 +40,14 @@ module.exports = {
 };
 
 function createAppointment(appointment) {
-    var $appointment = $("<div>", {
+    var $appointment = $("<a>", {
+        "href": "#",
         "class": "appointment",
         "style": "top: " + appointment.start  + "px; height: " + appointment["length"] + "px",
         "data-id": appointment.id
     });
 
-    $("<strong>").text(appointment.name).appendTo($appointment);
+    $("<strong>").html(appointment.name).appendTo($appointment);
 
     var startTime = moment().minute(0).hour(0).add(appointment.start, "minutes");
     var endTime = startTime.clone().add(appointment["length"], "minutes");

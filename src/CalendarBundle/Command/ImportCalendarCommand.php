@@ -3,10 +3,13 @@
 namespace CalendarBundle\Command;
 
 use CalendarBundle\Formatting\ICal\Lexer\ICalLexer;
-use CalendarBundle\Formatting\ICal\Reader\CalendarReader;
+use CalendarBundle\Formatting\ICal\Reader\CalendarReader as ICalTclReader;
+use CalendarBundle\Formatting\ICS\Reader\CalendarReader as ICSReader;
 use Doctrine\ORM\EntityManagerInterface;
+use ICal\ICal as ICalParser;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -52,6 +55,7 @@ class ImportCalendarCommand extends Command
         $this
             ->setName("calendar:import")
             ->setDescription("import an ical-tcl calendar")
+            ->addArgument("type", InputArgument::REQUIRED, "the type of calendar (ics/ical-tcl)")
             ->addArgument("filename", InputArgument::REQUIRED, "the filename (location) of the calendar")
         ;
     }
@@ -67,12 +71,22 @@ class ImportCalendarCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $filename = $input->getArgument("filename");
+        $calType  = $input->getArgument("type");
 
         $contents = file_get_contents($filename);
 
         $this->logger->info("Parsing calendar from " . $filename);
 
-        $calendarReader = new CalendarReader(new ICalLexer($contents));
+        if ($calType === "ics") {
+            $parser = new ICalParser();
+            $parser->initString($contents);
+            $calendarReader = new ICSReader($parser);
+        } elseif ($calType === "ical-tcl"){
+            $calendarReader = new ICalTclReader(new ICalLexer($contents));
+        } else {
+            throw new InvalidArgumentException("invalid calendar type");
+        }
+
         $calendar = $calendarReader->read();
 
         $this->logger->info("Found an ical-tcl format with version " . $calendar->getVersion());

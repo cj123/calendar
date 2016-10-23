@@ -18,7 +18,7 @@ use Recurr\Transformer\Constraint\BetweenConstraint;
 class AppointmentRepository extends EntityRepository
 {
     /**
-     *
+     * Find Appointments for a specific date.
      *
      * @param \DateTime $date
      * @return Appointment[]
@@ -30,8 +30,8 @@ class AppointmentRepository extends EntityRepository
             "
                 SELECT a FROM CalendarBundle:Appointment a
                     WHERE
-                        (a.recurrenceRule != '' AND a.start < :now)
-                        OR (a.recurrenceRule = '' AND a.start = :now)
+                        ((a.recurrenceRule != '' AND a.start < :now) OR (a.recurrenceRule = '' AND a.start = :now))
+
 
             "
         )->setParameter("now", $date->setTime(0, 0, 0), Type::DATETIME);

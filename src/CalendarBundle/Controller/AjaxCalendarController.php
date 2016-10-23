@@ -87,7 +87,7 @@ class AjaxCalendarController extends Controller
             $data[] = [
                 "id" => $result->getId(),
                 "length" => $result->getLength(),
-                "name" => $result->getText(),
+                "name" => stripslashes(str_replace('\n',"\n", $result->getText())),
                 "start" => $result->getStartTime(),
             ];
         }
