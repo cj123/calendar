@@ -1,0 +1,67 @@
+$middle-row-height: 170px;
+
+.appointment-info {
+    &__description {
+        @include make-md-column(8);
+
+        white-space: pre-wrap;
+        margin-bottom: 20px;
+    }
+
+    &__time {
+        @include make-md-column(4);
+
+        label {
+            font-weight: normal;
+        }
+    }
+
+    &__calendars {
+        @include make-md-column(6);
+
+        height: $middle-row-height;
+        border-right: 1px solid $gray-lighter;
+    }
+
+    &__highlight {
+        @include make-md-column(3);
+
+        height: $middle-row-height;
+        border-right: 1px solid $gray-lighter;
+
+        label {
+            font-weight: normal;
+            font-size: $font-size-small;
+            display: block;
+
+            input {
+                margin-right: 10px;
+            }
+        }
+    }
+
+    &__early-warning {
+        @include make-md-column(3);
+
+        height: $middle-row-height;
+
+        input[type="range"] {
+            transform: rotate(90deg);
+
+            position: relative;
+            top: 50px;
+        }
+    }
+
+    &__alarms {
+        @include make-md-column(12);
+    }
+
+    .row:not(:last-child) {
+        border-bottom: 1px solid $gray-lighter;
+    }
+
+    .modal-title {
+        text-align: center;
+    }
+}

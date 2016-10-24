@@ -9,6 +9,8 @@
         .month-controls, .year-controls {
             display: inline-block;
             font-size: 1.2em;
+            padding-top: 5px;
+            padding-bottom: 5px;
 
             .month, .year {
                 margin-left: 10px;
