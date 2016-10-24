@@ -42,7 +42,7 @@ class CalendarReader
         $uniqueIds = [];
 
         foreach ($this->parser->events() as $event) {
-
+            // filter out already added events!
             if (in_array($event->uid, $uniqueIds)) {
                 continue;
             }
@@ -57,7 +57,6 @@ class CalendarReader
             $end   = $this->parseDateTime($event->dtend);
 
             $appointment->setStartTime($this->getMinutesPastMidnight($start));
-
             $appointment->setLength(($end->getTimestamp() - $start->getTimestamp()) / 60);
 
             // our data structure just stores dates, times are stored elsewhere
@@ -77,7 +76,7 @@ class CalendarReader
                         array_map(
                             function ($date) {
                                 try {
-                                    return $this->parseDateTime($date);
+                                    return $this->parseDateTime($date)->setTime(0, 0);
                                 } catch (\Exception $e) {
                                     return null;
                                 }
@@ -92,8 +91,8 @@ class CalendarReader
                 // exdates, rrules, etc.
                 $rrule = new Rule($event->rrule);
 
-                if ($rrule->getEndDate()) {
-                    $appointment->setFinish($rrule->getEndDate());
+                if ($rrule->getUntil()) {
+                    $appointment->setFinish($rrule->getUntil()->setTime(0, 0));
                 }
             }
 

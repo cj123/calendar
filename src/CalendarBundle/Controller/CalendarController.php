@@ -18,10 +18,6 @@ class CalendarController extends Controller
      */
     public function indexAction(): Response
     {
-        $numDays = cal_days_in_month(CAL_GREGORIAN, 10, 2016);
-
-        return $this->render("CalendarBundle:Calendar:index.html.twig", [
-            "daysInMonth" => $numDays,
-        ]);
+        return $this->render("CalendarBundle:Calendar:index.html.twig");
     }
 }

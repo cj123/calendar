@@ -35,6 +35,10 @@ class AjaxCalendarController extends Controller
         $firstDayOfMonth = \DateTime::createFromFormat("d/m/Y", sprintf("01/%02d/%d", $month, $year));
         $firstWeekday = (int) $firstDayOfMonth->format("w");
 
+        // @TODO inject me
+        $em = $this->getDoctrine()->getManager();
+        $appointmentRepository = $em->getRepository("CalendarBundle:Appointment");
+
         $days = [];
 
         // make firstWeekday in the range 1..7 by swapping sunday to be last
@@ -52,6 +56,7 @@ class AjaxCalendarController extends Controller
         for ($day = 1; $day <= $daysInMonth; $day++) {
             $days[] = [
                 "num" => $day,
+                "hasEvents" => count($appointmentRepository->findByDate(\DateTime::createFromFormat("Y-m-d", "$year-$month-$day"))) > 0,
             ];
         }
 
@@ -80,7 +85,7 @@ class AjaxCalendarController extends Controller
         $appointmentRepository = $em->getRepository("CalendarBundle:Appointment");
         $results = $appointmentRepository->findByDate($date);
 
-        // @TODO temp
+        // @TODO temp. use a serializer
         $data = [];
 
         foreach ($results as $result) {

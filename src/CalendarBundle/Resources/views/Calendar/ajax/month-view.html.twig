@@ -16,9 +16,10 @@
             {% for day in 1..7 %}
                 {% if days[totalDays] is defined and days[totalDays]|length > 0 %}
                     {% set monthDay = days[totalDays]["num"] %}
+                    {% set hasEvents = days[totalDays]["hasEvents"] %}
 
                     <td>
-                        <a href="#" class="day" data-day="{{ monthDay }}">{{ monthDay }}</a>
+                        <a href="#" class="day {% if hasEvents %}day--has-appointments{% endif %}" data-day="{{ monthDay }}">{{ monthDay }}</a>
                     </td>
                 {% else %}
                     {# padding table cell #}

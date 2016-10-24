@@ -29,6 +29,7 @@
     table {
         margin: 0 auto;
         font-size: 1em;
+        min-height: 330px;
 
         tr {
             th {
@@ -57,7 +58,7 @@
                     }
 
                     &--has-appointments {
-                        color: blue;
+                        color: $blue;
 
                         &:nth-child(6), &:nth-child(7) {
                             color: purple;
