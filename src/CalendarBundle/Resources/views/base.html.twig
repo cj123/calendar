@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="calendar">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Calendar{% endblock %}</title>
@@ -32,6 +32,7 @@
 {% block javascripts %}
     <script type="text/javascript" src="{{ asset("assets/js/vendor.js") }}"></script>
     <script type="text/javascript" src="{{ asset("assets/js/calendar.js") }}"></script>
+    <script type="text/javascript" src="{{ asset("assets/js/templates.js") }}"></script>
 {% endblock %}
 </body>
 </html>

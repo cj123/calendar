@@ -48,7 +48,7 @@ class AjaxCalendarController extends Controller
         }
 
         // first, go through all the days and pop the padding in until the first day
-        for ($day = 0; $day < $firstWeekday - 1; $day++) {
+        for ($day = 0; $day < $firstWeekday; $day++) {
             $days[] = [];
         }
 
@@ -56,13 +56,11 @@ class AjaxCalendarController extends Controller
         for ($day = 1; $day <= $daysInMonth; $day++) {
             $days[] = [
                 "num" => $day,
-                "hasEvents" => count($appointmentRepository->findByDate(\DateTime::createFromFormat("Y-m-d", "$year-$month-$day"))) > 0,
+                "hasEvents" => true || count($appointmentRepository->findByDate(\DateTime::createFromFormat("Y-m-d", "$year-$month-$day"))) > 0,
             ];
         }
 
-        return $this->render("CalendarBundle:Calendar:ajax/month-view.html.twig", [
-            "days" => $days,
-        ]);
+        return new JsonResponse($days);
     }
 
     /**

@@ -3,37 +3,7 @@
 {% block body %}
     <div class="calendar">
         <div class="left">
-            <div class="month-view">
-                <div class="month-view__controls">
-                    <div class="month-controls">
-                        <a href="#" class="btn btn-default previous-month">&larr;</a>
-                        <span class="month"></span>
-                        <a href="#" class="btn btn-default next-month">&rarr;</a>
-                    </div>
-
-                    <div class="year-controls">
-                        <a href="#" class="btn btn-default previous-year">&larr;</a>
-                        <span class="year"></span>
-                        <a href="#" class="btn btn-default next-year">&rarr;</a>
-                    </div>
-                </div>
-
-                <div class="month-view__grid"></div>
-
-                <div class="month-view__skip">
-                    <a href="#" class="btn btn-default previous-day">
-                        Previous
-                    </a>
-
-                    <a href="#" class="btn btn-default today">
-                        Today
-                    </a>
-
-                    <a href="#" class="btn btn-default next-day">
-                        Next
-                    </a>
-                </div>
-            </div>
+            <div ng-include="'calendar/view/month-view.html'"></div>
 
             <div class="notes">
                 <button class="btn btn-default add-note"><i class="fa fa-sticky-note fa-fw"></i>Add a Note</button>
@@ -41,23 +11,7 @@
         </div>
 
         <div class="right">
-            <div class="day-view">
-                <div class="day-view__appointments"></div>
-
-                <table class="day-view__grid">
-                    {% for i in 0..23 %}
-                        <tr class="time-slot">
-                            <td class="time">
-                                {{ "%02d:00"|format(i) }}
-                            </td>
-
-                            <td></td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            </div>
+            <div ng-include="'calendar/view/day-view.html'"></div>
         </div>
     </div>
-
-    {% include "CalendarBundle:Calendar:modals/appointment-info.html.twig" %}
 {% endblock %}

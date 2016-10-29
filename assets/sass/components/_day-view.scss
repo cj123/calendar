@@ -67,11 +67,14 @@ $time-cell-width: 50px;
             color: $white;
             width: calc(100% - #{$time-cell-width});
             opacity: 0.9;
-            white-space: pre;
             overflow-y: auto;
             
-            &:hover {
+            &:hover, &:focus, &:visited, &:active {
                 text-decoration: none;
+            }
+
+            strong {
+                white-space: pre;
             }
 
             time {

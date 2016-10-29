@@ -1,16 +1,11 @@
-/**
- * Calendar Javascript Base.
- * @author Callum Jones <cj@icj.me>
- */
+// calendar app.
+var app = angular.module("calendar", [
+    "angularMoment",
+    "templates",
+    "ui.bootstrap"
+]);
 
-var calendarData = require("./model/calendar-data.js");
-var monthView = require("./modules/month-view.js");
-var dayView = require("./modules/day-view.js");
+app.run();
 
-(function() {
-    console.log("Calendar.");
-    calendarData.init();
-
-    monthView.init();
-    dayView.init();
-})();
+// template cache.
+angular.module("templates", []);

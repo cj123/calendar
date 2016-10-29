@@ -34,16 +34,6 @@ services:
     ports:
     - 3306:3306
 
-  node:
-    image: node:4.5
-    volumes:
-    - .:/app
-    # keep these off the machine, eases permissions.
-    - /app/.npm
-    - /app/node_modules
-    working_dir: /app
-    command: bash -c "npm install && node_modules/.bin/gulp watch"
-
 volumes:
   dbdata:
     driver: local

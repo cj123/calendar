@@ -2,29 +2,31 @@
 
 var gulp          = require("gulp"),
     buffer        = require("vinyl-buffer"),
-    browserify    = require("browserify"),
     uglify        = require("gulp-uglify"),
     sass          = require("gulp-sass"),
     concat        = require("gulp-concat"),
     plumber       = require("gulp-plumber"),
     jshint        = require("gulp-jshint"),
     source        = require("vinyl-source-stream"),
-    sourcemaps    = require("gulp-sourcemaps")
+    sourcemaps    = require("gulp-sourcemaps"),
+    templateCache = require("gulp-angular-templatecache"),
+    ngAnnotate    = require("gulp-ng-annotate")
 ;
 
 var paths = {
     src: {
         sass: "./assets/sass/calendar.scss",
         js: {
-            app: "./assets/js/calendar.js",
+            app: "./assets/js/**/*.js",
             vendor: [
-                "./node_modules/jquery/dist/jquery.min.js",
-                "./node_modules/bootstrap-sass/assets/javascripts/bootstrap.min.js",
-                "./node_modules/sprintf-js/dist/sprintf.min.js",
-                "./node_modules/moment/min/moment.min.js"
+                "./node_modules/angular/angular.min.js",
+                "./node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js",
+                "./node_modules/moment/min/moment.min.js",
+                "./node_modules/angular-moment/angular-moment.min.js"
             ]
         },
-        fonts: "./node_modules/font-awesome/fonts/*"
+        fonts: "./node_modules/font-awesome/fonts/*",
+        templates: "./assets/js/**/*.html"
     },
     build: {
         css: "web/assets/css/",
@@ -36,13 +38,14 @@ var paths = {
         js: {
             app: "./assets/js/**/*.js",
             vendor: "./node_modules/**/*.js"
-        }
+        },
+        templates: "./assets/js/**/*.html"
     }
 };
 
 gulp.task("default", [ "watch" ]);
-gulp.task("build", [ "js-deps", "js", "compile-sass", "fonts" ]);
-gulp.task("watch", [ "build", "watch-js-deps", "watch-js", "watch-sass" ]);
+gulp.task("build", [ "js-deps", "js", "compile-sass", "fonts", "templates" ]);
+gulp.task("watch", [ "build", "watch-js-deps", "watch-js", "watch-sass", "watch-templates" ]);
 
 gulp.task("compile-sass", function() {
     return gulp.src(paths.src.sass)
@@ -71,6 +74,7 @@ gulp.task("js-deps", function() {
         .pipe(plumber())
         .pipe(concat("vendor.js"))
         .pipe(sourcemaps.init())
+        .pipe(ngAnnotate())
         .pipe(uglify())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest(paths.build.js))
@@ -84,16 +88,18 @@ gulp.task("watch-js-deps", function() {
 });
 
 gulp.task("js", function() {
-    return browserify(paths.src.js.app)
-        .bundle()
-        .on("error", function(e) {
-            console.log(e);
+    return gulp.src(paths.src.js.app)
+        .pipe(jshint())
+        .pipe(jshint.reporter())
+        .pipe(jshint.reporter("fail"))
+        .on("error", function(err) {
+            console.log(err);
             this.emit("end");
         })
-        .pipe(source("calendar.js"))
-        .pipe(buffer())
         .pipe(sourcemaps.init({ loadMaps: true }))
+        .pipe(ngAnnotate())
         .pipe(uglify())
+        .pipe(concat("calendar.js"))
         .pipe(sourcemaps.write())
         .pipe(gulp.dest(paths.build.js))
     ;
@@ -110,3 +116,17 @@ gulp.task("fonts", function() {
         .pipe(gulp.dest(paths.build.fonts))
     ;
 });
+
+gulp.task("watch-templates", function() {
+    return gulp.watch(paths.watch.templates, function() {
+        gulp.start("templates");
+    });
+});
+
+gulp.task("templates", function() {
+    return gulp.src(paths.src.templates)
+        .pipe(templateCache({root: "calendar/"}))
+        .pipe(gulp.dest(paths.build.js))
+    ;
+});
+
