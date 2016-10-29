@@ -61,16 +61,16 @@
 
                     &--has-appointments {
                         color: $blue;
-
-                        &:nth-child(6), &:nth-child(7) {
-                            color: purple;
-                        }
                     }
                 }
 
                 // weekend highlighting
                 &:nth-child(6), &:nth-child(7) {
                     color: $brand-primary;
+
+                    a.day--has-appointments {
+                        color: purple;
+                    }
                 }
             }
         }
