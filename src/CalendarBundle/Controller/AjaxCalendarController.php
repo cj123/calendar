@@ -56,7 +56,7 @@ class AjaxCalendarController extends Controller
         for ($day = 1; $day <= $daysInMonth; $day++) {
             $days[] = [
                 "num" => $day,
-                "hasEvents" => true || count($appointmentRepository->findByDate(\DateTime::createFromFormat("Y-m-d", "$year-$month-$day"))) > 0,
+                "hasEvents" => count($appointmentRepository->findByDate(\DateTime::createFromFormat("Y-m-d", "$year-$month-$day"))) > 0,
             ];
         }
 
