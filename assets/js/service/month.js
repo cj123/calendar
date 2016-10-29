@@ -6,8 +6,7 @@ angular.module("calendar").factory("Month", [ "$http", function($http) {
             params: {
                 year: year,
                 month: month
-            },
-            cache: true
+            }
         });
     };
 
