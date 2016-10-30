@@ -3,7 +3,7 @@
 namespace CalendarBundle\Controller;
 
 use CalendarBundle\Repository\AppointmentRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use JMS\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,8 +13,29 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
  * AjaxCalendarController
  * @package CalendarBundle\Controller
  */
-class AjaxCalendarController extends Controller
+class AjaxCalendarController
 {
+    /**
+     * @var AppointmentRepository
+     */
+    private $appointmentRepository;
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * AjaxCalendarController constructor.
+     * @param AppointmentRepository $appointmentRepository
+     * @param SerializerInterface $serializer
+     */
+    public function __construct(AppointmentRepository $appointmentRepository, SerializerInterface $serializer)
+    {
+        $this->appointmentRepository = $appointmentRepository;
+        $this->serializer = $serializer;
+    }
+
     /**
      * Month View.
      *
@@ -35,10 +56,6 @@ class AjaxCalendarController extends Controller
         $firstDayOfMonth = \DateTime::createFromFormat("d/m/Y", sprintf("01/%02d/%d", $month, $year));
         $firstWeekday = (int) $firstDayOfMonth->format("w");
 
-        // @TODO inject me
-        $em = $this->getDoctrine()->getManager();
-        $appointmentRepository = $em->getRepository("CalendarBundle:Appointment");
-
         $days = [];
 
         // make firstWeekday in the range 1..7 by swapping sunday to be last
@@ -54,9 +71,11 @@ class AjaxCalendarController extends Controller
 
         // then put the actual days in
         for ($day = 1; $day <= $daysInMonth; $day++) {
+            $strDate = \DateTime::createFromFormat("Y-m-d", "$year-$month-$day");
+
             $days[] = [
                 "num" => $day,
-                "hasEvents" => count($appointmentRepository->findByDate(\DateTime::createFromFormat("Y-m-d", "$year-$month-$day"))) > 0,
+                "hasEvents" => count($this->appointmentRepository->findByDate($strDate)) > 0,
             ];
         }
 
@@ -77,27 +96,10 @@ class AjaxCalendarController extends Controller
             throw new BadRequestHttpException();
         }
 
-        $em = $this->getDoctrine()->getManager();
+        $results = $this->appointmentRepository->findByDate($date);
 
-        /** @var AppointmentRepository $appointmentRepository */
-        $appointmentRepository = $em->getRepository("CalendarBundle:Appointment");
-        $results = $appointmentRepository->findByDate($date);
-
-        // @TODO temp. use a serializer
-        $data = [];
-
-        foreach ($results as $result) {
-            $data[] = [
-                "id" => $result->getId(),
-                "length" => $result->getLength(),
-                "name" => stripslashes(str_replace('\n',"\n", $result->getText())),
-                "start" => $result->getStartTime(),
-            ];
-        }
-
-        return new JsonResponse([
-            "count" => count($data),
-            "data" => $data,
+        return new Response($this->serializer->serialize($results, "json"), 200, [
+            "Content-Type" => "application/json",
         ]);
     }
 }

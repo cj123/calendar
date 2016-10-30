@@ -73,6 +73,10 @@ $time-cell-width: 50px;
                 text-decoration: none;
             }
 
+            &--selected {
+                border: 1px solid $black;
+            }
+
             strong {
                 white-space: pre;
             }

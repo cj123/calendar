@@ -33,8 +33,10 @@ class AppointmentRepository extends EntityRepository
             "
                 SELECT a FROM CalendarBundle:Appointment a
                     WHERE
-                        (a.recurrenceRule != '' AND a.start < :now)
-                        OR (a.recurrenceRule = '' AND a.start = :now)
+                        ((a.recurrenceRule != '' AND a.start <= :now AND (a.finish IS NULL OR :now <= a.finish))
+                        OR (a.recurrenceRule = '' AND a.start = :now))
+                    ORDER BY a.startTime ASC
+
             " // @TODO: there's much more that can be done to improve the speed of this query.
         )->setParameter("now", $date, Type::DATETIME);
 

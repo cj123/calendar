@@ -4,16 +4,17 @@
             href="#"
             class="appointment"
             ng-repeat="appointment in appointments"
-            ng-style="{ 'top': appointment.start + 'px', 'height': appointment.length + 'px'}"
-            ng-click="viewAppointmentDetail(appointment)"
+            ng-class="{ 'appointment--selected': selectedAppointment === appointment }"
+            ng-style="{ 'top': appointment['start_time'] + 'px', 'height': appointment.length + 'px' }"
+            ng-dblclick="viewAppointmentDetail(appointment)"
         >
-            <strong>{{ appointment.name }}</strong>
+            <strong>{{ appointment.text }}</strong>
             <time>{{ appointment.startTime.format("HH:mm") }} - {{ appointment.endTime.format("HH:mm") }}</time>
         </a>
     </div>
 
     <table class="day-view__grid">
-        <tr class="time-slot" ng-repeat="hour in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]">
+        <tr class="time-slot" ng-repeat="hour in [24] | range">
             <td class="time">
                 {{ hour }}:00
             </td>

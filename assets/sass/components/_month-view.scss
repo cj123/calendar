@@ -40,6 +40,7 @@
             }
 
             td {
+                width: 50px;
                 text-align: right;
 
                 a.day {
@@ -60,7 +61,7 @@
                     }
 
                     &--has-appointments {
-                        color: $blue;
+                        color: blue;
                     }
                 }
 

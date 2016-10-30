@@ -4,3 +4,13 @@ services:
         tags:
             - { name: console.command }
         arguments: [ null, "@doctrine.orm.entity_manager", "@logger" ]
+
+    calendar.repository.appointment:
+        class: Doctrine\ORM\EntityRepository
+        factory: [ "@doctrine.orm.entity_manager", getRepository ]
+        arguments:
+            - CalendarBundle\Entity\Appointment
+
+    calendar.controller.ajax_calendar:
+        class: CalendarBundle\Controller\AjaxCalendarController
+        arguments: [ "@calendar.repository.appointment", "@jms_serializer" ]
