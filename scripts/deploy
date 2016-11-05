@@ -16,12 +16,12 @@ ssh $USER@$SERVER <<EOF
     cd release-$BUILD_NUMBER
     tar xfz ../$SOURCE
     cd ..
-    cp -R parameters.yml "release-$BUILD_NUMBER/app/config"
-    cd release-$BUILD_NUMBER
+    cp -R parameters.yml "release-$BUILD_NUMBER/api/app/config"
+    cd release-$BUILD_NUMBER/api
     bin/console cache:clear --env=prod
     bin/console doctrine:schema:update -f
     chmod -R 777 var/
-    cd ..
+    cd ../..
     ln -nfs "release-$BUILD_NUMBER" release
     rm ./$SOURCE
 EOF

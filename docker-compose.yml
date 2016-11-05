@@ -7,10 +7,9 @@ services:
       NGINX_TEMPLATE: default-php-symfony2
       PHP_INDEX: app_dev.php
     ports:
-    - 80:8080
     - 443:4430
     volumes:
-    - .:/opt/www
+    - ./api:/opt/www
     links:
     - php:php.docker
 
@@ -20,7 +19,7 @@ services:
       PHP_UID: 501
       PHP_GID: 20
     volumes:
-    - .:/opt/www
+    - ./api:/opt/www
     links:
     - db:db.docker
 
@@ -33,6 +32,13 @@ services:
     - MYSQL_DATABASE=calendar
     ports:
     - 3306:3306
+
+  frontend:
+    image: nginx:latest
+    volumes:
+    - ./frontend:/usr/share/nginx/html
+    ports:
+    - 80:80
 
 volumes:
   dbdata:

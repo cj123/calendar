@@ -6,7 +6,7 @@ var calendar = angular.module("calendar", [
 ]);
 
 // api base, including trailing slash
-calendar.constant("API_BASE", "/");
+calendar.constant("API_BASE", "https://calendar.docker.local/");
 
 // routing
 calendar.config(function($stateProvider, $urlRouterProvider, $locationProvider) {

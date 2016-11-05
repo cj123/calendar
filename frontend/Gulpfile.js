@@ -15,9 +15,9 @@ var gulp          = require("gulp"),
 
 var paths = {
     src: {
-        sass: "./assets/sass/calendar.scss",
+        sass: "./src/sass/calendar.scss",
         js: {
-            app: "./assets/js/**/*.js",
+            app: "./src/js/**/*.js",
             vendor: [
                 "./node_modules/angular/angular.min.js",
                 "./node_modules/angular-ui-router/release/angular-ui-router.min.js",
@@ -27,20 +27,20 @@ var paths = {
             ]
         },
         fonts: "./node_modules/font-awesome/fonts/*",
-        templates: "./assets/js/**/*.html"
+        templates: "./src/js/**/*.html"
     },
     build: {
-        css: "web/assets/css/",
-        js: "web/assets/js/",
-        fonts: "web/assets/fonts/"
+        css: "./assets/css/",
+        js: "./assets/js/",
+        fonts: "./assets/fonts/"
     },
     watch: {
-        sass:  "./assets/sass/**/*.scss",
+        sass:  "./src/sass/**/*.scss",
         js: {
-            app: "./assets/js/**/*.js",
+            app: "./src/js/**/*.js",
             vendor: "./node_modules/**/*.js"
         },
-        templates: "./assets/js/**/*.html"
+        templates: "./src/js/**/*.html"
     }
 };
 

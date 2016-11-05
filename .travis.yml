@@ -16,21 +16,29 @@ install:
   - composer --version
   - node -v
 
+  - pushd api
   - composer install
+  - popd
+
+  - pushd frontend
   - npm install
+  - popd
 
 script:
+  - pushd frontend
   - ./node_modules/.bin/gulp build
-  - phpunit --coverage-text
+  - popd
+
+  - phpunit --coverage-text -c ./api
 
 before_deploy:
-  - tar czf ./calendar-$TRAVIS_BUILD_NUMBER.tar.gz -C ./ ./app ./bin ./src ./vendor ./web ./var
+  - tar czf ./calendar-$TRAVIS_BUILD_NUMBER.tar.gz -C ./ ./api/app ./api/bin ./api/src ./api/vendor ./api/web ./api/var ./frontend/index.html ./frontend/assets
   - ssh-keyscan $DEPLOY_SERVER >> ~/.ssh/known_hosts
 
 deploy:
   provider: script
   skip_cleanup: true
-  script: bin/deploy ./calendar-$TRAVIS_BUILD_NUMBER.tar.gz $DEPLOY_USER $DEPLOY_SERVER $DEPLOY_PATH $TRAVIS_BUILD_NUMBER
+  script: scripts/deploy ./calendar-$TRAVIS_BUILD_NUMBER.tar.gz $DEPLOY_USER $DEPLOY_SERVER $DEPLOY_PATH $TRAVIS_BUILD_NUMBER
   on:
     branch: development
 
