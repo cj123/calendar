@@ -3,6 +3,7 @@
 namespace CalendarBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Note
@@ -26,6 +27,7 @@ class Note extends Item
      *
      * @ORM\ManyToOne(targetEntity="Calendar", inversedBy="notes")
      * @ORM\JoinColumn(name="calendar_id", referencedColumnName="id")
+     * @Serializer\Exclude
      */
     private $calendar;
 

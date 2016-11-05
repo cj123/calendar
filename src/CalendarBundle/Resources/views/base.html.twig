@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="calendar">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Calendar{% endblock %}</title>
@@ -8,8 +8,9 @@
     {% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset("favicon.ico") }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/">
 </head>
-<body>
+<body ng-app="calendar">
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">

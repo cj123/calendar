@@ -23,6 +23,7 @@
     "angular": "^1.5.8",
     "angular-moment": "^1.0.0",
     "angular-ui-bootstrap": "^2.2.0",
+    "angular-ui-router": "^0.3.2",
     "bootstrap-sass": "^3.3.7",
     "font-awesome": "^4.6.3",
     "gulp": "^3.9.1",

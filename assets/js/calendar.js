@@ -1,11 +1,26 @@
-// calendar app.
-var app = angular.module("calendar", [
+var calendar = angular.module("calendar", [
     "angularMoment",
     "templates",
+    "ui.router",
     "ui.bootstrap"
 ]);
 
-app.run();
+// api base, including trailing slash
+calendar.constant("API_BASE", "/");
+
+// routing
+calendar.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
+    $stateProvider.state("index", {
+        url: "/",
+        templateUrl: "calendar/view/index.html",
+        controller: "CalendarController"
+    });
+
+    $urlRouterProvider.otherwise("/");
+    $locationProvider.html5Mode(true);
+});
+
+calendar.run();
 
 // template cache.
 angular.module("templates", []);

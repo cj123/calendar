@@ -12,7 +12,7 @@
 
         height: 100%;
         background: $gray-lighter;
-
+        overflow-y: auto;
         border-right: 1px solid $gray-light;
 
         @media screen and (max-width: $screen-xs-max) {

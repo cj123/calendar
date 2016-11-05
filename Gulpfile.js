@@ -20,6 +20,7 @@ var paths = {
             app: "./assets/js/**/*.js",
             vendor: [
                 "./node_modules/angular/angular.min.js",
+                "./node_modules/angular-ui-router/release/angular-ui-router.min.js",
                 "./node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js",
                 "./node_modules/moment/min/moment.min.js",
                 "./node_modules/angular-moment/angular-moment.min.js"

@@ -3,6 +3,7 @@
 namespace CalendarBundle\Controller;
 
 use CalendarBundle\Repository\AppointmentRepository;
+use CalendarBundle\Repository\NoteRepository;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,19 +22,30 @@ class AjaxCalendarController
     private $appointmentRepository;
 
     /**
+     * @var NoteRepository
+     */
+    private $noteRepository;
+
+    /**
      * @var SerializerInterface
      */
     private $serializer;
 
     /**
      * AjaxCalendarController constructor.
-     * @param AppointmentRepository $appointmentRepository
+     *
      * @param SerializerInterface $serializer
+     * @param AppointmentRepository $appointmentRepository
+     * @param NoteRepository $noteRepository
      */
-    public function __construct(AppointmentRepository $appointmentRepository, SerializerInterface $serializer)
-    {
-        $this->appointmentRepository = $appointmentRepository;
+    public function __construct(
+        SerializerInterface $serializer,
+        AppointmentRepository $appointmentRepository,
+        NoteRepository $noteRepository
+    ) {
         $this->serializer = $serializer;
+        $this->appointmentRepository = $appointmentRepository;
+        $this->noteRepository = $noteRepository;
     }
 
     /**
@@ -72,10 +84,11 @@ class AjaxCalendarController
         // then put the actual days in
         for ($day = 1; $day <= $daysInMonth; $day++) {
             $strDate = \DateTime::createFromFormat("Y-m-d", "$year-$month-$day");
+            $events = $this->appointmentRepository->findByDate($strDate);
 
             $days[] = [
                 "num" => $day,
-                "hasEvents" => count($this->appointmentRepository->findByDate($strDate)) > 0,
+                "hasEvents" => count($events) > 0,
             ];
         }
 
@@ -97,6 +110,27 @@ class AjaxCalendarController
         }
 
         $results = $this->appointmentRepository->findByDate($date);
+
+        return new Response($this->serializer->serialize($results, "json"), 200, [
+            "Content-Type" => "application/json",
+        ]);
+    }
+
+    /**
+     * Get notes for a given date
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function notesAction(Request $request): Response
+    {
+        $date = \DateTime::createFromFormat("Y-m-d", $request->get("date"));
+
+        if (!$date) {
+            throw new BadRequestHttpException();
+        }
+
+        $results = $this->noteRepository->findByDate($date);
 
         return new Response($this->serializer->serialize($results, "json"), 200, [
             "Content-Type" => "application/json",
