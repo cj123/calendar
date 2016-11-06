@@ -1,11 +1,15 @@
-calendar_ajax_month-view:
-    path:     /ajax/month-view
-    defaults: { _controller: calendar.controller.ajax_calendar:monthViewAction }
+calendar_month-view:
+    path:     /calendar/month-view
+    defaults: { _controller: calendar.controller.calendar:monthViewAction }
 
-calendar_ajax_day-view:
-    path:     /ajax/day-view
-    defaults: { _controller: calendar.controller.ajax_calendar:dayViewAction }
+calendar_day-view:
+    path:     /calendar/day-view
+    defaults: { _controller: calendar.controller.calendar:dayViewAction }
 
-calendar_ajax_notes:
-    path:     /ajax/notes
-    defaults: { _controller: calendar.controller.ajax_calendar:notesAction }
+calendar_notes:
+    path:     /calendar/notes
+    defaults: { _controller: calendar.controller.calendar:notesAction }
+
+user_options:
+    path:     /user/options
+    defaults: { _controller: calendar.controller.user:optionsAction }

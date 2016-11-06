@@ -2,7 +2,7 @@ angular.module("calendar").factory("Appointment", [ "$http", "API_BASE", functio
     var appointment = {};
 
     appointment.getAppointments = function(date) {
-        return $http.get(API_BASE + "ajax/day-view", {
+        return $http.get(API_BASE + "calendar/day-view", {
             params: {
                 date: date.format("Y-M-D")
             }

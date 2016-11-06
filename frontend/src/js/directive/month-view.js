@@ -4,8 +4,6 @@ angular.module("calendar").directive("monthView", [function() {
         scope: {},
         templateUrl: "calendar/view/month-view.html",
         controller: ["$scope", "Month", "CalendarData", "moment", function($scope, Month, CalendarData, moment) {
-            console.log($scope.test);
-
             $scope.dayIndex = 0;
             $scope.today = moment(); // @todo handle today better
             $scope.currentDate = CalendarData.currentDate;

@@ -11,10 +11,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
- * AjaxCalendarController
+ * CalendarController
  * @package CalendarBundle\Controller
+ * @author Callum Jones <cj@icj.me>
  */
-class AjaxCalendarController
+class CalendarController
 {
     /**
      * @var AppointmentRepository
@@ -32,7 +33,7 @@ class AjaxCalendarController
     private $serializer;
 
     /**
-     * AjaxCalendarController constructor.
+     * CalendarController constructor.
      *
      * @param SerializerInterface $serializer
      * @param AppointmentRepository $appointmentRepository

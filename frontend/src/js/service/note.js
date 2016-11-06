@@ -2,7 +2,7 @@ angular.module("calendar").factory("Note", [ "$http", "API_BASE", function($http
     var note = {};
 
     note.getNotes = function(date) {
-        return $http.get(API_BASE + "ajax/notes", {
+        return $http.get(API_BASE + "calendar/notes", {
             params: {
                 date: date.format("Y-M-D")
             }
