@@ -9,6 +9,7 @@ addons:
 before_install:
   - nvm install 4
   - nvm use 4
+  - npm install -g yarn
 
 install:
   - git --version
@@ -21,7 +22,7 @@ install:
   - popd
 
   - pushd frontend
-  - npm install
+  - yarn install
   - popd
 
 script:
