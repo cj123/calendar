@@ -5,17 +5,17 @@ namespace CalendarBundle\Tests\Controller;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
- * Class UserControllerTest
+ * Class CalendarControllerTest
  * @package CalendarBundle\Tests\Controller
  * @author Callum Jones <cj@icj.me>
  */
-class UserControllerTest extends WebTestCase
+class CalendarControllerTest extends WebTestCase
 {
     public function testOptions()
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/user/options');
+        $crawler = $client->request('GET', '/calendar/options');
 
         $this->assertEquals($client->getResponse()->getStatusCode(), 200);
 

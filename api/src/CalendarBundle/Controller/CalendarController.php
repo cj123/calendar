@@ -2,6 +2,7 @@
 
 namespace CalendarBundle\Controller;
 
+use CalendarBundle\Defaults\OptionMap as DefaultOptionMap;
 use CalendarBundle\Repository\AppointmentRepository;
 use CalendarBundle\Repository\NoteRepository;
 use JMS\Serializer\SerializerInterface;
@@ -33,20 +34,28 @@ class CalendarController
     private $serializer;
 
     /**
+     * @var DefaultOptionMap
+     */
+    private $defaultOptionMap;
+
+    /**
      * CalendarController constructor.
      *
      * @param SerializerInterface $serializer
      * @param AppointmentRepository $appointmentRepository
      * @param NoteRepository $noteRepository
+     * @param DefaultOptionMap $defaultOptionMap
      */
     public function __construct(
         SerializerInterface $serializer,
         AppointmentRepository $appointmentRepository,
-        NoteRepository $noteRepository
+        NoteRepository $noteRepository,
+        DefaultOptionMap $defaultOptionMap
     ) {
         $this->serializer = $serializer;
         $this->appointmentRepository = $appointmentRepository;
         $this->noteRepository = $noteRepository;
+        $this->defaultOptionMap = $defaultOptionMap;
     }
 
     /**
@@ -136,5 +145,18 @@ class CalendarController
         return new Response($this->serializer->serialize($results, "json"), 200, [
             "Content-Type" => "application/json",
         ]);
+    }
+
+    /**
+     * Returns user defined options
+     *
+     * @return Response
+     */
+    public function optionsAction()
+    {
+        // @TODO eventually this will be merged with user's settings
+        $defaultOptionMap = $this->defaultOptionMap->getDefaults();
+
+        return new JsonResponse($defaultOptionMap);
     }
 }

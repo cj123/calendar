@@ -22,8 +22,4 @@ services:
 
     calendar.controller.calendar:
         class: CalendarBundle\Controller\CalendarController
-        arguments: [ "@jms_serializer", "@calendar.repository.appointment", "@calendar.repository.note" ]
-
-    calendar.controller.user:
-        class: CalendarBundle\Controller\UserController
-        arguments: [ "@calendar.defaults.option_map" ]
+        arguments: [ "@jms_serializer", "@calendar.repository.appointment", "@calendar.repository.note", "@calendar.defaults.option_map" ]

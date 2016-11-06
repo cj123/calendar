@@ -11,5 +11,5 @@ calendar_notes:
     defaults: { _controller: calendar.controller.calendar:notesAction }
 
 user_options:
-    path:     /user/options
-    defaults: { _controller: calendar.controller.user:optionsAction }
+    path:     /calendar/options
+    defaults: { _controller: calendar.controller.calendar:optionsAction }
