@@ -2,7 +2,8 @@ var calendar = angular.module("calendar", [
     "angularMoment",
     "templates",
     "ui.router",
-    "ui.bootstrap"
+    "ui.bootstrap",
+    "duScroll"
 ]);
 
 // api base, including trailing slash
