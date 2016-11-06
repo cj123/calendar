@@ -3,7 +3,7 @@ angular.module("calendar").directive("dayView", [function() {
         restrict: "E",
         scope: {},
         templateUrl: "calendar/view/day-view.html",
-        controller: ["$scope", "$uibModal", "Appointment", "CalendarData", "moment", function($scope, $uibModal, Appointment, CalendarData, moment) {
+        controller: ["$scope", "$document", "$uibModal", "Appointment", "CalendarData", "CalendarOptions", function($scope, $document, $uibModal, Appointment, CalendarData, CalendarOptions) {
             $scope.currentDate = CalendarData.currentDate;
             $scope.appointments = [];
 
@@ -21,19 +21,14 @@ angular.module("calendar").directive("dayView", [function() {
                     return;
                 }
 
-                Appointment.getAppointments(date).then(function(response) {
-                    var appointments = response.data;
-
-                    for (var appointmentIndex = 0; appointmentIndex < appointments.length; appointmentIndex++) {
-                        var appointment = appointments[appointmentIndex];
-                        var startTime = $scope.currentDate.clone().minute(0).hour(0).add(appointment.start_time, "minutes");
-                        var endTime = startTime.clone().add(appointment.length, "minutes");
-
-                        appointments[appointmentIndex].startTime = startTime;
-                        appointments[appointmentIndex].endTime = endTime;
-                    }
-
+                Appointment.getAppointments(date).then(function(appointments) {
                     $scope.appointments = appointments;
+
+                    CalendarOptions.get().then(function(response) {
+                        var opts = response.data;
+
+                        angular.element(document.getElementById("day-view")).scrollTop(60 * opts.DayviewTimeStart, 0);
+                    });
                 });
             }
 
