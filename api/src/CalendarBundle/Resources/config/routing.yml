@@ -1,0 +1,11 @@
+calendar_ajax_month-view:
+    path:     /ajax/month-view
+    defaults: { _controller: calendar.controller.ajax_calendar:monthViewAction }
+
+calendar_ajax_day-view:
+    path:     /ajax/day-view
+    defaults: { _controller: calendar.controller.ajax_calendar:dayViewAction }
+
+calendar_ajax_notes:
+    path:     /ajax/notes
+    defaults: { _controller: calendar.controller.ajax_calendar:notesAction }

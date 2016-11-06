@@ -1,0 +1,28 @@
+.notes {
+    padding: 20px;
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    height: auto;
+
+    @media screen and (max-width: $screen-xs-max) {
+        display: none;
+    }
+
+    .note {
+        display: block;
+        padding: 10px;
+        background: #FFFFA5;
+        text-align: left;
+        margin-bottom: 20px;
+        color: $black;
+
+        &:last-child {
+            margin-bottom: 5px;
+        }
+
+        &:hover, &:focus, &:visited, &:active {
+            text-decoration: none;
+        }
+    }
+}
