@@ -26,7 +26,7 @@ install:
   - composer install
   - php bin/console doctrine:database:create --env=test
   - php bin/console doctrine:schema:create --env=test
-  - php bin/console calendar:import ./data/simple-calendar
+  - php bin/console calendar:import ical-tcl ./data/simple-calendar
   - popd
 
   - pushd frontend
