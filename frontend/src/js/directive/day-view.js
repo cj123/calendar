@@ -37,7 +37,6 @@ angular.module("calendar").directive("dayView", [function() {
                 });
             }
 
-
             $scope.viewAppointmentDetail = function(appointment) {
                 $uibModal.open({
                     animation: true,

@@ -5,7 +5,6 @@ namespace CalendarBundle\Repository;
 use CalendarBundle\Entity\Item;
 use Doctrine\Bundle\DoctrineBundle\Mapping;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\DBAL\Types\Type;
 use Recurr\Rule;
 use Recurr\Transformer\ArrayTransformer;
 use Recurr\Transformer\Constraint\BetweenConstraint;
