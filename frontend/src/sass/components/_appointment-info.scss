@@ -49,12 +49,21 @@ $middle-row-height: 170px;
             transform: rotate(90deg);
 
             position: relative;
-            top: 50px;
+            top: 28px;
+        }
+
+        label {
+            font-weight: normal;
         }
     }
 
     &__alarms {
         @include make-md-column(12);
+
+        label {
+            width: 100%;
+            font-weight: normal;
+        }
     }
 
     .row:not(:last-child) {

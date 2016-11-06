@@ -2,6 +2,7 @@
 
 namespace CalendarBundle\Controller;
 
+use CalendarBundle\Defaults\OptionMap as DefaultOptionMap;
 use CalendarBundle\Repository\AppointmentRepository;
 use CalendarBundle\Repository\NoteRepository;
 use JMS\Serializer\SerializerInterface;
@@ -11,10 +12,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
- * AjaxCalendarController
+ * CalendarController
  * @package CalendarBundle\Controller
+ * @author Callum Jones <cj@icj.me>
  */
-class AjaxCalendarController
+class CalendarController
 {
     /**
      * @var AppointmentRepository
@@ -32,20 +34,28 @@ class AjaxCalendarController
     private $serializer;
 
     /**
-     * AjaxCalendarController constructor.
+     * @var DefaultOptionMap
+     */
+    private $defaultOptionMap;
+
+    /**
+     * CalendarController constructor.
      *
      * @param SerializerInterface $serializer
      * @param AppointmentRepository $appointmentRepository
      * @param NoteRepository $noteRepository
+     * @param DefaultOptionMap $defaultOptionMap
      */
     public function __construct(
         SerializerInterface $serializer,
         AppointmentRepository $appointmentRepository,
-        NoteRepository $noteRepository
+        NoteRepository $noteRepository,
+        DefaultOptionMap $defaultOptionMap
     ) {
         $this->serializer = $serializer;
         $this->appointmentRepository = $appointmentRepository;
         $this->noteRepository = $noteRepository;
+        $this->defaultOptionMap = $defaultOptionMap;
     }
 
     /**
@@ -135,5 +145,18 @@ class AjaxCalendarController
         return new Response($this->serializer->serialize($results, "json"), 200, [
             "Content-Type" => "application/json",
         ]);
+    }
+
+    /**
+     * Returns user defined options
+     *
+     * @return Response
+     */
+    public function optionsAction()
+    {
+        // @TODO eventually this will be merged with user's settings
+        $defaultOptionMap = $this->defaultOptionMap->getDefaults();
+
+        return new JsonResponse($defaultOptionMap);
     }
 }

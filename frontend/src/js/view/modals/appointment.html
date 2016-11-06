@@ -1,8 +1,8 @@
 <div class="modal-header">
     <button
-        type="button"
-        class="close"
-        aria-label="Close" ng-click="cancel()"
+            type="button"
+            class="close"
+            aria-label="Close" ng-click="cancel()"
     >
         <span aria-hidden="true">&times;</span>
     </button>
@@ -19,25 +19,29 @@
                 Start Time
 
                 <input
-                    type="time"
-                    step="60"
-                    name="start-time"
-                    class="start-time"
-                    ng-value="appointment.startTime.format('HH:mm')"
+                        type="time"
+                        step="60"
+                        name="start-time"
+                        class="start-time"
+                        ng-value="appointment.startTime.format('HH:mm')"
                 >
             </label>
 
             <label>
                 Finish Time
                 <input
-                    type="time"
-                    step="60"
-                    name="finish-time"
-                    class="finish-time"
-                    ng-value="appointment.endTime.format('HH:mm')"
+                        type="time"
+                        step="60"
+                        name="finish-time"
+                        class="finish-time"
+                        ng-value="appointment.endTime.format('HH:mm')"
                 >
             </label>
-            <strong>Timezone</strong> - <span class="timezone">&lt;Local&gt;</span><br>
+            <strong>Timezone</strong> -
+            <div class="timezone">
+                {{ appointment.timezone }}
+            </div>
+            <br>
         </div>
     </div>
 
@@ -52,16 +56,26 @@
 
             <label><input type="radio" name="highlight" value="always" checked> Always</label>
             <label><input type="radio" name="highlight" value="never"> Never</label>
-            <label><input type="radio" name="highlight" value="until-expiration"> Until Expiration</label>
+            <label><input type="radio" name="highlight" value="until-expiration"> Until
+                Expiration</label>
             <label><input type="radio" name="highlight" value="as-holiday"> As Holiday</label>
 
-            <label><input type="checkbox" name="todo" value="0"> Todo Item</label>
+            <label><input type="checkbox" name="todo" value="{{ appointment.todo }}"> Todo
+                Item</label>
         </div>
 
         <div class="appointment-info__early-warning">
             <h4>Early Warning</h4>
 
-            <input type="range" name="points" min="0" max="15">
+            <label for="early-warning">
+                {{ appointment.remind }}
+                <ng-pluralize count="appointment.remind"
+                              when="{'0': 'days',
+                                     '1': 'day',
+                                     'other': 'days'}">
+                </ng-pluralize>
+            </label>
+            <input type="range" name="early-warning" id="early-warning" min="0" max="15" ng-model="appointment.remind">
         </div>
     </div>
 
@@ -69,9 +83,16 @@
         <div class="appointment-info__alarms">
             <h4>Alarms</h4>
 
-            <input type="range" name="points" min="0" max="10">
-
-            <small>alarms in minutes</small>
+            <div ng-repeat="alarm in appointment.alarms">
+                <label> {{ alarm }}
+                    <ng-pluralize count="alarm"
+                                  when="{'0': 'minutes',
+                                         '1': 'minute',
+                                         'other': 'minutes'}">
+                    </ng-pluralize>
+                    <input type="range" name="points" min="0" max="60" ng-model="alarm">
+                </label>
+            </div>
         </div>
     </div>
 </div>

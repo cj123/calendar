@@ -17,6 +17,9 @@ services:
         arguments:
             - CalendarBundle\Entity\Note
 
-    calendar.controller.ajax_calendar:
-        class: CalendarBundle\Controller\AjaxCalendarController
-        arguments: [ "@jms_serializer", "@calendar.repository.appointment", "@calendar.repository.note" ]
+    calendar.defaults.option_map:
+        class: CalendarBundle\Defaults\OptionMap
+
+    calendar.controller.calendar:
+        class: CalendarBundle\Controller\CalendarController
+        arguments: [ "@jms_serializer", "@calendar.repository.appointment", "@calendar.repository.note", "@calendar.defaults.option_map" ]

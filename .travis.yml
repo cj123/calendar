@@ -3,6 +3,9 @@ language: php
 php:
   - '7.0'
 
+services:
+  - mysql
+
 addons:
   ssh_known_hosts: $DEPLOY_SERVER
 
@@ -10,6 +13,8 @@ before_install:
   - nvm install 4
   - nvm use 4
   - npm install -g yarn
+
+  - cp api/app/config/parameters.yml.travis api/app/config/parameters.yml.dist
 
 install:
   - git --version
@@ -19,6 +24,9 @@ install:
 
   - pushd api
   - composer install
+  - php bin/console doctrine:database:create --env=test
+  - php bin/console doctrine:schema:create --env=test
+  - php bin/console calendar:import ical-tcl ./data/simple-calendar
   - popd
 
   - pushd frontend

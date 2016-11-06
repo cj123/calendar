@@ -1,8 +1,14 @@
 angular.module("calendar").factory("Month", [ "$http", "API_BASE", function($http, API_BASE) {
     var month = {};
 
+    /**
+     * Get Calendar Days in a Month
+     * @param month
+     * @param year
+     * @returns {HttpPromise}
+     */
     month.getDays = function(month, year) {
-        return $http.get(API_BASE + "ajax/month-view", {
+        return $http.get(API_BASE + "calendar/month-view", {
             params: {
                 year: year,
                 month: month
