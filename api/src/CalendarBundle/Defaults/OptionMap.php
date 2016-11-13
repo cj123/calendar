@@ -37,7 +37,7 @@ class OptionMap
      *
      * @return array
      */
-    public function getDefaults()
+    public function getDefaults(): array
     {
         return self::$defaults;
     }

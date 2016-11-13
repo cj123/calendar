@@ -6,9 +6,6 @@ var calendar = angular.module("calendar", [
     "duScroll"
 ]);
 
-// api base, including trailing slash
-calendar.constant("API_BASE", "https://calendar.docker.local/");
-
 // routing
 calendar.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
     $stateProvider.state("index", {
@@ -18,7 +15,8 @@ calendar.config(function($stateProvider, $urlRouterProvider, $locationProvider) 
     });
 
     $urlRouterProvider.otherwise("/");
-    $locationProvider.html5Mode(true);
+
+    $locationProvider.html5Mode(false).hashPrefix('!');
 });
 
 calendar.run();

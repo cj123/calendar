@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace CalendarBundle\Controller;
 
@@ -152,7 +152,7 @@ class CalendarController
      *
      * @return Response
      */
-    public function optionsAction()
+    public function optionsAction(): Response
     {
         // @TODO eventually this will be merged with user's settings
         $defaultOptionMap = $this->defaultOptionMap->getDefaults();
