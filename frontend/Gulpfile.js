@@ -1,16 +1,15 @@
 "use strict";
 
 var gulp          = require("gulp"),
-    buffer        = require("vinyl-buffer"),
     uglify        = require("gulp-uglify"),
     sass          = require("gulp-sass"),
     concat        = require("gulp-concat"),
     plumber       = require("gulp-plumber"),
     jshint        = require("gulp-jshint"),
-    source        = require("vinyl-source-stream"),
     sourcemaps    = require("gulp-sourcemaps"),
     templateCache = require("gulp-angular-templatecache"),
-    ngAnnotate    = require("gulp-ng-annotate")
+    ngAnnotate    = require("gulp-ng-annotate"),
+    ngConfig      = require("gulp-ng-config")
 ;
 
 var paths = {
@@ -18,6 +17,7 @@ var paths = {
         sass: "./src/sass/calendar.scss",
         js: {
             app: "./src/js/**/*.js",
+            config: "./src/js/config.json",
             vendor: [
                 "./node_modules/angular/angular.min.js",
                 "./node_modules/angular-ui-router/release/angular-ui-router.min.js",
@@ -39,6 +39,7 @@ var paths = {
         sass:  "./src/sass/**/*.scss",
         js: {
             app: "./src/js/**/*.js",
+            config: "./src/js/config.json",
             vendor: "./node_modules/**/*.js"
         },
         templates: "./src/js/**/*.html"
@@ -46,8 +47,8 @@ var paths = {
 };
 
 gulp.task("default", [ "watch" ]);
-gulp.task("build", [ "js-deps", "js", "compile-sass", "fonts", "templates" ]);
-gulp.task("watch", [ "build", "watch-js-deps", "watch-js", "watch-sass", "watch-templates" ]);
+gulp.task("build", [ "js-deps", "js-config", "js", "compile-sass", "fonts", "templates" ]);
+gulp.task("watch", [ "build", "watch-js-deps", "watch-js", "watch-sass", "watch-templates", "watch-js-config" ]);
 
 gulp.task("compile-sass", function() {
     return gulp.src(paths.src.sass)
@@ -105,6 +106,20 @@ gulp.task("js", function() {
         .pipe(sourcemaps.write())
         .pipe(gulp.dest(paths.build.js))
     ;
+});
+
+gulp.task("js-config", function() {
+    return gulp.src(paths.src.js.config)
+        .pipe(ngConfig("calendar", {
+            createModule: false
+        }))
+        .pipe(gulp.dest(paths.build.js));
+});
+
+gulp.task("watch-js-config", function() {
+    return gulp.watch(paths.watch.js.config, function() {
+        gulp.start("js-config");
+    });
 });
 
 gulp.task("watch-js", function() {

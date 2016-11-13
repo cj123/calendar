@@ -15,6 +15,7 @@ before_install:
   - npm install -g yarn
 
   - cp api/app/config/parameters.yml.travis api/app/config/parameters.yml.dist
+  - cp frontend/src/js/config.dist.json frontend/src/js/config.json
 
 install:
   - git --version
