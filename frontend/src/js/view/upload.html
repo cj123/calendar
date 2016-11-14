@@ -1,0 +1,20 @@
+<div class="upload">
+    <h1>Import an existing calendar</h1>
+
+    <p>Please select a file to upload. This must be one of the following:</p>
+
+    <ul>
+        <li>An ical-tcl <code>.calendar</code> file (usually located at <code>~/.calendar</code>)</li>
+        <li>A ICS file, though note that this functionality has not been fully tested!</li>
+    </ul>
+
+    <form>
+        <input type="file" nv-file-select uploader="uploader"/><br/>
+        <ul>
+            <li ng-repeat="item in uploader.queue">
+                Name: <span ng-bind="item.file.name"></span><br/>
+                <button ng-click="item.upload()">upload</button>
+            </li>
+        </ul>
+    </form>
+</div>
