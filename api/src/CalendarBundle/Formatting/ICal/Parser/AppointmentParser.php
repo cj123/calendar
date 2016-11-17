@@ -73,10 +73,7 @@ class AppointmentParser extends ItemParser
 
                 while (true) {
                     $lexer->skipWhitespace();
-
-                    if (!$char = $lexer->peek()) {
-                        throw new ParserException("unable to read alarm list");
-                    }
+                    $char = $lexer->peek();
 
                     if (!preg_match("/[0-9]+/", $char)) {
                         break;

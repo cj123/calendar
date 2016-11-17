@@ -22,4 +22,4 @@ services:
 
     calendar.controller.calendar:
         class: CalendarBundle\Controller\CalendarController
-        arguments: [ "@jms_serializer", "@calendar.repository.appointment", "@calendar.repository.note", "@calendar.defaults.option_map" ]
+        arguments: [ "@logger", "@jms_serializer", "@doctrine.orm.entity_manager", "@calendar.repository.appointment", "@calendar.repository.note", "@calendar.defaults.option_map" ]

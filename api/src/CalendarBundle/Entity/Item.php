@@ -28,7 +28,7 @@ class Item
     /**
      * @var string
      *
-     * @ORM\Column(name="uid", type="string", length=255)
+     * @ORM\Column(name="uid", type="string", length=255, unique=true)
      */
     protected $uid;
 

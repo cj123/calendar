@@ -3,7 +3,8 @@ var calendar = angular.module("calendar", [
     "templates",
     "ui.router",
     "ui.bootstrap",
-    "duScroll"
+    "duScroll",
+    "ngFileUpload"
 ]);
 
 // routing
@@ -12,6 +13,12 @@ calendar.config(function($stateProvider, $urlRouterProvider, $locationProvider) 
         url: "/",
         templateUrl: "calendar/view/index.html",
         controller: "CalendarController"
+    });
+
+    $stateProvider.state("upload", {
+        url: "/upload",
+        templateUrl: "calendar/view/upload.html",
+        controller: "UploadController"
     });
 
     $urlRouterProvider.otherwise("/");
