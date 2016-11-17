@@ -149,21 +149,4 @@ class AppointmentParserTest extends TestCase
         $this->assertTrue(is_array($alarms));
         $this->assertEquals(4, count($alarms));
     }
-
-    public function testParseAlarmsNonNumeric()
-    {
-        $lexer = new ICalLexer("Alarms [ 1 7 1");
-
-        $keyword = $this->getKeyword($lexer);
-        $parser = new AppointmentParser();
-
-        try {
-            $parser->parse($lexer, $keyword);
-        } catch (\Exception $e) {
-            $this->assertInstanceOf(ParserException::class, $e);
-            return;
-        }
-
-        $this->fail("no exception raised when parsing invalid alarms");
-    }
 }
