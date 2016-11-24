@@ -22,4 +22,11 @@ services:
 
     calendar.controller.calendar:
         class: CalendarBundle\Controller\CalendarController
-        arguments: [ "@logger", "@jms_serializer", "@doctrine.orm.entity_manager", "@calendar.repository.appointment", "@calendar.repository.note", "@calendar.defaults.option_map" ]
+        arguments: [ "@logger", "@jms_serializer", "@doctrine.orm.entity_manager", "@calendar.repository.appointment", "@calendar.repository.note", "@calendar.gateway.recurrence", "@calendar.defaults.option_map" ]
+
+    calendar.gateway.recurrence:
+        class: CalendarBundle\Gateway\RecurrenceGateway
+        arguments: [ "@recurr.transformer" ]
+
+    recurr.transformer:
+        class: Recurr\Transformer\ArrayTransformer

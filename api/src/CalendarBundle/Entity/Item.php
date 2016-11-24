@@ -337,30 +337,6 @@ class Item
     }
 
     /**
-     * Set date
-     *
-     * @param DateSet $date
-     *
-     * @return Item
-     */
-    public function setDate(DateSet $date)
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    /**
-     * Get date
-     *
-     * @return DateSet
-     */
-    public function getDate()
-    {
-        return $this->date;
-    }
-
-    /**
      * Set hilite
      *
      * @param string $hilite

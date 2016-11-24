@@ -6,12 +6,14 @@ use CalendarBundle\Defaults\OptionMap as DefaultOptionMap;
 use CalendarBundle\Formatting\ICal\Lexer\ICalLexer;
 use CalendarBundle\Formatting\ICal\Reader\CalendarReader as ICalTclReader;
 use CalendarBundle\Formatting\ICS\Reader\CalendarReader as ICSReader;
+use CalendarBundle\Gateway\RecurrenceGateway;
 use ICal\ICal as ICalParser;
 use CalendarBundle\Repository\AppointmentRepository;
 use CalendarBundle\Repository\NoteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use JMS\Serializer\SerializerInterface;
 use Psr\Log\LoggerInterface;
+use Recurr\Recurrence;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,6 +36,11 @@ class CalendarController
      * @var NoteRepository
      */
     private $noteRepository;
+
+    /**
+     * @var RecurrenceGateway
+     */
+    private $recurrenceGateway;
 
     /**
      * @var LoggerInterface
@@ -63,6 +70,7 @@ class CalendarController
      * @param EntityManagerInterface $entityManager
      * @param AppointmentRepository $appointmentRepository
      * @param NoteRepository $noteRepository
+     * @param RecurrenceGateway $recurrenceGateway
      * @param DefaultOptionMap $defaultOptionMap
      */
     public function __construct(
@@ -71,6 +79,7 @@ class CalendarController
         EntityManagerInterface $entityManager,
         AppointmentRepository $appointmentRepository,
         NoteRepository $noteRepository,
+        RecurrenceGateway $recurrenceGateway,
         DefaultOptionMap $defaultOptionMap
     ) {
         $this->logger = $logger;
@@ -78,6 +87,7 @@ class CalendarController
         $this->entityManager = $entityManager;
         $this->appointmentRepository = $appointmentRepository;
         $this->noteRepository = $noteRepository;
+        $this->recurrenceGateway = $recurrenceGateway;
         $this->defaultOptionMap = $defaultOptionMap;
     }
 
@@ -99,9 +109,8 @@ class CalendarController
         $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 
         $firstDayOfMonth = \DateTime::createFromFormat("d/m/Y", sprintf("01/%02d/%d", $month, $year));
+        $lastDayOfMonth = \DateTime::createFromFormat("d/m/Y", sprintf("%02d/%02d/%d", $daysInMonth, $month, $year));
         $firstWeekday = (int) $firstDayOfMonth->format("w");
-
-        $days = [];
 
         // make firstWeekday in the range 1..7 by swapping sunday to be last
         // @TODO use options to determine whether to do this or not.
@@ -109,23 +118,36 @@ class CalendarController
             $firstWeekday = 7;
         }
 
-        // first, go through all the days and pop the padding in until the first day
-        for ($day = 0; $day < $firstWeekday; $day++) {
-            $days[] = [];
-        }
+        $days = [];
 
-        // then put the actual days in
         for ($day = 1; $day <= $daysInMonth; $day++) {
-            $strDate = \DateTime::createFromFormat("Y-m-d", "$year-$month-$day");
-            $events = $this->appointmentRepository->findByDate($strDate);
-
-            $days[] = [
-                "num" => $day,
-                "hasEvents" => count($events) > 0,
-            ];
+            $days[$day] = [ "day" => $day, "events" => false];
         }
 
-        return new JsonResponse($days);
+        $appointments = $this->appointmentRepository->findBetweenDates($firstDayOfMonth, $lastDayOfMonth);
+
+        foreach ($appointments as $appointment) {
+            // generate recurrences
+            $recurrences = $this->recurrenceGateway->findRecurrencesBetweenDates(
+                $appointment,
+                $firstDayOfMonth,
+                $lastDayOfMonth
+            );
+
+            // go through each day checking if in recurrences.
+            foreach ($recurrences as $recurrence) {
+                // only startdate is valid, not end date.
+                /** @var Recurrence $recurrence */
+                $day = (int) $recurrence->getStart()->format("d");
+
+                $days[$day]["events"] = true;
+            }
+        }
+
+        return new JsonResponse([
+            "padding_days" => $firstWeekday - 1,
+            "days" => array_values($days)
+        ]);
     }
 
     /**
@@ -142,7 +164,8 @@ class CalendarController
             throw new BadRequestHttpException();
         }
 
-        $results = $this->appointmentRepository->findByDate($date);
+        $appointments = $this->appointmentRepository->findBetweenDates($date, $date);
+        $results = $this->recurrenceGateway->filterItemsByDate($appointments, $date);
 
         return new Response($this->serializer->serialize($results, "json"), 200, [
             "Content-Type" => "application/json",
@@ -163,7 +186,8 @@ class CalendarController
             throw new BadRequestHttpException();
         }
 
-        $results = $this->noteRepository->findByDate($date);
+        $notes = $this->noteRepository->findBetweenDates($date, $date);
+        $results = $this->recurrenceGateway->filterItemsByDate($notes, $date);
 
         return new Response($this->serializer->serialize($results, "json"), 200, [
             "Content-Type" => "application/json",

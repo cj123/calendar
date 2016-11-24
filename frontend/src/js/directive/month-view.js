@@ -21,8 +21,8 @@ angular.module("calendar").directive("monthView", [function() {
                 });
 
                 function loadGridView(date) {
-                    Month.getDays(date.format("M"), date.format("Y")).then(function(response) {
-                        $scope.days = response.data;
+                    Month.getDays(date.format("M"), date.format("Y")).then(function(daysByWeek) {
+                        $scope.weeks = daysByWeek;
                     });
                 }
             }
