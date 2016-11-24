@@ -8,13 +8,56 @@
         <li>A ICS file, though note that this functionality has not been fully tested!</li>
     </ul>
 
-    <form>
-        <input type="file" nv-file-select uploader="uploader"/><br/>
-        <ul>
-            <li ng-repeat="item in uploader.queue">
-                Name: <span ng-bind="item.file.name"></span><br/>
-                <button ng-click="item.upload()">upload</button>
-            </li>
-        </ul>
+    <form name="import">
+        <label>
+            Choose a calendar format
+            <select ng-model="calendarFormat">
+                <option value="ical-tcl">ical-tcl</option>
+                <option value="ics">ICS (iCal standard)</option>
+            </select>
+        </label>
+
+        <div ng-if="calendarFormat == 'ical-tcl'">
+            <p>To upload an ical-tcl <code>~/.calendar</code> file, I recommend the following so you
+            can open the file in your browser easily:</p>
+
+            <code>
+                cp ~/.calendar ~/Desktop/calendar-file
+            </code>
+
+            <p>Then you can import the file from your desktop.</p>
+        </div>
+
+
+        <div
+            ng-show="!!calendarFormat"
+            class="btn btn-primary"
+            ngf-select
+            ng-model="file"
+            name="file"
+            ngf-max-size="20MB"
+        >
+            Select a calendar file
+        </div>
+
+        <br><br>
+
+
+        <div class="upload__file" ng-show="file">
+            <small>File selected: {{ file.name }}</small><br>
+
+            <button ng-if="file" type="submit" class="btn btn-success" ng-click="submit()">Import Calendar</button>
+        </div>
+
+        <div class="upload__response" ng-show="uploadAttempt">
+            <div ng-show="uploadSuccess">
+                Your file (<code>{{ file.name }}</code>) has successfully been uploaded and imported.
+                <a ui-sref="index">View calendar</a>.
+            </div>
+
+            <div ng-show="!uploadSuccess">
+                Your file (<code>{{ file.name }}</code>) failed to upload.
+            </div>
+        </div>
     </form>
 </div>

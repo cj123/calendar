@@ -1,0 +1,19 @@
+.upload {
+    @include make-lg-column(6);
+    @include make-md-column(6);
+    @include make-sm-column(6);
+    @include make-lg-column-offset(3);
+    @include make-md-column-offset(3);
+    @include make-sm-column-offset(3);
+
+    padding-top: $navbar-height;
+
+    h1 {
+        text-align: center;
+    }
+
+    &__response, &__file {
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+}

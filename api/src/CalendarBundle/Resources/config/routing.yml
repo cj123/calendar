@@ -10,6 +10,10 @@ calendar_notes:
     path:     /calendar/notes
     defaults: { _controller: calendar.controller.calendar:notesAction }
 
-user_options:
+calendar_options:
     path:     /calendar/options
     defaults: { _controller: calendar.controller.calendar:optionsAction }
+
+calendar_import:
+    path:     /calendar/import
+    defaults: { _controller: calendar.controller.calendar:importAction }

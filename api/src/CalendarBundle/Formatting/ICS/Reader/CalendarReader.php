@@ -118,13 +118,29 @@ class CalendarReader
      */
     private function parseDateTime(string $str): \DateTime
     {
-        $date = \DateTime::createFromFormat('Ymd\THis', $str);
+        // supported datetime formats.
+        $supportedFormats = [
+            'Ymd\THis\Z',
+            'Ymd\THis',
+            'Ymd',
+        ];
 
-        if (!$date) {
-            throw new ReaderException("invalid datetime");
+        foreach ($supportedFormats as $format) {
+            $date = \DateTime::createFromFormat($format, $str);
+
+            if ($date instanceof \DateTime) {
+                if ($format === 'Ymd') {
+                    // the time will automatically be set to the current time
+                    // which we do not want, as an event with an unspecified date
+                    // probably exists as an 'all day' event.
+                    $date->setTime(0, 0, 0);
+                }
+
+                return $date;
+            }
         }
 
-        return $date;
+        throw new ReaderException("invalid datetime: $str (tried formats: " . explode(",", $supportedFormats) . ")");
     }
 
     /**

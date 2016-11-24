@@ -12,8 +12,10 @@
 @import "font-awesome";
 
 // customisations
+@import "layout/body";
 @import "layout/sections";
 @import "components/month-view";
 @import "components/notes";
 @import "components/day-view";
 @import "components/appointment-info";
+@import "components/upload";
