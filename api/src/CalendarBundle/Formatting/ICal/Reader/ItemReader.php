@@ -61,6 +61,7 @@ class ItemReader
 
             // read property
             $this->parser->parse($this->lexer, $keyword);
+            $this->parser->extractDateSet();
 
             $this->lexer->skipWhitespace();
             $this->lexer->skipClosingDelimiter();

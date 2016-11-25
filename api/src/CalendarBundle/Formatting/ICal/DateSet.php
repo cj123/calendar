@@ -29,6 +29,16 @@ class DateSet
      */
     private $recurrenceRule;
 
+    /**
+     * @var int
+     */
+    private $length = 0;
+
+    /**
+     * @var int
+     */
+    private $startTime = 0;
+
 
     /**
      * Set start
@@ -148,5 +158,43 @@ class DateSet
         $this->recurrenceRule = $recurrenceRule;
 
         return $this;
+    }
+
+    /**
+     * @param int $length
+     * @return DateSet
+     */
+    public function setLength($length)
+    {
+        $this->length = $length;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLength()
+    {
+        return $this->length;
+    }
+
+    /**
+     * @param int $startTime
+     * @return DateSet
+     */
+    public function setStartTime($startTime)
+    {
+        $this->startTime = $startTime;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStartTime()
+    {
+        return $this->startTime;
     }
 }

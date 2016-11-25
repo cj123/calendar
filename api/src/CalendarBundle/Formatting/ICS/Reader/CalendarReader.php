@@ -51,49 +51,34 @@ class CalendarReader
 
             $appointment = new Appointment();
 
-            $appointment->setText(htmlspecialchars_decode(stripslashes(str_replace('\n',"\n", $event->summary . "\n" . $event->description))));
+            $appointment->setText(
+                htmlspecialchars_decode(
+                    stripslashes(
+                        str_replace('\n', "\n", $event->summary . "\n" . $event->description)
+                    )
+                )
+            );
 
             $start = $this->parseDateTime($event->dtstart);
-            $end   = $this->parseDateTime($event->dtend);
-
-            $appointment->setStartTime($this->getMinutesPastMidnight($start));
-            $appointment->setLength(($end->getTimestamp() - $start->getTimestamp()) / 60);
+            $end = $this->parseDateTime($event->dtend);
 
             // our data structure just stores dates, times are stored elsewhere
-            $appointment->setStart($start->setTime(0, 0));
-            $appointment->setFinish($end->setTime(0, 0));
+            $appointment->setStart($start);
+            $appointment->setFinish($end);
 
             if (property_exists($event, "tzid")) {
                 $appointment->setTimezone($event->tzid);
             }
 
             if (property_exists($event, "rrule")) {
-                $appointment->setRecurrenceRule($event->rrule);
 
-                if (property_exists($event, "exdate")) {
-                    // we need to deal with recurrences.
-                    $exclusionDates = array_filter(
-                        array_map(
-                            function ($date) {
-                                try {
-                                    return $this->parseDateTime($date)->setTime(0, 0);
-                                } catch (\Exception $e) {
-                                    return null;
-                                }
-                            },
-                            explode(",", $event->exdate)
-                        )
-                    );
-
-                    $appointment->setDeleted($exclusionDates);
-                }
 
                 // exdates, rrules, etc.
                 $rrule = new Rule($event->rrule);
-
-                if ($rrule->getUntil()) {
-                    $appointment->setFinish($rrule->getUntil()->setTime(0, 0));
+                if (property_exists($event, "exdate")) {
+                    $rrule->setExDates(explode(",", $event->exdate));
                 }
+                $appointment->setRecurrenceRule($rrule->getString());
             }
 
             $appointment->setUid($event->uid);
@@ -140,7 +125,9 @@ class CalendarReader
             }
         }
 
-        throw new ReaderException("invalid datetime: $str (tried formats: " . explode(",", $supportedFormats) . ")");
+        throw new ReaderException(
+            "invalid datetime: $str (tried formats: " . explode(",", $supportedFormats) . ")"
+        );
     }
 
     /**

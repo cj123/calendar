@@ -149,6 +149,7 @@ and here's some text on a newline but with some trailing newlines too", $parser-
         $keyword = $this->getKeyword($lexer);
         $parser = new ItemParser();
         $parser->parse($lexer, $keyword);
+        $parser->extractDateSet();
 
         $item = $parser->getItem();
 

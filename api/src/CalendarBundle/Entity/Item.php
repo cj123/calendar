@@ -82,13 +82,6 @@ class Item
     protected $finish;
 
     /**
-     * @var array
-     *
-     * @ORM\Column(name="deleted", type="array")
-     */
-    protected $deleted;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="recurrence_rule", type="string", length=255)
@@ -142,54 +135,6 @@ class Item
     public function getFinish()
     {
         return $this->finish;
-    }
-
-    /**
-     * Set deleted
-     *
-     * @param array $deleted
-     *
-     * @return Item
-     */
-    public function setDeleted($deleted)
-    {
-        $this->deleted = $deleted;
-
-        return $this;
-    }
-
-    /**
-     * Get deleted
-     *
-     * @return array
-     */
-    public function getDeleted()
-    {
-        return $this->deleted;
-    }
-
-    /**
-     * Add a deleted date to the array set
-     *
-     * @param \DateTime $date
-     */
-    public function addDeleted(\DateTime $date)
-    {
-        $this->deleted[] = $date;
-    }
-
-    /**
-     * Remove a deleted date from the array set
-     *
-     * @param \DateTime $date
-     */
-    public function removeDeleted(\DateTime $date)
-    {
-        foreach ($this->deleted as $index => $deleted) {
-            if ($deleted === $date) {
-                unset($this->deleted[$index]);
-            }
-        }
     }
 
     /**
