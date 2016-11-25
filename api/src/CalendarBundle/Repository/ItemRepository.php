@@ -31,23 +31,32 @@ class ItemRepository extends EntityRepository
         $query = $this->getEntityManager()->createQuery(
             "
                 SELECT a FROM ${className} a
-                    WHERE (
-                        a.start IS NOT NULL and a.finish IS NOT NULL AND (
-                            a.start <= :start AND (a.finish IS NULL OR :end <= a.finish)
+                    WHERE
+                    a.start IS NOT NULL AND (
+                        (
+                            a.recurrenceRule != '' AND (
+                                (a.start <= :start AND :end <= a.finish)
+                                OR
+                                (a.start <= :end)
+                            )
+                        )
+                        OR
+                        (
+                            a.start = a.finish AND a.start = :start
+                        )
+                        OR
+                        (
+                            a.start != a.finish AND a.start <= :start AND :end <= a.finish
                         )
                     )
-                    OR
-                    (
-                        a.recurrenceRule = ''
-                        AND (
-                            a.start >= :start AND a.start <= :end
-                        )
-                    )
-                    ORDER BY a.start ASC, a.finish ASC
 
+
+                    ORDER BY a.start ASC, a.finish ASC
             " // @TODO: there's much more that can be done to improve the speed of this query.
-        )->setParameter("start", $start, Type::DATETIME)
-            ->setParameter("end", $end, Type::DATETIME);
+        );
+
+        $query->setParameter("start", $start, Type::DATETIME);
+        $query->setParameter("end", $end, Type::DATETIME);
 
         return $query->getResult();
     }

@@ -3,6 +3,7 @@
 namespace CalendarBundle\Gateway;
 
 use CalendarBundle\Entity\Item;
+use Recurr\DateExclusion;
 use Recurr\Recurrence;
 use Recurr\RecurrenceCollection;
 use Recurr\Rule;
@@ -28,37 +29,6 @@ class RecurrenceGateway
     public function __construct(ArrayTransformer $transformer)
     {
         $this->transformer = $transformer;
-    }
-
-    /**
-     * Don't use this in a loop.
-     *
-     * @param Item $item
-     * @param \DateTime $date
-     * @return bool
-     * @throws \Recurr\Exception\MissingData
-     * @deprecated don't use me
-     */
-    public function recurrenceOccursOnDate(Item $item, \DateTime $date): bool
-    {
-        $date->setTime(0, 0, 0);
-        $rule = $item->getRecurrenceRule();
-
-        $startDate = $item->getStart();
-        $endDate = $item->getFinish();
-
-        if (!$rule) {
-            $timestamp = $date->getTimestamp();
-
-            return $timestamp > $startDate->getTimestamp() && ($endDate === null || $timestamp < $endDate->getTimestamp());
-        }
-
-        $dates = $this->transformer->transform(
-            new Rule($rule, $startDate, $endDate),
-            new BetweenConstraint($date, $date, true)
-        );
-
-        return $dates->count() > 0;
     }
 
     /**
@@ -115,19 +85,48 @@ class RecurrenceGateway
      * @return RecurrenceCollection
      * @throws \Recurr\Exception\MissingData
      */
-    public function findRecurrencesBetweenDates(Item $item, \DateTime $start, \DateTime $finish): RecurrenceCollection
+    public function findRecurrencesBetweenDates(
+        Item $item,
+        \DateTime $start,
+        \DateTime $finish
+    ): RecurrenceCollection
     {
         $rule = $item->getRecurrenceRule();
 
         if (!$rule) {
-            return new RecurrenceCollection([ new Recurrence($item->getStart(), $item->getFinish()) ]);
+            $itemStart = $item->getStart();
+            $itemEnd   = $item->getFinish();
+
+            if ($itemStart && $itemEnd && $itemStart != $itemEnd) {
+                $period = new \DatePeriod(
+                    $itemStart,
+                    new \DateInterval('P1D'),
+                    $itemEnd
+                );
+
+                return new RecurrenceCollection(array_map(function($date) {
+                    return new Recurrence($date);
+                }, iterator_to_array($period)));
+            } elseif ($itemStart) {
+                return new RecurrenceCollection([ new Recurrence($itemStart) ]);
+            } else {
+                return new RecurrenceCollection();
+            }
         }
 
         $startDate = $item->getStart();
         $endDate = $item->getFinish();
 
+        $rrule = new Rule($rule, $startDate, $endDate);
+
+        if ($deleted = $item->getDeleted()) {
+            $rrule->setExDates(array_map(function(\DateTime $date) {
+                return new DateExclusion($date);
+            }, $deleted));
+        }
+
         return $this->transformer->transform(
-            new Rule($rule, $startDate, $endDate),
+            $rrule,
             new BetweenConstraint($start, $finish, true)
         );
     }

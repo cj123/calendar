@@ -134,13 +134,12 @@ class CalendarController
                 $lastDayOfMonth
             );
 
-            // go through each day checking if in recurrences.
             foreach ($recurrences as $recurrence) {
                 // only startdate is valid, not end date.
                 /** @var Recurrence $recurrence */
                 $day = (int) $recurrence->getStart()->format("d");
-
                 $days[$day]["events"] = true;
+                $days[$day]["list"][] = $appointment->getUid();
             }
         }
 

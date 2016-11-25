@@ -51,7 +51,7 @@ class CalendarReader
 
             $appointment = new Appointment();
 
-            $appointment->setText(htmlspecialchars_decode(stripslashes(str_replace('\n',"\n", $event->summary . " " . $event->description))));
+            $appointment->setText(htmlspecialchars_decode(stripslashes(str_replace('\n',"\n", $event->summary . "\n" . $event->description))));
 
             $start = $this->parseDateTime($event->dtstart);
             $end   = $this->parseDateTime($event->dtend);
