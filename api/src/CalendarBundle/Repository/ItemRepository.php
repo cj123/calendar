@@ -23,35 +23,15 @@ class ItemRepository extends EntityRepository
      */
     public function findBetweenDates(\DateTime $start, \DateTime $end): array
     {
-        $start->setTime(0, 0, 0);
-        $end->setTime(0, 0, 0);
-
         $className = $this->getClassName();
 
         $query = $this->getEntityManager()->createQuery(
             "
                 SELECT a FROM ${className} a
                     WHERE
-                    a.start IS NOT NULL AND (
-                        (
-                            a.recurrenceRule != '' AND (
-                                (a.start <= :start AND :end <= a.finish)
-                                OR
-                                (a.start <= :end)
-                            )
-                        )
-                        OR
-                        (
-                            a.start = a.finish AND a.start = :start
-                        )
-                        OR
-                        (
-                            a.start != a.finish AND a.start <= :start AND :end <= a.finish
-                        )
-                    )
-
-
-                    ORDER BY a.start ASC, a.finish ASC
+                    a.start IS NOT NULL AND a.start <= :end
+                    AND (a.recurrenceRule != '' OR (a.start <= :end AND a.start >= :start))
+                    ORDER BY a.start ASC
             " // @TODO: there's much more that can be done to improve the speed of this query.
         );
 

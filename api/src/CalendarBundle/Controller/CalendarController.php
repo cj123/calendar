@@ -92,6 +92,27 @@ class CalendarController
     }
 
     /**
+     * @param Request $request
+     * @return Response
+     */
+    public function appointmentsAction(Request $request): Response
+    {
+        $start = \DateTime::createFromFormat("Y-m-d", $request->get("start"))->setTime(0, 0);
+        $finish = \DateTime::createFromFormat("Y-m-d", $request->get("finish"))->setTime(0, 0);
+
+        if (!$start || !$finish) {
+            throw new BadRequestHttpException();
+        }
+
+
+        $appointments = $this->appointmentRepository->findBetweenDates($start, $finish);
+
+        return new Response($this->serializer->serialize($appointments, "json"), 200, [
+            "Content-Type" => "application/json",
+        ]);
+    }
+
+    /**
      * Month View.
      *
      * @param Request $request

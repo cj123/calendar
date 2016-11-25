@@ -7,6 +7,7 @@ use CalendarBundle\Entity\Appointment;
 use CalendarBundle\Entity\Calendar;
 use Doctrine\Common\Collections\ArrayCollection;
 use ICal\ICal as ICalParser;
+use Recurr\DateExclusion;
 use Recurr\Rule;
 
 /**
@@ -71,12 +72,23 @@ class CalendarReader
             }
 
             if (property_exists($event, "rrule")) {
-
-
                 // exdates, rrules, etc.
                 $rrule = new Rule($event->rrule);
                 if (property_exists($event, "exdate")) {
-                    $rrule->setExDates(explode(",", $event->exdate));
+                    $exclusionDates = array_filter(
+                        array_map(
+                            function ($date) {
+                                try {
+                                    return  new DateExclusion($this->parseDateTime($date));
+                                } catch (\Exception $e) {
+                                    return null;
+                                }
+                            },
+                            explode(",", $event->exdate)
+                        )
+                    );
+
+                    $rrule->setExDates($exclusionDates);
                 }
                 $appointment->setRecurrenceRule($rrule->getString());
             }

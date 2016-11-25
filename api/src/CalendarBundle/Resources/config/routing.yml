@@ -1,3 +1,7 @@
+calendar_appointments:
+    path:     /calendar/appointments
+    defaults: { _controller: calendar.controller.calendar:appointmentsAction }
+
 calendar_month-view:
     path:     /calendar/month-view
     defaults: { _controller: calendar.controller.calendar:monthViewAction }
