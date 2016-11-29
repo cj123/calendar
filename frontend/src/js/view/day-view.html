@@ -5,7 +5,7 @@
             class="appointment"
             ng-repeat="appointment in appointments"
             ng-class="{ 'appointment--selected': selectedAppointment === appointment }"
-            ng-style="{ 'top': appointment['start_time'] + 'px', 'height': appointment.length + 'px' }"
+            ng-style="{ 'top': appointment['offset'] + 'px', 'height': appointment.length + 'px' }"
             ng-dblclick="viewAppointmentDetail(appointment)"
         >
             <strong>{{ appointment.text }}</strong>

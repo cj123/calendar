@@ -39,9 +39,10 @@
     "gulp-uglify": "^2.0.0",
     "jshint": "^2.9.3",
     "moment": "^2.15.1",
+    "moment-timezone": "^0.5.10",
     "ng-file-upload": "^12.2.13",
     "normalize-scss": "^5.0.3",
-    "rrule": "https://github.com/jkbrzt/rrule.git",
+    "rrule": "https://github.com/cj123/rrule.git",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   }

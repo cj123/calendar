@@ -2,6 +2,7 @@ angular.module("calendar").factory("Appointment", [ "$http", "moment", "API_BASE
     var appointment = {};
 
     function recurrTransform(rule) {
+
         // strip exclusion dates from the recurrence rule, because despite the library saying it
         // supports them, it does not.
         if (rule.indexOf(";EXDATE") !== -1) {
@@ -52,6 +53,20 @@ angular.module("calendar").factory("Appointment", [ "$http", "moment", "API_BASE
 
             return filtered;
         });
+    };
+
+    appointment.getOffset = function(appt) {
+        var start = moment(appt.start).tz(appt.timezone);
+        console.log(appt.start);
+        console.log(moment(appt.start));
+        console.log(moment.parseZone(appt.start).hour());
+        return (start.hour() * 60) + start.minute();
+    };
+
+    appointment.getLength = function(appt) {
+        var start = moment(appt.start);
+        var finish = moment(appt.finish);
+        return Math.abs(moment.duration(finish.diff(start)).asMinutes());
     };
 
     return appointment;

@@ -1091,11 +1091,6 @@ http-signature@~1.1.0:
     jsprim "^1.2.2"
     sshpk "^1.7.0"
 
-"https://github.com/jkbrzt/rrule.git":
-  name rrule
-  version "2.2.0-dev"
-  resolved "https://github.com/jkbrzt/rrule.git#fd5326d365dc133bc2387a174cdac58283f2c404"
-
 in-publish@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/in-publish/-/in-publish-2.0.0.tgz#e20ff5e3a2afc2690320b6dc552682a9c7fadf51"
@@ -1624,9 +1619,19 @@ mkdirp@^0.5.0, mkdirp@^0.5.1, "mkdirp@>=0.5 0":
   dependencies:
     minimist "0.0.8"
 
+moment-timezone:
+  version "0.5.10"
+  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.10.tgz#3766249c2d317d08f07d896d3033c26f87c4ae2b"
+  dependencies:
+    moment ">= 2.6.0"
+
 moment@^2.15.1, "moment@>=2.8.0 <3.0.0":
   version "2.15.2"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.15.2.tgz#1bfdedf6a6e345f322fe956d5df5bd08a8ce84dc"
+
+"moment@>= 2.6.0":
+  version "2.17.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.17.0.tgz#a4c292e02aac5ddefb29a6eed24f51938dd3b74f"
 
 ms@0.7.1:
   version "0.7.1"
@@ -2120,6 +2125,10 @@ rimraf@2:
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.5.4.tgz#96800093cbf1a0c86bd95b4625467535c29dfa04"
   dependencies:
     glob "^7.0.5"
+
+"rrule@https://github.com/cj123/rrule.git":
+  version "2.2.0-dev"
+  resolved "https://github.com/cj123/rrule.git#6f077016d88637767e26e80e05e2a80f0bf67018"
 
 sass-graph@^2.1.1:
   version "2.1.2"
