@@ -24,8 +24,12 @@ angular.module("calendar").directive("dayView", [function() {
                         return;
                     }
 
-                    Appointment.getAppointments(date).then(function(appointments) {
+                    Appointment.getAppointments(date.clone(), date.clone()).then(function(appointments) {
                         $scope.appointments = appointments;
+
+                        for (var i = 0; i < appointments.length; i++) {
+                            // @TODO calculate appt offset
+                        }
 
                         CalendarOptions.get().then(function(response) {
                             var opts = response.data;

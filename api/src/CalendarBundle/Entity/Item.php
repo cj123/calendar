@@ -70,14 +70,14 @@ class Item
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="start", type="datetime")
+     * @ORM\Column(name="start", type="datetimetz")
      */
     protected $start;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="finish", type="datetime", nullable=true)
+     * @ORM\Column(name="finish", type="datetimetz", nullable=true)
      */
     protected $finish;
 

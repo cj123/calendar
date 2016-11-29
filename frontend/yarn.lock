@@ -1091,6 +1091,11 @@ http-signature@~1.1.0:
     jsprim "^1.2.2"
     sshpk "^1.7.0"
 
+"https://github.com/jkbrzt/rrule.git":
+  name rrule
+  version "2.2.0-dev"
+  resolved "https://github.com/jkbrzt/rrule.git#fd5326d365dc133bc2387a174cdac58283f2c404"
+
 in-publish@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/in-publish/-/in-publish-2.0.0.tgz#e20ff5e3a2afc2690320b6dc552682a9c7fadf51"

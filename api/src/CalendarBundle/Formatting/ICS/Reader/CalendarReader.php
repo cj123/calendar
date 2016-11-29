@@ -60,8 +60,8 @@ class CalendarReader
                 )
             );
 
-            $start = $this->parseDateTime($event->dtstart);
-            $end = $this->parseDateTime($event->dtend);
+            $start = $this->parseDateTime($event->dtstart_tz);
+            $end = $this->parseDateTime($event->dtend_tz);
 
             // our data structure just stores dates, times are stored elsewhere
             $appointment->setStart($start);
@@ -140,19 +140,5 @@ class CalendarReader
         throw new ReaderException(
             "invalid datetime: $str (tried formats: " . explode(",", $supportedFormats) . ")"
         );
-    }
-
-    /**
-     * Get number of minutes since midnight.
-     *
-     * @param \DateTime $dateTime
-     * @return int
-     */
-    private function getMinutesPastMidnight(\DateTime $dateTime): int
-    {
-        $midnight = clone $dateTime;
-        $midnight->setTime(0, 0);
-
-        return ($dateTime->getTimestamp() - $midnight->getTimestamp()) / 60;
     }
 }
