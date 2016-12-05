@@ -28,10 +28,13 @@
         }
     }
 
+    &__grid {
+        min-height: 300px;
+    }
+
     table {
         margin: 0 auto;
         font-size: 1em;
-        min-height: 330px;
 
         tr {
             th {

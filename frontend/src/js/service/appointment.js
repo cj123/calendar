@@ -31,11 +31,11 @@ angular.module("calendar").factory("Appointment", [ "$http", "moment", "API_BASE
             var filtered = [];
 
             for (var appointmentIndex = 0; appointmentIndex < appointments.length; appointmentIndex++) {
-                var appt = appointments[appointmentIndex];
+                var appt = appointment.processTimes(appointments[appointmentIndex]);
 
                 if (!!appt.recurrence_rule) {
                     var rule = rrulestr(recurrTransform(appt.recurrence_rule), {
-                        dtstart: moment(appt.start).toDate(),
+                        dtstart: appt.start.toDate(),
                     });
 
                     appt.rule = rule;
@@ -55,15 +55,18 @@ angular.module("calendar").factory("Appointment", [ "$http", "moment", "API_BASE
         });
     };
 
-    appointment.getOffset = function(appt) {
-        var start = moment.tz(appt.start, appt.timezone);
-        return (start.hour() * 60) + start.minute();
-    };
+    /**
+     * Build up some useful information about the appointment to make displaying it easier.
+     * @param appt
+     * @returns {*}
+     */
+    appointment.processTimes = function(appt) {
+        appt.start = moment.tz(appt.start, appt.timezone);
+        appt.finish = moment.tz(appt.finish, appt.timezone);
+        appt.length = Math.abs(moment.duration(appt.finish.diff(appt.start)).asMinutes());
+        appt.offset = (appt.start.hour() * 60) + appt.start.minute();
 
-    appointment.getLength = function(appt) {
-        var start = moment.tz(appt.start, appt.timezone);
-        var finish = moment.tz(appt.finish, appt.timezone);
-        return Math.abs(moment.duration(finish.diff(start)).asMinutes());
+        return appt;
     };
 
     return appointment;

@@ -5,11 +5,11 @@
             class="appointment"
             ng-repeat="appointment in appointments"
             ng-class="{ 'appointment--selected': selectedAppointment === appointment }"
-            ng-style="{ 'top': appointment['offset'] + 'px', 'height': appointment.length + 'px' }"
+            ng-style="{ 'top': appointment.offset + 'px', 'height': appointment.length + 'px' }"
             ng-dblclick="viewAppointmentDetail(appointment)"
         >
             <strong>{{ appointment.text }}</strong>
-            <time>{{ appointment.startTime.format("HH:mm") }} - {{ appointment.endTime.format("HH:mm") }}</time>
+            <time>{{ appointment.start.format("HH:mm") }} - {{ appointment.finish.format("HH:mm") }}</time>
         </a>
     </div>
 
