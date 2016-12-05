@@ -13,7 +13,6 @@ use CalendarBundle\Repository\NoteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use JMS\Serializer\SerializerInterface;
 use Psr\Log\LoggerInterface;
-use Recurr\Recurrence;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -104,90 +103,9 @@ class CalendarController
             throw new BadRequestHttpException();
         }
 
-
         $appointments = $this->appointmentRepository->findBetweenDates($start, $finish);
 
         return new Response($this->serializer->serialize($appointments, "json"), 200, [
-            "Content-Type" => "application/json",
-        ]);
-    }
-
-    /**
-     * Month View.
-     *
-     * @param Request $request
-     * @return Response
-     */
-    public function monthViewAction(Request $request): Response
-    {
-        $month = (int) $request->get("month");
-        $year  = (int) $request->get("year");
-
-        if (!$month || !$year) {
-            throw new BadRequestHttpException();
-        }
-
-        $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
-
-        $firstDayOfMonth = \DateTime::createFromFormat("d/m/Y", sprintf("01/%02d/%d", $month, $year));
-        $lastDayOfMonth = \DateTime::createFromFormat("d/m/Y", sprintf("%02d/%02d/%d", $daysInMonth, $month, $year));
-        $firstWeekday = (int) $firstDayOfMonth->format("w");
-
-        // make firstWeekday in the range 1..7 by swapping sunday to be last
-        // @TODO use options to determine whether to do this or not.
-        if ($firstWeekday === 0) {
-            $firstWeekday = 7;
-        }
-
-        $days = [];
-
-        for ($day = 1; $day <= $daysInMonth; $day++) {
-            $days[$day] = [ "day" => $day, "events" => false];
-        }
-
-        $appointments = $this->appointmentRepository->findBetweenDates($firstDayOfMonth, $lastDayOfMonth);
-
-        foreach ($appointments as $appointment) {
-            // generate recurrences
-            $recurrences = $this->recurrenceGateway->findRecurrencesBetweenDates(
-                $appointment,
-                $firstDayOfMonth,
-                $lastDayOfMonth
-            );
-
-            foreach ($recurrences as $recurrence) {
-                // only startdate is valid, not end date.
-                /** @var Recurrence $recurrence */
-                $day = (int) $recurrence->getStart()->format("d");
-                $days[$day]["events"] = true;
-                $days[$day]["list"][] = $appointment->getUid();
-            }
-        }
-
-        return new JsonResponse([
-            "padding_days" => $firstWeekday - 1,
-            "days" => array_values($days)
-        ]);
-    }
-
-    /**
-     * Day View.
-     *
-     * @param Request $request
-     * @return Response
-     */
-    public function dayViewAction(Request $request): Response
-    {
-        $date = \DateTime::createFromFormat("Y-m-d", $request->get("date"));
-
-        if (!$date) {
-            throw new BadRequestHttpException();
-        }
-
-        $appointments = $this->appointmentRepository->findBetweenDates($date, $date);
-        $results = $this->recurrenceGateway->filterItemsByDate($appointments, $date);
-
-        return new Response($this->serializer->serialize($results, "json"), 200, [
             "Content-Type" => "application/json",
         ]);
     }
