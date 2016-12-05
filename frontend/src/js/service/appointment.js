@@ -56,16 +56,13 @@ angular.module("calendar").factory("Appointment", [ "$http", "moment", "API_BASE
     };
 
     appointment.getOffset = function(appt) {
-        var start = moment(appt.start).tz(appt.timezone);
-        console.log(appt.start);
-        console.log(moment(appt.start));
-        console.log(moment.parseZone(appt.start).hour());
+        var start = moment.tz(appt.start, appt.timezone);
         return (start.hour() * 60) + start.minute();
     };
 
     appointment.getLength = function(appt) {
-        var start = moment(appt.start);
-        var finish = moment(appt.finish);
+        var start = moment.tz(appt.start, appt.timezone);
+        var finish = moment.tz(appt.finish, appt.timezone);
         return Math.abs(moment.duration(finish.diff(start)).asMinutes());
     };
 
