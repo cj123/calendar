@@ -60,16 +60,18 @@ class DateReader
     }
 
     /**
-     * @return DateSet
+     * @param DateSet $dateSet
+     * @return void
      * @throws DateReaderException
+     * @throws \Recurr\Exception\InvalidArgument
+     * @throws \Recurr\Exception\InvalidRRule
      */
-    public function read(): DateSet
+    public function read(DateSet $dateSet)
     {
         $this->lexer->skipWhitespace();
         $dateType = $this->lexer->getId();
 
         $recurrenceRule = new Rule();
-        $dateSet = new DateSet();
 
         switch ($dateType) {
             case "Single":
@@ -226,8 +228,6 @@ class DateReader
                     throw new DateReaderException("unrecognised DateSet keyword " . $keyword);
             }
         }
-
-        return $dateSet;
     }
 
     /**

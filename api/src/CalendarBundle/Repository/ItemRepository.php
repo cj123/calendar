@@ -1,13 +1,11 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace CalendarBundle\Repository;
 
 use CalendarBundle\Entity\Item;
 use Doctrine\Bundle\DoctrineBundle\Mapping;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
-use Recurr\Rule;
-use Recurr\Transformer\ArrayTransformer;
-use Recurr\Transformer\Constraint\BetweenConstraint;
 
 /**
  * Class ItemRepository
@@ -17,50 +15,29 @@ use Recurr\Transformer\Constraint\BetweenConstraint;
 class ItemRepository extends EntityRepository
 {
     /**
-     * Take a result set and parse out occurrences.
+     * Find Appointments between dates.
      *
-     * @param \DateTime $date
-     * @param array $items
-     * @return array
-     * @throws \Recurr\Exception\MissingData
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @return Item[]
      */
-    protected function processRecurrences(\DateTime $date, array $items): array
+    public function findBetweenDates(\DateTime $start, \DateTime $end): array
     {
-        $recurrenceConstraint = new BetweenConstraint($date, $date, true);
-        $recurrenceTransformer = new ArrayTransformer();
+        $className = $this->getClassName();
 
-        $resultSet = [];
+        $query = $this->getEntityManager()->createQuery(
+            "
+                SELECT a FROM ${className} a
+                    WHERE
+                    a.start IS NOT NULL AND a.start <= :end
+                    AND (a.recurrenceRule != '' OR (a.start <= :end AND a.start >= :start))
+                    ORDER BY a.start ASC
+            " // @TODO: there's much more that can be done to improve the speed of this query.
+        );
 
-        foreach ($items as $item) {
-            if (!$item instanceof Item) {
-                continue;
-            }
+        $query->setParameter("start", $start, Type::DATETIME);
+        $query->setParameter("end", $end, Type::DATETIME);
 
-            $deletedDates = $item->getDeleted();
-
-            // @TODO maybe this could be done in SQL?
-            if ($deletedDates && in_array($date, $deletedDates)) {
-                // skip deleted dates.
-                continue;
-            }
-
-            if (!$item->getRecurrenceRule()) {
-                $resultSet[] = $item;
-                continue;
-            }
-
-            // parse out recurrence rules.
-            $recurrenceRule = new Rule($item->getRecurrenceRule(), $item->getStart(), $item->getFinish());
-
-            $instances = $recurrenceTransformer->transform($recurrenceRule, $recurrenceConstraint);
-
-            if (count($instances) === 0) {
-                continue;
-            }
-
-            $resultSet[] = $item;
-        }
-
-        return $resultSet;
+        return $query->getResult();
     }
 }

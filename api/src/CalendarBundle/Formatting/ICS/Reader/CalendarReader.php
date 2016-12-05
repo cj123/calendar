@@ -7,6 +7,7 @@ use CalendarBundle\Entity\Appointment;
 use CalendarBundle\Entity\Calendar;
 use Doctrine\Common\Collections\ArrayCollection;
 use ICal\ICal as ICalParser;
+use Recurr\DateExclusion;
 use Recurr\Rule;
 
 /**
@@ -51,32 +52,34 @@ class CalendarReader
 
             $appointment = new Appointment();
 
-            $appointment->setText(htmlspecialchars_decode(stripslashes(str_replace('\n',"\n", $event->summary . " " . $event->description))));
+            $appointment->setText(
+                htmlspecialchars_decode(
+                    stripslashes(
+                        str_replace('\n', "\n", $event->summary . "\n" . $event->description)
+                    )
+                )
+            );
 
-            $start = $this->parseDateTime($event->dtstart);
-            $end   = $this->parseDateTime($event->dtend);
-
-            $appointment->setStartTime($this->getMinutesPastMidnight($start));
-            $appointment->setLength(($end->getTimestamp() - $start->getTimestamp()) / 60);
+            $start = $this->parseDateTime($event->dtstart_tz);
+            $end = $this->parseDateTime($event->dtend_tz);
 
             // our data structure just stores dates, times are stored elsewhere
-            $appointment->setStart($start->setTime(0, 0));
-            $appointment->setFinish($end->setTime(0, 0));
+            $appointment->setStart($start);
+            $appointment->setFinish($end);
 
             if (property_exists($event, "tzid")) {
                 $appointment->setTimezone($event->tzid);
             }
 
             if (property_exists($event, "rrule")) {
-                $appointment->setRecurrenceRule($event->rrule);
-
+                // exdates, rrules, etc.
+                $rrule = new Rule($event->rrule);
                 if (property_exists($event, "exdate")) {
-                    // we need to deal with recurrences.
                     $exclusionDates = array_filter(
                         array_map(
                             function ($date) {
                                 try {
-                                    return $this->parseDateTime($date)->setTime(0, 0);
+                                    return  new DateExclusion($this->parseDateTime($date));
                                 } catch (\Exception $e) {
                                     return null;
                                 }
@@ -85,15 +88,9 @@ class CalendarReader
                         )
                     );
 
-                    $appointment->setDeleted($exclusionDates);
+                    $rrule->setExDates($exclusionDates);
                 }
-
-                // exdates, rrules, etc.
-                $rrule = new Rule($event->rrule);
-
-                if ($rrule->getUntil()) {
-                    $appointment->setFinish($rrule->getUntil()->setTime(0, 0));
-                }
+                $appointment->setRecurrenceRule($rrule->getString());
             }
 
             $appointment->setUid($event->uid);
@@ -140,20 +137,8 @@ class CalendarReader
             }
         }
 
-        throw new ReaderException("invalid datetime: $str (tried formats: " . explode(",", $supportedFormats) . ")");
-    }
-
-    /**
-     * Get number of minutes since midnight.
-     *
-     * @param \DateTime $dateTime
-     * @return int
-     */
-    private function getMinutesPastMidnight(\DateTime $dateTime): int
-    {
-        $midnight = clone $dateTime;
-        $midnight->setTime(0, 0);
-
-        return ($dateTime->getTimestamp() - $midnight->getTimestamp()) / 60;
+        throw new ReaderException(
+            "invalid datetime: $str (tried formats: " . explode(",", $supportedFormats) . ")"
+        );
     }
 }

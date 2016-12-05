@@ -15,7 +15,7 @@
 
     <div class="month-view__grid">
         <table>
-            <tr class="days">
+            <tr class="days" ng-if="!!weeks">
                 <th>Mon</th>
                 <th>Tue</th>
                 <th>Wed</th>
@@ -25,20 +25,18 @@
                 <th>Sun</th>
             </tr>
 
-            <tr ng-repeat="week in [0, 5] | range">
+            <tr ng-repeat="week in weeks">
                 <td
-                    ng-repeat="day in [1, 7] | range"
-                    ng-init="dayIndex = ((week * 7) + day)"
+                    ng-repeat="day in week"
                 >
                     <a
-                        ng-if="!!days[dayIndex].num"
                         href="#"
                         class="day"
-                        ng-class="{'day--has-appointments': days[dayIndex].hasEvents, 'day--selected': currentDate.date() === days[dayIndex].num}"
-                        ng-click="currentDate.date(days[dayIndex].num)"
+                        ng-class="{'day--has-appointments': day.events, 'day--selected': currentDate.date() === day.day}"
+                        ng-click="currentDate.date(day.day)"
                     >
 
-                        {{ days[dayIndex].num }}
+                        {{ day.day }}
                     </a>
                 </td>
             </tr>

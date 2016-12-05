@@ -1,8 +1,8 @@
 <div class="modal-header">
     <button
-            type="button"
-            class="close"
-            aria-label="Close" ng-click="cancel()"
+        type="button"
+        class="close"
+        aria-label="Close" ng-click="cancel()"
     >
         <span aria-hidden="true">&times;</span>
     </button>
@@ -19,22 +19,22 @@
                 Start Time
 
                 <input
-                        type="time"
-                        step="60"
-                        name="start-time"
-                        class="start-time"
-                        ng-value="appointment.startTime.format('HH:mm')"
+                    type="time"
+                    step="60"
+                    name="start-time"
+                    class="start-time"
+                    ng-value="appointment.start.format('HH:mm')"
                 >
             </label>
 
             <label>
                 Finish Time
                 <input
-                        type="time"
-                        step="60"
-                        name="finish-time"
-                        class="finish-time"
-                        ng-value="appointment.endTime.format('HH:mm')"
+                    type="time"
+                    step="60"
+                    name="finish-time"
+                    class="finish-time"
+                    ng-value="appointment.finish.format('HH:mm')"
                 >
             </label>
             <strong>Timezone</strong> -
@@ -56,12 +56,18 @@
 
             <label><input type="radio" name="highlight" value="always" checked> Always</label>
             <label><input type="radio" name="highlight" value="never"> Never</label>
-            <label><input type="radio" name="highlight" value="until-expiration"> Until
-                Expiration</label>
-            <label><input type="radio" name="highlight" value="as-holiday"> As Holiday</label>
 
-            <label><input type="checkbox" name="todo" value="{{ appointment.todo }}"> Todo
-                Item</label>
+            <label>
+                <input type="radio" name="highlight" value="until-expiration"> Until Expiration
+            </label>
+
+            <label>
+                <input type="radio" name="highlight" value="as-holiday"> As Holiday
+            </label>
+
+            <label>
+                <input type="checkbox" name="todo" value="{{ appointment.todo }}"> Todo Item
+            </label>
         </div>
 
         <div class="appointment-info__early-warning">

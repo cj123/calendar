@@ -24,4 +24,11 @@ interface ParserInterface
      * @return void
      */
     public function parse(LexerInterface $lexer, string $keyword);
+
+    /**
+     * Take out the iCal formatted date, put it into a more standard format on self::$item;
+     *
+     * @return void
+     */
+    public function extractDateSet();
 }

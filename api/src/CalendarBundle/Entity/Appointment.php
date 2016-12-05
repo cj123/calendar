@@ -23,13 +23,6 @@ class Appointment extends Item
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="length", type="integer")
-     */
-    private $length;
-
-    /**
      * @var array
      *
      * @ORM\Column(name="alarms", type="array")
@@ -53,13 +46,6 @@ class Appointment extends Item
     private $calendar;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="startTime", type="integer")
-     */
-    private $startTime;
-
-    /**
      * Get id
      *
      * @return int
@@ -69,29 +55,6 @@ class Appointment extends Item
         return $this->id;
     }
 
-    /**
-     * Set length
-     *
-     * @param integer $length
-     *
-     * @return Appointment
-     */
-    public function setLength($length)
-    {
-        $this->length = $length;
-
-        return $this;
-    }
-
-    /**
-     * Get length
-     *
-     * @return int
-     */
-    public function getLength()
-    {
-        return $this->length;
-    }
 
     /**
      * Set alarms
@@ -158,25 +121,6 @@ class Appointment extends Item
     public function getCalendar()
     {
         return $this->calendar;
-    }
-
-    /**
-     * @param int $startTime
-     * @return Appointment
-     */
-    public function setStartTime($startTime)
-    {
-        $this->startTime = $startTime;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getStartTime()
-    {
-        return $this->startTime;
     }
 }
 

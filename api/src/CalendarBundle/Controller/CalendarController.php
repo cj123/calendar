@@ -6,6 +6,7 @@ use CalendarBundle\Defaults\OptionMap as DefaultOptionMap;
 use CalendarBundle\Formatting\ICal\Lexer\ICalLexer;
 use CalendarBundle\Formatting\ICal\Reader\CalendarReader as ICalTclReader;
 use CalendarBundle\Formatting\ICS\Reader\CalendarReader as ICSReader;
+use CalendarBundle\Gateway\RecurrenceGateway;
 use ICal\ICal as ICalParser;
 use CalendarBundle\Repository\AppointmentRepository;
 use CalendarBundle\Repository\NoteRepository;
@@ -36,6 +37,11 @@ class CalendarController
     private $noteRepository;
 
     /**
+     * @var RecurrenceGateway
+     */
+    private $recurrenceGateway;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -63,6 +69,7 @@ class CalendarController
      * @param EntityManagerInterface $entityManager
      * @param AppointmentRepository $appointmentRepository
      * @param NoteRepository $noteRepository
+     * @param RecurrenceGateway $recurrenceGateway
      * @param DefaultOptionMap $defaultOptionMap
      */
     public function __construct(
@@ -71,6 +78,7 @@ class CalendarController
         EntityManagerInterface $entityManager,
         AppointmentRepository $appointmentRepository,
         NoteRepository $noteRepository,
+        RecurrenceGateway $recurrenceGateway,
         DefaultOptionMap $defaultOptionMap
     ) {
         $this->logger = $logger;
@@ -78,73 +86,26 @@ class CalendarController
         $this->entityManager = $entityManager;
         $this->appointmentRepository = $appointmentRepository;
         $this->noteRepository = $noteRepository;
+        $this->recurrenceGateway = $recurrenceGateway;
         $this->defaultOptionMap = $defaultOptionMap;
     }
 
     /**
-     * Month View.
-     *
      * @param Request $request
      * @return Response
      */
-    public function monthViewAction(Request $request): Response
+    public function appointmentsAction(Request $request): Response
     {
-        $month = (int) $request->get("month");
-        $year  = (int) $request->get("year");
+        $start = \DateTime::createFromFormat("Y-m-d", $request->get("start"))->setTime(0, 0);
+        $finish = \DateTime::createFromFormat("Y-m-d", $request->get("finish"))->setTime(0, 0);
 
-        if (!$month || !$year) {
+        if (!$start || !$finish) {
             throw new BadRequestHttpException();
         }
 
-        $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+        $appointments = $this->appointmentRepository->findBetweenDates($start, $finish);
 
-        $firstDayOfMonth = \DateTime::createFromFormat("d/m/Y", sprintf("01/%02d/%d", $month, $year));
-        $firstWeekday = (int) $firstDayOfMonth->format("w");
-
-        $days = [];
-
-        // make firstWeekday in the range 1..7 by swapping sunday to be last
-        // @TODO use options to determine whether to do this or not.
-        if ($firstWeekday === 0) {
-            $firstWeekday = 7;
-        }
-
-        // first, go through all the days and pop the padding in until the first day
-        for ($day = 0; $day < $firstWeekday; $day++) {
-            $days[] = [];
-        }
-
-        // then put the actual days in
-        for ($day = 1; $day <= $daysInMonth; $day++) {
-            $strDate = \DateTime::createFromFormat("Y-m-d", "$year-$month-$day");
-            $events = $this->appointmentRepository->findByDate($strDate);
-
-            $days[] = [
-                "num" => $day,
-                "hasEvents" => count($events) > 0,
-            ];
-        }
-
-        return new JsonResponse($days);
-    }
-
-    /**
-     * Day View.
-     *
-     * @param Request $request
-     * @return Response
-     */
-    public function dayViewAction(Request $request): Response
-    {
-        $date = \DateTime::createFromFormat("Y-m-d", $request->get("date"));
-
-        if (!$date) {
-            throw new BadRequestHttpException();
-        }
-
-        $results = $this->appointmentRepository->findByDate($date);
-
-        return new Response($this->serializer->serialize($results, "json"), 200, [
+        return new Response($this->serializer->serialize($appointments, "json"), 200, [
             "Content-Type" => "application/json",
         ]);
     }
@@ -163,7 +124,8 @@ class CalendarController
             throw new BadRequestHttpException();
         }
 
-        $results = $this->noteRepository->findByDate($date);
+        $notes = $this->noteRepository->findBetweenDates($date, $date);
+        $results = $this->recurrenceGateway->filterItemsByDate($notes, $date);
 
         return new Response($this->serializer->serialize($results, "json"), 200, [
             "Content-Type" => "application/json",

@@ -33,6 +33,11 @@ class ItemReaderTest extends TestCase
             {
                 $this->c->assertEquals("d", $lexer->next());
             }
+
+            public function extractDateSet()
+            {
+                return; // don't do anything
+            }
         };
 
         $reader = new ItemReader($lexer, $parser);

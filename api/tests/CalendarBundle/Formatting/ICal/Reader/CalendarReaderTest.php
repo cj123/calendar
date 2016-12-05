@@ -68,7 +68,7 @@ class CalendarReaderTest extends TestCase
 Calendar [v2.0]
 MondayFirst [1]
 Appt [
-Start [870]
+Start [630]
 Length [30]
 Uid [eskimo_0_f57_d]
 Owner [cj]
@@ -108,7 +108,7 @@ EOF;
         $appt = $calendar->getAppointments()->get(0);
         $this->assertEquals("cj", $appt->getOwner());
         $this->assertEquals(1, $appt->getRemindStart());
-        $actual = \DateTime::createFromFormat(LexerInterface::DATE_FORMAT, "16/11/2016")->setTime(0, 0);
-        $this->assertEquals($actual, $appt->getStart());
+        $expected = \DateTime::createFromFormat(LexerInterface::DATE_FORMAT, "16/11/2016")->setTime(10, 30);
+        $this->assertEquals($expected, $appt->getStart());
     }
 }

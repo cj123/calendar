@@ -2,6 +2,7 @@
 
 namespace CalendarBundle\Tests\Formatting\ICal\Reader;
 
+use CalendarBundle\Formatting\ICal\DateSet;
 use CalendarBundle\Formatting\ICal\Lexer\ICalLexer;
 use CalendarBundle\Formatting\ICal\Reader\DateReader;
 use CalendarBundle\Formatting\ICal\Reader\DateReaderException;
@@ -20,7 +21,8 @@ class DateReaderTest extends TestCase
     {
         $lexer = new ICalLexer("Single 20/9/2016 End");
         $reader = new DateReader($lexer);
-        $dateSet = $reader->read();
+        $dateSet = new DateSet();
+        $reader->read($dateSet);
 
         $this->assertEquals("", $dateSet->getRecurrenceRule()); // single dates should never recur.
         $this->assertInstanceOf("\\DateTime", $dateSet->getStart());
@@ -34,7 +36,8 @@ class DateReaderTest extends TestCase
             Start 8/10/2016
             Finish 31/12/2016 End");
         $reader = new DateReader($lexer);
-        $dateSet = $reader->read();
+        $dateSet = new DateSet();
+        $reader->read($dateSet);
 
         $this->assertInstanceOf("\\DateTime", $dateSet->getStart());
         $this->assertInstanceOf("\\DateTime", $dateSet->getFinish());
@@ -48,7 +51,8 @@ class DateReaderTest extends TestCase
             Start 8/10/2016 End
         ");
         $reader = new DateReader($lexer);
-        $dateSet = $reader->read();
+        $dateSet = new DateSet();
+        $reader->read($dateSet);
 
         $this->assertInstanceOf("\\DateTime", $dateSet->getStart());
         $this->assertNull($dateSet->getFinish());
@@ -62,7 +66,8 @@ class DateReaderTest extends TestCase
             Start 8/10/2016 End
         ");
         $reader = new DateReader($lexer);
-        $dateSet = $reader->read();
+        $dateSet = new DateSet();
+        $reader->read($dateSet);
 
         $this->assertInstanceOf("\\DateTime", $dateSet->getStart());
         $this->assertNull($dateSet->getFinish());
@@ -81,7 +86,8 @@ class DateReaderTest extends TestCase
             Start 8/10/2016 End
         ");
         $reader = new DateReader($lexer);
-        $dateSet = $reader->read();
+        $dateSet = new DateSet();
+        $reader->read($dateSet);
 
         // these extra days will just be ignored, so everything should look the same.
         $this->assertInstanceOf("\\DateTime", $dateSet->getStart());
@@ -96,7 +102,8 @@ class DateReaderTest extends TestCase
             Start 8/10/2016 End
         ");
         $reader = new DateReader($lexer);
-        $dateSet = $reader->read();
+        $dateSet = new DateSet();
+        $reader->read($dateSet);
 
         // these extra months will just be ignored, so everything should look the same.
         $this->assertInstanceOf("\\DateTime", $dateSet->getStart());
@@ -112,7 +119,8 @@ class DateReaderTest extends TestCase
             Finish 8/10/2020 End
         ");
         $reader = new DateReader($lexer);
-        $dateSet = $reader->read();
+        $dateSet = new DateSet();
+        $reader->read($dateSet);
 
         $this->assertInstanceOf("\\DateTime", $dateSet->getStart());
         $this->assertInstanceOf("\\DateTime", $dateSet->getFinish());
@@ -132,9 +140,10 @@ class DateReaderTest extends TestCase
             Finish 8/10/2020 End
         ");
         $reader = new DateReader($lexer);
+        $dateSet = new DateSet();
 
         try {
-            $reader->read();
+            $reader->read($dateSet);
         } catch (DateReaderException $e) {
             return;
         }
@@ -149,7 +158,8 @@ class DateReaderTest extends TestCase
             Start 8/10/2016 End
         ");
         $reader = new DateReader($lexer);
-        $dateSet = $reader->read();
+        $dateSet = new DateSet();
+        $reader->read($dateSet);
 
         $rrule = $dateSet->getRecurrenceRule();
         $this->assertNotEmpty($rrule);
@@ -170,9 +180,10 @@ class DateReaderTest extends TestCase
             Start 8/10/2016 End
         ");
         $reader = new DateReader($lexer);
+        $dateSet = new DateSet();
 
         try {
-            $reader->read();
+            $reader->read($dateSet);
         } catch (DateReaderException $e) {
             return;
         }
@@ -187,9 +198,10 @@ class DateReaderTest extends TestCase
             Start 8/10/2016 End
         ");
         $reader = new DateReader($lexer);
+        $dateSet = new DateSet();
 
         try {
-            $reader->read();
+            $reader->read($dateSet);
         } catch (DateReaderException $e) {
             return;
         }
@@ -204,7 +216,8 @@ class DateReaderTest extends TestCase
             Start 16/11/2016 End
         ");
         $reader = new DateReader($lexer);
-        $dateSet = $reader->read();
+        $dateSet = new DateSet();
+        $reader->read($dateSet);
 
         $rrule = $dateSet->getRecurrenceRule();
         $this->assertNotEmpty($rrule);
@@ -225,7 +238,8 @@ class DateReaderTest extends TestCase
             Start 16/11/2016 End
         ");
         $reader = new DateReader($lexer);
-        $dateSet = $reader->read();
+        $dateSet = new DateSet();
+        $reader->read($dateSet);
 
         $rrule = $dateSet->getRecurrenceRule();
 
@@ -247,9 +261,10 @@ class DateReaderTest extends TestCase
             Start 16/11/2016 End
         ");
         $reader = new DateReader($lexer);
+        $dateSet = new DateSet();
 
         try {
-            $reader->read();
+            $reader->read($dateSet);
         } catch (DateReaderException $e) {
             return;
         }
@@ -264,9 +279,10 @@ class DateReaderTest extends TestCase
             Start 16/11/2016 End
         ");
         $reader = new DateReader($lexer);
+        $dateSet = new DateSet();
 
         try {
-            $reader->read();
+            $reader->read($dateSet);
         } catch (DateReaderException $e) {
             return;
         }

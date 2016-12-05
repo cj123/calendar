@@ -70,23 +70,16 @@ class Item
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="start", type="datetime")
+     * @ORM\Column(name="start", type="datetimetz")
      */
     protected $start;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="finish", type="datetime", nullable=true)
+     * @ORM\Column(name="finish", type="datetimetz", nullable=true)
      */
     protected $finish;
-
-    /**
-     * @var array
-     *
-     * @ORM\Column(name="deleted", type="array")
-     */
-    protected $deleted;
 
     /**
      * @var string
@@ -142,54 +135,6 @@ class Item
     public function getFinish()
     {
         return $this->finish;
-    }
-
-    /**
-     * Set deleted
-     *
-     * @param array $deleted
-     *
-     * @return Item
-     */
-    public function setDeleted($deleted)
-    {
-        $this->deleted = $deleted;
-
-        return $this;
-    }
-
-    /**
-     * Get deleted
-     *
-     * @return array
-     */
-    public function getDeleted()
-    {
-        return $this->deleted;
-    }
-
-    /**
-     * Add a deleted date to the array set
-     *
-     * @param \DateTime $date
-     */
-    public function addDeleted(\DateTime $date)
-    {
-        $this->deleted[] = $date;
-    }
-
-    /**
-     * Remove a deleted date from the array set
-     *
-     * @param \DateTime $date
-     */
-    public function removeDeleted(\DateTime $date)
-    {
-        foreach ($this->deleted as $index => $deleted) {
-            if ($deleted === $date) {
-                unset($this->deleted[$index]);
-            }
-        }
     }
 
     /**
@@ -334,30 +279,6 @@ class Item
     public function getRemindStart()
     {
         return $this->remindStart;
-    }
-
-    /**
-     * Set date
-     *
-     * @param DateSet $date
-     *
-     * @return Item
-     */
-    public function setDate(DateSet $date)
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    /**
-     * Get date
-     *
-     * @return DateSet
-     */
-    public function getDate()
-    {
-        return $this->date;
     }
 
     /**

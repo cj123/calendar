@@ -44,7 +44,7 @@ class AppointmentParser extends ItemParser
             case "Start":
                 $lexer->skipWhitespace();
                 $start = $lexer->getNumber();
-                $this->item->setStartTime($start);
+                $this->dateSet->setStartTime($start);
 
                 break;
 
@@ -52,7 +52,7 @@ class AppointmentParser extends ItemParser
                 $lexer->skipWhitespace();
                 $length = $lexer->getNumber();
 
-                $this->item->setLength($length);
+                $this->dateSet->setLength($length);
 
                 break;
 

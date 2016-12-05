@@ -1,10 +1,6 @@
-calendar_month-view:
-    path:     /calendar/month-view
-    defaults: { _controller: calendar.controller.calendar:monthViewAction }
-
-calendar_day-view:
-    path:     /calendar/day-view
-    defaults: { _controller: calendar.controller.calendar:dayViewAction }
+calendar_appointments:
+    path:     /calendar/appointments
+    defaults: { _controller: calendar.controller.calendar:appointmentsAction }
 
 calendar_notes:
     path:     /calendar/notes
