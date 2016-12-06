@@ -1,8 +1,13 @@
 angular.module("calendar").factory("Appointment", [ "$http", "moment", "API_BASE", function($http, moment, API_BASE) {
     var appointment = {};
 
-    function recurrTransform(rule) {
-
+    /**
+     * Remove exdate from recurrence rule.
+     *
+     * @param rule
+     * @returns {string}
+     */
+    function stripExDate(rule) {
         // strip exclusion dates from the recurrence rule, because despite the library saying it
         // supports them, it does not.
         if (rule.indexOf(";EXDATE") !== -1) {
@@ -34,7 +39,7 @@ angular.module("calendar").factory("Appointment", [ "$http", "moment", "API_BASE
                 var appt = appointment.processTimes(appointments[appointmentIndex]);
 
                 if (!!appt.recurrence_rule) {
-                    var rule = rrulestr(recurrTransform(appt.recurrence_rule), {
+                    var rule = rrulestr(stripExDate(appt.recurrence_rule), {
                         dtstart: appt.start.toDate(),
                     });
 
@@ -61,8 +66,13 @@ angular.module("calendar").factory("Appointment", [ "$http", "moment", "API_BASE
      * @returns {*}
      */
     appointment.processTimes = function(appt) {
-        appt.start = moment.tz(appt.start, appt.timezone);
-        appt.finish = moment.tz(appt.finish, appt.timezone);
+        if (!appt.timezone) {
+            appt.timezone = moment.tz.guess();
+            console.log(appt.timezone);
+        }
+
+        appt.start = moment.tz(appt.start, "YYYY-MM-DDTHH:mm:ss", appt.timezone);
+        appt.finish = moment.tz(appt.finish, "YYYY-MM-DDTHH:mm:ss", appt.timezone);
         appt.length = Math.abs(moment.duration(appt.finish.diff(appt.start)).asMinutes());
         appt.offset = (appt.start.hour() * 60) + appt.start.minute();
 

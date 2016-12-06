@@ -28,9 +28,6 @@ angular.module("calendar").directive("dayView", [function() {
                         $scope.appointments = appointments;
 
                         for (var i = 0; i < appointments.length; i++) {
-                            appointments[i].offset = Appointment.getOffset(appointments[i]);
-                            appointments[i].length = Appointment.getLength(appointments[i]);
-
                             console.log(appointments[i]);
                         }
 
