@@ -9,6 +9,7 @@ angular.module("calendar").directive("dayView", [function() {
             "$scope", "$document", "$uibModal", "Appointment", "CalendarOptions",
             function($scope, $document, $uibModal, Appointment, CalendarOptions) {
                 $scope.appointments = [];
+                $scope.newAppointment = null;
 
                 // watch the current date of the view for changes.
                 $scope.$watch(function() {
@@ -26,10 +27,6 @@ angular.module("calendar").directive("dayView", [function() {
 
                     Appointment.getAppointments(date.clone(), date.clone()).then(function(appointments) {
                         $scope.appointments = appointments;
-
-                        for (var i = 0; i < appointments.length; i++) {
-                            console.log(appointments[i]);
-                        }
 
                         CalendarOptions.get().then(function(response) {
                             var opts = response.data;
@@ -50,6 +47,24 @@ angular.module("calendar").directive("dayView", [function() {
                             }
                         }
                     });
+                };
+
+                $scope.createAppointment = function(event) {
+                    var offset = event.offsetY - (event.offsetY % 30); // rounded to nearest 30min
+
+                    var start = $scope.currentDate.clone()
+                        .hour(0)
+                        .minute(0)
+                        .second(0)
+                        .add(offset, "minutes");
+
+                    $scope.newAppointment = {
+                        offset: offset,
+                        start: start,
+                        finish: start.clone().add(30, "minutes")
+                    };
+
+                    console.log($scope.newAppointment);
                 };
             }
         ]

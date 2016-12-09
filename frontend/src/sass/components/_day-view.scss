@@ -50,7 +50,7 @@ $time-cell-width: 50px;
         position: absolute;
         z-index: 10;
         width: 100%;
-        height: 100%;
+        height: 24 * 60px;
 
         padding-left: ($time-cell-width);
 
@@ -87,6 +87,21 @@ $time-cell-width: 50px;
                 position: absolute;
                 top: 5px;
                 right: 5px;
+            }
+
+            &--creator {
+                resize: both;
+
+                textarea {
+                    background: transparent;
+                    border: none;
+                    resize: none;
+
+                    position: absolute;
+                    top: 0px;
+                    width: 80%;
+                    height: 100%;
+                }
             }
         }
     }

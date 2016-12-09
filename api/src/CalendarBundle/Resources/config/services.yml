@@ -17,12 +17,26 @@ services:
         arguments:
             - CalendarBundle\Entity\Note
 
+    calendar.repository.calendar:
+        class: Doctrine\ORM\EntityRepository
+        factory: [ "@doctrine.orm.entity_manager", getRepository ]
+        arguments:
+            - CalendarBundle\Entity\Calendar
+
     calendar.defaults.option_map:
         class: CalendarBundle\Defaults\OptionMap
+
+    calendar.generator.uid:
+        class: CalendarBundle\Generator\UidGenerator
 
     calendar.controller.calendar:
         class: CalendarBundle\Controller\CalendarController
         arguments: [ "@logger", "@jms_serializer", "@doctrine.orm.entity_manager", "@calendar.repository.appointment", "@calendar.repository.note", "@calendar.gateway.recurrence", "@calendar.defaults.option_map" ]
+
+
+    calendar.controller.appointment:
+        class: CalendarBundle\Controller\AppointmentController
+        arguments: [ "@logger", "@form.factory", "@doctrine.orm.entity_manager", "@calendar.repository.calendar", "@calendar.generator.uid" ]
 
     calendar.gateway.recurrence:
         class: CalendarBundle\Gateway\RecurrenceGateway

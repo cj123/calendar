@@ -24,7 +24,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
  * @package CalendarBundle\Controller
  * @author Callum Jones <cj@icj.me>
  */
-class CalendarController
+final class CalendarController
 {
     /**
      * @var AppointmentRepository

@@ -1,5 +1,5 @@
 <div class="day-view" id="day-view" ng-cloak du-scroll-container>
-    <div class="day-view__appointments">
+    <div class="day-view__appointments" ng-click="!!newAppointment || createAppointment($event);">
         <a
             href="#"
             class="appointment"
@@ -10,6 +10,17 @@
         >
             <strong>{{ appointment.text }}</strong>
             <time>{{ appointment.start.format("HH:mm") }} - {{ appointment.finish.format("HH:mm") }}</time>
+        </a>
+
+        <a
+            href="#"
+            class="appointment appointment--creator"
+            ng-show="newAppointment !== null"
+            ng-style="{ 'top': newAppointment.offset + 'px', 'height': newAppointment.length + 'px' }"
+            ng-dblclick="viewAppointmentDetail(newAppointment)"
+        >
+            <strong><label><textarea ng-model="newAppointment.text"></textarea></label></strong>
+            <time>{{ newAppointment.start.format("HH:mm") }} - {{ newAppointment.finish.format("HH:mm") }}</time>
         </a>
     </div>
 
