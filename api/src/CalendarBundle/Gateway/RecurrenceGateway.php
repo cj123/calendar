@@ -119,12 +119,6 @@ class RecurrenceGateway
 
         $rrule = new Rule($rule, $startDate, $endDate);
 
-        if ($deleted = $item->getDeleted()) {
-            $rrule->setExDates(array_map(function(\DateTime $date) {
-                return new DateExclusion($date);
-            }, $deleted));
-        }
-
         return $this->transformer->transform(
             $rrule,
             new BetweenConstraint($start, $finish, true)

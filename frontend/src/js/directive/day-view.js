@@ -2,7 +2,7 @@ angular.module("calendar").directive("dayView", [function() {
     return {
         restrict: "E",
         scope: {
-            currentDate: '='
+            currentDate: '=',
         },
         templateUrl: "calendar/view/day-view.html",
         controller: [

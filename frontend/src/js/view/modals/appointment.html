@@ -42,6 +42,10 @@
                 {{ appointment.timezone }}
             </div>
             <br>
+
+            <strong>Repeats</strong> -
+            {{ appointment.rule.toText() || "none" }}
+            <br>
         </div>
     </div>
 

@@ -24,8 +24,8 @@ angular.module("calendar").directive("notes", [function() {
                         return;
                     }
 
-                    Note.getNotes(date).then(function(response) {
-                        $scope.notes = response.data;
+                    Note.getNotes(date.clone()).then(function(notes) {
+                        $scope.notes = notes;
                     });
                 }
 

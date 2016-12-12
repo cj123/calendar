@@ -1,18 +1,21 @@
-angular.module("calendar").factory("Note", [ "$http", "API_BASE", function($http, API_BASE) {
-    var note = {};
+angular.module("calendar").factory("Note", [ "Item", "$http", "API_BASE", function(Item, $http, API_BASE) {
+    var noteFactory = {};
 
     /**
-     * Get Calendar Notes
+     * Get Notes.
+     *
      * @param date
-     * @returns {HttpPromise}
+     * @returns {*}
      */
-    note.getNotes = function(date) {
+    noteFactory.getNotes = function(date) {
         return $http.get(API_BASE + "calendar/notes", {
             params: {
                 date: date.format("Y-M-D")
             }
+        }).then(function(response) {
+            return Item.filterBetweenDates(response.data, date, date.clone());
         });
     };
 
-    return note;
+    return noteFactory;
 }]);

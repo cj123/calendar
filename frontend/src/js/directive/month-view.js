@@ -33,10 +33,15 @@ angular.module("calendar").directive("monthView", [function() {
                     Appointment.getAppointments(firstDayOfMonth, lastDayOfMonth).then(function(appts) {
                         for (var apptIndex = 0; apptIndex < appts.length; apptIndex++) {
                             var appt = appts[apptIndex];
-                            for (var apptRecurrIndex = 0; apptRecurrIndex < appt.recurrences.length; apptRecurrIndex++) {
-                                var recurrence = appt.recurrences[apptRecurrIndex];
 
-                                days[moment(recurrence).date() - 1].events = true;
+                            if (appt.recurrences.length > 0) {
+                                for (var apptRecurrIndex = 0; apptRecurrIndex < appt.recurrences.length; apptRecurrIndex++) {
+                                    var recurrence = appt.recurrences[apptRecurrIndex];
+
+                                    days[moment(recurrence).date() - 1].events = true;
+                                }
+                            } else {
+                                days[appt.start.date() - 1].events = true;
                             }
                         }
 

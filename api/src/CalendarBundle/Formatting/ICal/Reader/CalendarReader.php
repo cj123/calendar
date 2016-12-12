@@ -133,7 +133,12 @@ class CalendarReader
                     $reader = new ItemReader($this->lexer, $parser);
                     $reader->read();
 
-                    $notes[] = $parser->getNote();
+                    $note = $parser->getNote();
+
+                    // make the finish date the last second of the day, so the note appears to have a length
+                    $note->setStart($note->getStart()->setTime(12, 00, 00));
+                    $note->setFinish($note->getFinish()->setTime(13, 00, 00));
+                    $notes[] = $note;
 
                     break;
 

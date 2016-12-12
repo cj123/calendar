@@ -32,10 +32,10 @@
                     <a
                         href="#"
                         class="day"
+                        ng-if="!!day.day"
                         ng-class="{'day--has-appointments': day.events, 'day--selected': currentDate.date() === day.day}"
                         ng-click="currentDate.date(day.day)"
                     >
-
                         {{ day.day }}
                     </a>
                 </td>

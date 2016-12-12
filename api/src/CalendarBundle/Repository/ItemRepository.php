@@ -23,6 +23,12 @@ class ItemRepository extends EntityRepository
      */
     public function findBetweenDates(\DateTime $start, \DateTime $end): array
     {
+        if ($start == $end) {
+            // beginning and end of days
+            $start->setTime(0, 0, 0);
+            $end->setTime(23, 59, 59);
+        }
+
         $className = $this->getClassName();
 
         $query = $this->getEntityManager()->createQuery(

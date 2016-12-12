@@ -125,9 +125,8 @@ final class CalendarController
         }
 
         $notes = $this->noteRepository->findBetweenDates($date, $date);
-        $results = $this->recurrenceGateway->filterItemsByDate($notes, $date);
 
-        return new Response($this->serializer->serialize($results, "json"), 200, [
+        return new Response($this->serializer->serialize($notes, "json"), 200, [
             "Content-Type" => "application/json",
         ]);
     }
@@ -180,6 +179,20 @@ final class CalendarController
                 }
 
                 $calendar = $reader->read();
+
+                foreach ($calendar->getAppointments() as $appointment) {
+                    if (count($this->appointmentRepository->findBy([ "uid" => $appointment->getUid()])) > 0) {
+                        // skip duplicates
+                        $calendar->getAppointments()->removeElement($appointment);
+                    }
+                }
+
+                foreach ($calendar->getNotes() as $note) {
+                    if (count($this->noteRepository->findBy([ "uid" => $note->getUid() ])) > 0) {
+                        // skip duplicates
+                        $calendar->getNotes()->removeElement($note);
+                    }
+                }
 
                 $this->logger->info("Found an ${format} format with version " . $calendar->getVersion());
                 $this->logger->info("Persisting calendar and appointments to database");

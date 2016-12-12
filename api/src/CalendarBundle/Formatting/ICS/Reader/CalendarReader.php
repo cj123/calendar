@@ -104,6 +104,7 @@ class CalendarReader
         $calendar->setImportedDate(new \DateTime());
         $calendar->setVersion(2.0);
         $calendar->setAppointments(new ArrayCollection($appointments));
+        $calendar->setNotes(new ArrayCollection());
 
         return $calendar;
     }

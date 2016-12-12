@@ -25,6 +25,7 @@ var paths = {
                 "./node_modules/angular-scroll/angular-scroll.min.js",
                 "./node_modules/moment/min/moment.min.js",
                 "./node_modules/moment-timezone/builds/moment-timezone-with-data.min.js",
+                "./node_modules/rrule/lib/nlp.js",
                 "./node_modules/rrule/lib/rrule.js",
                 "./node_modules/angular-moment/angular-moment.min.js",
                 "./node_modules/ng-file-upload/dist/ng-file-upload-all.min.js"
