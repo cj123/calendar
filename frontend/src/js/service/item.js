@@ -2,22 +2,6 @@ angular.module("calendar").factory("Item", ["moment", function(moment) {
     var itemFactory = {};
 
     /**
-     * Remove exdate from recurrence rule.
-     *
-     * @param rule
-     * @returns {string}
-     */
-    function stripExDate(rule) {
-        // strip exclusion dates from the recurrence rule, because despite the library saying it
-        // supports them, it does not.
-        if (rule.indexOf(";EXDATE") !== -1) {
-            rule = rule.substring(0, rule.indexOf(';EXDATE'));
-        }
-
-        return "RRULE:" + rule;
-    }
-
-    /**
      * Filter items to only display those occuring between two dates. between two dates.
      * @param items
      * @param startDate
@@ -34,14 +18,9 @@ angular.module("calendar").factory("Item", ["moment", function(moment) {
             var item = itemFactory.processTimes(items[itemIndex]);
 
             if (!!item.recurrence_rule) {
-                var rule = rrulestr(stripExDate(item.recurrence_rule), {
-                    dtstart: item.start.toDate(),
-                });
+                item.recurrences = recurrencesBetween(item.recurrence_rule, item.start, startDate, endDate);
 
-                item.rule = rule;
-                item.recurrences = rule.between(startDate.toDate(), endDate.toDate(), true);
-
-                if (item.recurrences.length > 0) { // @TODO non-recurring dates
+                if (item.recurrences.length > 0) {
                     filtered.push(item);
                 }
             } else {
@@ -53,6 +32,30 @@ angular.module("calendar").factory("Item", ["moment", function(moment) {
 
         return filtered;
     };
+
+    function recurrencesBetween(rrulestr, dtstart, setStart, setEnd) {
+        var start = ICAL.Time.fromJSDate(dtstart.toDate());
+        // hack: https://github.com/mozilla-comm/ical.js/issues/243
+        var rule = ICAL.Recur.fromData(ICAL.Recur._stringToData(rrulestr, true));
+        var iterator = rule.iterator(start);
+
+        setStart = ICAL.Time.fromJSDate(setStart.toDate());
+        setEnd = ICAL.Time.fromJSDate(setEnd.toDate());
+
+        var recurrences = [];
+
+        for (var next = iterator.next(); next; next = iterator.next()) {
+            if (next.compare(setStart) < 0) {
+                continue;
+            } else if (next.compare(setEnd) > 0) {
+                break;
+            }
+
+            recurrences.push(next.toJSDate());
+        }
+
+        return recurrences;
+    }
 
     /**
      * Given an item, assign it a length, offset and start and end moment objects.
