@@ -10,7 +10,7 @@ angular.module("calendar").factory("Note", [ "Item", "$http", "API_BASE", functi
     noteFactory.getNotes = function(date) {
         return $http.get(API_BASE + "calendar/notes", {
             params: {
-                date: date.format("Y-M-D")
+                date: date.format("YYYY-MM-DD")
             }
         }).then(function(response) {
             return Item.filterBetweenDates(response.data, date, date.clone());

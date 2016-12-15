@@ -12,8 +12,8 @@ angular.module("calendar").factory("Appointment", [ "Item", "$http", "moment", "
     appointmentFactory.getAppointments = function(startDate, endDate) {
         return $http.get(API_BASE + "calendar/appointments", {
             params: {
-                start: startDate.format("Y-M-D"),
-                finish: endDate.format("Y-M-D")
+                start: startDate.format("YYYY-MM-DD"),
+                finish: endDate.format("YYYY-MM-DD")
             }
         }).then(function(response) {
             return Item.filterBetweenDates(response.data, startDate, endDate);

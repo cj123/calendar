@@ -1,0 +1,12 @@
+database:
+  dialect: sqlite3
+  location: /tmp/d.db
+  username: root
+  password: abcd1234
+  hostname: localhost
+  database: calendar
+  port: 3306
+
+web:
+  address: 127.0.0.1
+  port: 8000

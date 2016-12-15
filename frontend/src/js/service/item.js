@@ -24,7 +24,6 @@ angular.module("calendar").factory("Item", ["moment", function(moment) {
                     filtered.push(item);
                 }
             } else {
-                item.rule = null;
                 item.recurrences = [];
                 filtered.push(item);
             }
@@ -33,8 +32,17 @@ angular.module("calendar").factory("Item", ["moment", function(moment) {
         return filtered;
     };
 
+    /**
+     *
+     * @param rrulestr
+     * @param dtstart
+     * @param setStart
+     * @param setEnd
+     * @returns {Array}
+     */
     function recurrencesBetween(rrulestr, dtstart, setStart, setEnd) {
         var start = ICAL.Time.fromJSDate(dtstart.toDate());
+
         // hack: https://github.com/mozilla-comm/ical.js/issues/243
         var rule = ICAL.Recur.fromData(ICAL.Recur._stringToData(rrulestr, true));
         var iterator = rule.iterator(start);

@@ -1,4 +1,0 @@
-calendar:
-    resource: "@CalendarBundle/Resources/config/routing.yml"
-    prefix:   /
-
