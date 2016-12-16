@@ -32,7 +32,7 @@ func main() {
 		flag.PrintDefaults()
 		os.Exit(1)
 	} else if calendarType != "ics" && calendarType != "ical-tcl" {
-		log.Printf("Select a calendar type, ical-tcl/ics")
+		log.Printf("Select a calendar type, ical-tcl/ics\n")
 		flag.PrintDefaults()
 		os.Exit(1)
 	}

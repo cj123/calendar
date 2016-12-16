@@ -1,10 +1,8 @@
-language: php
+language: go
 
-php:
-  - '7.0'
-
-services:
-  - mysql
+go:
+  - 1.6
+  - 1.7
 
 addons:
   ssh_known_hosts: $DEPLOY_SERVER
@@ -14,21 +12,12 @@ before_install:
   - nvm use 4
   - npm install -g yarn
 
-  - cp api/app/config/parameters.yml.travis api/app/config/parameters.yml.dist
-  - cp frontend/src/js/config.dist.json frontend/src/js/config.json
+  - go get -u github.com/Masterminds/glide
 
 install:
   - git --version
-  - php -v
-  - composer --version
+  - go version
   - node -v
-
-  - pushd api
-  - composer install
-  - php bin/console doctrine:database:create --env=test
-  - php bin/console doctrine:schema:create --env=test
-  - php bin/console calendar:import ical-tcl ./data/simple-calendar
-  - popd
 
   - pushd frontend
   - yarn install
@@ -39,17 +28,25 @@ script:
   - ./node_modules/.bin/gulp build
   - popd
 
-  - phpunit --coverage-text -c ./api
+  - go test -cover $(glide novendor)
 
-before_deploy:
-  - tar czf ./calendar-$TRAVIS_BUILD_NUMBER.tar.gz -C ./ ./api/app ./api/bin ./api/src ./api/vendor ./api/web ./api/var ./frontend/index.html ./frontend/assets
-  - ssh-keyscan $DEPLOY_SERVER >> ~/.ssh/known_hosts
+  - pushd cmd/import
+  - go build
+  - popd
 
-deploy:
-  provider: script
-  skip_cleanup: true
-  script: scripts/deploy ./calendar-$TRAVIS_BUILD_NUMBER.tar.gz $DEPLOY_USER $DEPLOY_SERVER $DEPLOY_PATH $TRAVIS_BUILD_NUMBER
-  on:
-    branch: development
+  - pushd cmd/web
+  - go build
+  - popd
+#
+# before_deploy:
+#  - tar czf ./calendar-$TRAVIS_BUILD_NUMBER.tar.gz -C ./ ./api/app ./api/bin ./api/src ./api/vendor ./api/web ./api/var ./frontend/index.html ./frontend/assets
+#  - ssh-keyscan $DEPLOY_SERVER >> ~/.ssh/known_hosts
+#
+#deploy:
+#  provider: script
+#  skip_cleanup: true
+#  script: scripts/deploy ./calendar-$TRAVIS_BUILD_NUMBER.tar.gz $DEPLOY_USER $DEPLOY_SERVER $DEPLOY_PATH $TRAVIS_BUILD_NUMBER
+#  on:
+#    branch: development
 
 

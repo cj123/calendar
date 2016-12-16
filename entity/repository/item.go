@@ -1,9 +1,10 @@
 package repository
 
 import (
+	"time"
+
 	"github.com/cj123/calendar/entity"
 	"github.com/jinzhu/gorm"
-	"time"
 )
 
 type Repository struct {
@@ -15,9 +16,7 @@ type AppointmentRepository struct {
 }
 
 func (r *AppointmentRepository) FindBetweenDates(start, finish time.Time) ([]entity.Appointment, error) {
-	if start == finish {
-		finish.Add((time.Hour * 24) - (1 * time.Second)) // 23:59:59
-	}
+	finish = finish.Add((time.Hour * 24) - time.Second)
 
 	appointments := make([]entity.Appointment, 10)
 
@@ -34,9 +33,7 @@ type NoteRepository struct {
 }
 
 func (r *NoteRepository) FindBetweenDates(start, finish time.Time) ([]entity.Note, error) {
-	if start == finish {
-		finish.Add((time.Hour * 24) - (1 * time.Second)) // 23:59:59
-	}
+	finish = finish.Add((time.Hour * 24) - time.Second)
 
 	notes := make([]entity.Note, 10)
 
