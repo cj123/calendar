@@ -1,5 +1,5 @@
-hash: 708851b0b7d45637d63308a697f915c7d46b8ae99b172cd34cb14c9d85d4a988
-updated: 2016-12-14T23:13:24.025919294Z
+hash: b638fe96819a3e185011c05866f8ff0e4db6f7991e23c8e8bc11775554527663
+updated: 2016-12-16T01:37:13.864090522Z
 imports:
 - name: github.com/davecgh/go-spew
   version: 346938d642f2ec3594ed81d874461961cd0faa76
@@ -23,6 +23,12 @@ imports:
   version: 5174cc5c242a728b435ea2be8a2f7f998e15429b
 - name: github.com/jinzhu/inflection
   version: 74387dc39a75e970e7a3ae6a3386b5bd2e5c5cff
+- name: github.com/mattn/go-sqlite3
+  version: ca5e3819723d8eeaf170ad510e7da1d6d2e94a08
+- name: golang.org/x/net
+  version: f315505cf3349909cdf013ea56690da34e96a451
+  subpackages:
+  - context
 - name: gopkg.in/yaml.v2
   version: a5b47d31c556af34a302ce5d659e6fea44d90de0
 testImports: []
