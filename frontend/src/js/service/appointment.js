@@ -20,5 +20,9 @@ angular.module("calendar").factory("Appointment", [ "Item", "$http", "moment", "
         });
     };
 
+    appointmentFactory.delete = function(appointmentId) {
+        return $http.delete(API_BASE + "calendar/appointments/" + appointmentId);
+    };
+
     return appointmentFactory;
 }]);

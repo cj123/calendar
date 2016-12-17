@@ -18,3 +18,4 @@ import:
 - package: gopkg.in/yaml.v2
 - package: github.com/mattn/go-sqlite3
   version: ^1.2.0
+- package: gopkg.in/validator.v2

@@ -17,43 +17,6 @@ const (
 	dateFormat = "2006-01-02"
 )
 
-func (h *Handler) appointmentsHandler(w http.ResponseWriter, r *http.Request) {
-	startDateStr := r.URL.Query().Get("start")
-	finishDateStr := r.URL.Query().Get("finish")
-
-	startDate, err := time.Parse(dateFormat, startDateStr)
-
-	if err != nil {
-		http.Error(w, "Bad start date", http.StatusBadRequest)
-		return
-	}
-
-	finishDate, err := time.Parse(dateFormat, finishDateStr)
-
-	if err != nil {
-		http.Error(w, "Bad finish date", http.StatusBadRequest)
-		return
-	}
-
-	repo := repository.AppointmentRepository{repository.Repository{DB: h.db}}
-
-	appointments, err := repo.FindBetweenDates(startDate, finishDate)
-
-	if err != nil {
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
-		return
-	}
-
-	b, err := json.Marshal(&appointments)
-
-	if err != nil {
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
-		return
-	}
-
-	w.Write(b)
-}
-
 func (h *Handler) notesHandler(w http.ResponseWriter, r *http.Request) {
 	dateStr := r.URL.Query().Get("date")
 	date, err := time.Parse(dateFormat, dateStr)

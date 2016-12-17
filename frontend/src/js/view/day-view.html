@@ -12,8 +12,6 @@
             <time>{{ appointment.start.format("HH:mm") }} - {{ appointment.finish.format("HH:mm") }}</time>
         </a>
 
-        <hr class="time-line" style="border-color: red" ng-style="{ 'top': moment.duration(moment().clone().hour(0).minute(0).diff(moment())).asMinutes() + 'px' }">
-
         <!--<a
             href="#"
             class="appointment appointment--creator"

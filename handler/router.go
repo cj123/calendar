@@ -19,12 +19,14 @@ func NewHandler(db *gorm.DB) *Handler {
 func (h *Handler) Router() *mux.Router {
 	r := mux.NewRouter()
 
-	r.HandleFunc("/calendar/appointments", h.appointmentsHandler)
 	r.HandleFunc("/calendar/notes", h.notesHandler)
 	r.HandleFunc("/calendar/options", h.optionsHandler)
 	r.HandleFunc("/calendar/import", h.importHandler)
 
-	// @TODO: C-UD appointments
+	r.Path("/calendar/appointments").Methods("GET").HandlerFunc(h.getAppointmentsHandler)
+	r.Path("/calendar/appointments").Methods("POST").HandlerFunc(h.createAppointmentHandler)
+	r.Path("/calendar/appointments/{id}").Methods("PUT").HandlerFunc(h.updateAppointmentHandler)
+	r.Path("/calendar/appointments/{id}").Methods("DELETE").HandlerFunc(h.deleteAppointmentHandler)
 
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("../../frontend"))) // @TODO parameterize
 

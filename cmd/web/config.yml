@@ -1,6 +1,5 @@
 database:
-  dialect: sqlite3
-  location: /tmp/d.db
+  dialect: mysql
   username: root
   password: abcd1234
   hostname: localhost
