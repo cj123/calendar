@@ -6,6 +6,9 @@ $middle-row-height: 170px;
 
         white-space: pre-wrap;
         margin-bottom: 20px;
+        border: 0;
+        min-height: 170px;
+        resize: vertical;
     }
 
     &__time {

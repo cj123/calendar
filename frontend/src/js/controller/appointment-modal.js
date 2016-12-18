@@ -10,8 +10,9 @@ angular.module("calendar")
             $uibModalInstance.dismiss("cancel");
         };
 
-        $scope.delete = function() {
-            Appointment.delete($scope.appointment.id).then(function() {
+        $scope.delete = function(deleteRecurrences) {
+
+            Appointment.delete($scope.appointment.id, deleteRecurrences).then(function() {
                 console.log("deleted");
             });
         };

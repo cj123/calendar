@@ -115,6 +115,4 @@ func (h *Handler) importHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Could not create calendar: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
-
-	w.Write([]byte("ok"))
 }

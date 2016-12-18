@@ -13,20 +13,23 @@ import (
 )
 
 type Config struct {
-	Database struct {
-		Username string `yaml:"username"`
-		Password string `yaml:"password"`
-		Hostname string `yaml:"hostname"`
-		Database string `yaml:"database"`
-		Port     int    `yaml:"port"`
-		Dialect  string `yaml:"dialect"`
-		Location string `yaml:"location"`
-	} `yml:"database"`
+	Database Database `yaml:"database"`
+	Web      Web      `yaml:"web"`
+}
 
-	Web struct {
-		Address string `yaml:"address"`
-		Port    int    `yaml:"port"`
-	} `yaml:"web"`
+type Database struct {
+	Username string `yaml:"username"`
+	Password string `yaml:"password"`
+	Hostname string `yaml:"hostname"`
+	Database string `yaml:"database"`
+	Port     int    `yaml:"port"`
+	Dialect  string `yaml:"dialect"`
+	Location string `yaml:"location"`
+}
+
+type Web struct {
+	Address string `yaml:"address"`
+	Port    int    `yaml:"port"`
 }
 
 func Parse(location string) (*Config, error) {
@@ -65,10 +68,29 @@ func (c *Config) OpenDatabaseConnection() (*gorm.DB, error) {
 			c.Database.Database,
 		)
 	} else if c.Database.Dialect == "sqlite3" && c.Database.Location != "" {
-		connection = fmt.Sprintf("%s.db", c.Database.Location)
+		connection = fmt.Sprintf("%s", c.Database.Location)
 	} else {
 		return nil, errors.New("invalid database driver specified: " + c.Database.Dialect)
 	}
 
 	return gorm.Open(c.Database.Dialect, connection)
+}
+
+// ConfigTest returns the test configuration file
+func ConfigTest() *Config {
+	return &Config{
+		Database: Database{
+			Dialect: "sqlite3",
+			Location: "/tmp/calendar_test.db",
+			Username: "root",
+			Password: "abcd1234",
+			Hostname: "localhost",
+			Port: 3306,
+			Database: "calendar",
+		},
+		Web: Web{
+			Address: "0.0.0.0",
+			Port: 8000,
+		},
+	}
 }

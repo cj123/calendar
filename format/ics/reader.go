@@ -7,7 +7,12 @@ import (
 
 	"github.com/heindl/caldav-go/icalendar"
 	"github.com/heindl/caldav-go/icalendar/components"
+	"strings"
 )
+
+var escapeChars = [...]string{
+	",",
+}
 
 type ICSReader struct {
 	str string
@@ -15,6 +20,14 @@ type ICSReader struct {
 
 func NewICSReader(str string) *ICSReader {
 	return &ICSReader{str: str}
+}
+
+func stripEscapeChars(data string) string {
+	for _, c := range escapeChars {
+		data = strings.Replace(data, "\\" + c, c, -1)
+	}
+
+	return data
 }
 
 func (r *ICSReader) Read() (*entity.Calendar, error) {
@@ -39,7 +52,7 @@ func (r *ICSReader) mapToCalendar(icsCal *components.Calendar, cal *entity.Calen
 	for _, event := range icsCal.Events {
 		appt := entity.Appointment{}
 
-		appt.Text = event.Summary + "\n" + event.Description
+		appt.Text = stripEscapeChars(event.Summary + "\n" + event.Description)
 		appt.Start = event.DateStart.NativeTime()
 		appt.Finish = event.DateEnd.NativeTime()
 
@@ -80,7 +93,7 @@ func (r *ICSReader) mapToCalendar(icsCal *components.Calendar, cal *entity.Calen
 				return err
 			}
 
-			appt.Owner = owner
+			appt.Owner = stripEscapeChars(owner)
 		}
 
 		appointments = append(appointments, appt)
@@ -96,5 +109,5 @@ func (r *ICSReader) mapToCalendar(icsCal *components.Calendar, cal *entity.Calen
 
 	cal.Version = v
 
-	return err // @TODO
+	return err
 }

@@ -1,12 +1,13 @@
 package entity
 
 import (
-	"time"
 	"errors"
 	"math/rand"
+	"time"
 
 	"github.com/heindl/caldav-go/icalendar"
 	"github.com/heindl/caldav-go/icalendar/values"
+	"strings"
 )
 
 func init() {
@@ -20,9 +21,9 @@ var (
 )
 
 type Model struct {
-	ID        uint      `gorm:"primary_key" json:"id" validator:"len=0"`
-	CreatedAt time.Time `json:"created_at" validator:"len=0"`
-	UpdatedAt time.Time `json:"updated_at" validator:"len=0"`
+	ID        uint      `gorm:"primary_key" json:"id" validate:"len=0"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 func generateUID() string {
@@ -36,9 +37,9 @@ func generateUID() string {
 
 type Item struct {
 	Model
-	Text           string        `json:"text" validator:"min=1"`
+	Text           string        `json:"text" validate:"required"`
 	Owner          string        `json:"owner"`
-	UID            string        `json:"uid" validator:"len=0"`
+	UID            string        `json:"uid" validate:"len=0"`
 	UIDPersistent  bool          `json:"uid_persistent" gorm:"column:uid_persistent"`
 	RemindStart    int64         `json:"remind_start"`
 	Hilite         string        `json:"hilite"`
@@ -57,9 +58,11 @@ func (i *Item) BeforeCreate() error {
 
 	// validate recurrence rule
 	if i.RecurrenceRule != "" {
+		i.RecurrenceRule = strings.Replace(i.RecurrenceRule, "RRULE:", "", -1)
+
 		var rrule values.RecurrenceRule
 
-		err := icalendar.Unmarshal(i.RecurrenceRule, &rrule)
+		err := icalendar.Unmarshal("RRULE:" + i.RecurrenceRule, &rrule)
 
 		if err != nil {
 			return invalidRecurrenceRuleError
@@ -88,6 +91,7 @@ type Alarm struct {
 type DeletedDate struct {
 	Model
 	Date time.Time
+	AppointmentID uint
 }
 
 type Option struct {

@@ -28,6 +28,7 @@ script:
   - ./node_modules/.bin/gulp build
   - popd
 
+  - go vet $(glide novendor)
   - go test -cover $(glide novendor)
 
   - pushd cmd/import
