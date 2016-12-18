@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"net/http"
-	"io/ioutil"
 	"encoding/json"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"

@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"testing"
 	"net/http"
+	"testing"
 	"time"
 
 	"github.com/cj123/calendar/entity"
@@ -53,9 +53,9 @@ func TestHandler_CreateAppointmentHandler(t *testing.T) {
 	t.Run("Valid", func(t *testing.T) {
 		appointment := entity.Appointment{
 			Item: entity.Item{
-				Text: "test appointment",
-				Start: time.Now(),
-				Finish: time.Now().Add(time.Hour),
+				Text:       "test appointment",
+				Start:      time.Now(),
+				Finish:     time.Now().Add(time.Hour),
 				CalendarID: 1,
 			},
 		}
@@ -82,9 +82,9 @@ func TestHandler_CreateAppointmentHandler(t *testing.T) {
 	t.Run("Invalid text", func(t *testing.T) {
 		appointment := entity.Appointment{
 			Item: entity.Item{
-				Text: "",
-				Start: time.Now(),
-				Finish: time.Now().Add(time.Hour),
+				Text:       "",
+				Start:      time.Now(),
+				Finish:     time.Now().Add(time.Hour),
 				CalendarID: 1,
 			},
 		}

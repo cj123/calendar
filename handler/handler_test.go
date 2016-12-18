@@ -1,24 +1,24 @@
 package handler
 
 import (
-	"testing"
-	"net/http/httptest"
-	"net/http"
-	"io"
 	"bytes"
 	"encoding/json"
 	"errors"
+	"io"
+	"net/http"
+	"net/http/httptest"
 	"os"
+	"testing"
 
 	"github.com/cj123/calendar/config"
-	"github.com/cj123/calendar/format/ics"
 	"github.com/cj123/calendar/entity"
+	"github.com/cj123/calendar/format/ics"
 	"github.com/jinzhu/gorm"
 )
 
 var (
 	server *httptest.Server
-	db *gorm.DB
+	db     *gorm.DB
 )
 
 func TestMain(m *testing.M) {
@@ -56,7 +56,7 @@ func TestMain(m *testing.M) {
 	router := handler.Router()
 	server = httptest.NewServer(router)
 
-	m.Run()
+	os.Exit(m.Run())
 }
 
 func makeRequest(method, url string, body interface{}, output interface{}, headers map[string]string) (*http.Response, error) {

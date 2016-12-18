@@ -24,7 +24,7 @@ func NewICSReader(str string) *ICSReader {
 
 func stripEscapeChars(data string) string {
 	for _, c := range escapeChars {
-		data = strings.Replace(data, "\\" + c, c, -1)
+		data = strings.Replace(data, "\\"+c, c, -1)
 	}
 
 	return data

@@ -80,17 +80,17 @@ func (c *Config) OpenDatabaseConnection() (*gorm.DB, error) {
 func ConfigTest() *Config {
 	return &Config{
 		Database: Database{
-			Dialect: "sqlite3",
+			Dialect:  "sqlite3",
 			Location: "/tmp/calendar_test.db",
 			Username: "root",
 			Password: "abcd1234",
 			Hostname: "localhost",
-			Port: 3306,
+			Port:     3306,
 			Database: "calendar",
 		},
 		Web: Web{
 			Address: "0.0.0.0",
-			Port: 8000,
+			Port:    8000,
 		},
 	}
 }

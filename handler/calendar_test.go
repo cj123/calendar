@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"testing"
 	"net/http"
+	"testing"
 )
 
 func TestOptionsHandler(t *testing.T) {

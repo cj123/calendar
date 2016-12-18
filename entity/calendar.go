@@ -62,7 +62,7 @@ func (i *Item) BeforeCreate() error {
 
 		var rrule values.RecurrenceRule
 
-		err := icalendar.Unmarshal("RRULE:" + i.RecurrenceRule, &rrule)
+		err := icalendar.Unmarshal("RRULE:"+i.RecurrenceRule, &rrule)
 
 		if err != nil {
 			return invalidRecurrenceRuleError
@@ -90,7 +90,7 @@ type Alarm struct {
 
 type DeletedDate struct {
 	Model
-	Date time.Time
+	Date          time.Time
 	AppointmentID uint
 }
 

@@ -3,8 +3,8 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
-	"time"
 	"strconv"
+	"time"
 
 	"github.com/cj123/calendar/entity"
 	"github.com/cj123/calendar/entity/repository"
@@ -90,7 +90,7 @@ func (h *Handler) DeleteAppointmentHandler(w http.ResponseWriter, r *http.Reques
 		err     error
 	)
 
-	if err = unmarshalRequest(r , &request); err != nil {
+	if err = unmarshalRequest(r, &request); err != nil {
 		http.Error(w, "Unable to marshal request", http.StatusInternalServerError)
 		return
 	}
@@ -108,7 +108,7 @@ func (h *Handler) DeleteAppointmentHandler(w http.ResponseWriter, r *http.Reques
 
 		// there is a date, we just wish to add this to deleted
 		deletedDate := entity.DeletedDate{
-			Date: request.Date,
+			Date:          request.Date,
 			AppointmentID: uint(uid),
 		}
 
