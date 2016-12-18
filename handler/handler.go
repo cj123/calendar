@@ -7,24 +7,29 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
+	"github.com/cj123/calendar/entity/repository"
 )
 
 type Handler struct {
 	db *gorm.DB
+	noteRepository repository.NoteRepository
+	appointmentRepository repository.AppointmentRepository
 }
 
 func NewHandler(db *gorm.DB) *Handler {
 	return &Handler{
 		db: db,
+		noteRepository: repository.NoteRepository{repository.Repository{DB: db}},
+		appointmentRepository: repository.AppointmentRepository{repository.Repository{DB: db}},
 	}
 }
 
 func (h *Handler) Router() *mux.Router {
 	r := mux.NewRouter()
 
-	r.HandleFunc("/calendar/notes", h.notesHandler)
-	r.HandleFunc("/calendar/options", h.optionsHandler)
-	r.HandleFunc("/calendar/import", h.importHandler)
+	r.HandleFunc("/calendar/notes", h.NotesHandler)
+	r.HandleFunc("/calendar/options", h.OptionsHandler)
+	r.HandleFunc("/calendar/import", h.ImportHandler)
 
 	r.Path("/calendar/appointments").Methods("GET").HandlerFunc(h.GetAppointmentsHandler)
 	r.Path("/calendar/appointments").Methods("POST").HandlerFunc(h.CreateAppointmentHandler)

@@ -12,8 +12,8 @@ import (
 
 	"github.com/cj123/calendar/config"
 	"github.com/cj123/calendar/entity"
-	"github.com/cj123/calendar/format/ics"
 	"github.com/jinzhu/gorm"
+	"github.com/cj123/calendar/format"
 )
 
 var (
@@ -38,17 +38,23 @@ func TestMain(m *testing.M) {
 
 	entity.Migrate(db)
 
-	// import a calendar
-	r := ics.NewICSReader(uniTimetable)
+	// @TODO: simplify + abstract this
 
-	cal, err := r.Read()
-
-	if err != nil {
-		panic(err)
+	calendars := map[string]string{
+		"ical-tcl": icalTest,
+		"ics": uniTimetable,
 	}
 
-	if err := db.Create(&cal).Error; err != nil {
-		panic(err)
+	for calType, data := range calendars {
+		cal, err := format.ReadCalendar([]byte(data), calType)
+
+		if err != nil {
+			panic(err)
+		}
+
+		if err := db.Create(&cal).Error; err != nil {
+			panic(err)
+		}
 	}
 
 	handler := NewHandler(db)

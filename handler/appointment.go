@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/cj123/calendar/entity"
-	"github.com/cj123/calendar/entity/repository"
 	"github.com/gorilla/mux"
 	"gopkg.in/bluesuncorp/validator.v9"
 )
@@ -29,9 +28,7 @@ func (h *Handler) GetAppointmentsHandler(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	repo := repository.AppointmentRepository{repository.Repository{DB: h.db}}
-
-	appointments, err := repo.FindBetweenDates(startDate, finishDate)
+	appointments, err := h.appointmentRepository.FindBetweenDates(startDate, finishDate)
 
 	if err != nil {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)

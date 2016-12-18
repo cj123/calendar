@@ -6,18 +6,14 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cj123/calendar/entity"
-	"github.com/cj123/calendar/entity/repository"
 	"github.com/cj123/calendar/format"
-	"github.com/cj123/calendar/format/ical-tcl"
-	"github.com/cj123/calendar/format/ics"
 )
 
 const (
 	dateFormat = "2006-01-02"
 )
 
-func (h *Handler) notesHandler(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) NotesHandler(w http.ResponseWriter, r *http.Request) {
 	dateStr := r.URL.Query().Get("date")
 	date, err := time.Parse(dateFormat, dateStr)
 
@@ -26,16 +22,14 @@ func (h *Handler) notesHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	repo := repository.NoteRepository{repository.Repository{DB: h.db}}
-
-	appointments, err := repo.FindBetweenDates(date, date)
+	notes, err := h.noteRepository.FindBetweenDates(date, date)
 
 	if err != nil {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
 
-	b, err := json.Marshal(&appointments)
+	b, err := json.Marshal(&notes)
 
 	if err != nil {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
@@ -61,7 +55,7 @@ var defaultOptions = map[string]interface{}{
 	"Timezone":            "<Local>",
 }
 
-func (h *Handler) optionsHandler(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) OptionsHandler(w http.ResponseWriter, r *http.Request) {
 	b, err := json.Marshal(defaultOptions)
 
 	if err != nil {
@@ -72,7 +66,7 @@ func (h *Handler) optionsHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(b)
 }
 
-func (h *Handler) importHandler(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) ImportHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(32 << 20)
 
 	calendarType := r.FormValue("format")
@@ -93,16 +87,12 @@ func (h *Handler) importHandler(w http.ResponseWriter, r *http.Request) {
 
 	b, err := ioutil.ReadAll(file)
 
-	var cal *entity.Calendar
-	var reader format.Reader
-
-	if calendarType == "ical-tcl" {
-		reader = icaltcl.NewCalendarReader(icaltcl.NewICalLexer(string(b)))
-	} else if calendarType == "ics" {
-		reader = ics.NewICSReader(string(b))
+	if err != nil {
+		http.Error(w, "Could not read calendar: "+err.Error(), http.StatusInternalServerError)
+		return
 	}
 
-	cal, err = reader.Read()
+	cal, err := format.ReadCalendar(b, calendarType)
 
 	if err != nil {
 		http.Error(w, "Could not read calendar: "+err.Error(), http.StatusInternalServerError)
