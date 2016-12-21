@@ -9,8 +9,6 @@ import (
 	"github.com/cj123/calendar/config"
 	"github.com/cj123/calendar/entity"
 	"github.com/cj123/calendar/format"
-	"github.com/cj123/calendar/format/ical-tcl"
-	"github.com/cj123/calendar/format/ics"
 )
 
 var (
@@ -62,16 +60,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	var cal *entity.Calendar
-	var reader format.Reader
-
-	if calendarType == "ical-tcl" {
-		reader = icaltcl.NewCalendarReader(icaltcl.NewICalLexer(string(file)))
-	} else if calendarType == "ics" {
-		reader = ics.NewICSReader(string(file))
-	}
-
-	cal, err = reader.Read()
+	cal, err := format.ReadCalendar(file, calendarType)
 
 	if err != nil {
 		log.Printf("Could not read calendar: %s\n", err.Error())

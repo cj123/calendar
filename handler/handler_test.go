@@ -12,8 +12,8 @@ import (
 
 	"github.com/cj123/calendar/config"
 	"github.com/cj123/calendar/entity"
-	"github.com/jinzhu/gorm"
 	"github.com/cj123/calendar/format"
+	"github.com/jinzhu/gorm"
 )
 
 var (
@@ -42,7 +42,7 @@ func TestMain(m *testing.M) {
 
 	calendars := map[string]string{
 		"ical-tcl": icalTest,
-		"ics": uniTimetable,
+		"ics":      uniTimetable,
 	}
 
 	for calType, data := range calendars {

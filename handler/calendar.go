@@ -71,7 +71,7 @@ func (h *Handler) ImportHandler(w http.ResponseWriter, r *http.Request) {
 
 	calendarType := r.FormValue("format")
 
-	if calendarType != "ical-tcl" && calendarType != "ics" {
+	if !format.IsValidCalendarType(calendarType) {
 		http.Error(w, "Invalid calendar type", http.StatusBadRequest)
 		return
 	}

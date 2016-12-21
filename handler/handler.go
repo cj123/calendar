@@ -5,21 +5,21 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/cj123/calendar/entity/repository"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
-	"github.com/cj123/calendar/entity/repository"
 )
 
 type Handler struct {
-	db *gorm.DB
-	noteRepository repository.NoteRepository
+	db                    *gorm.DB
+	noteRepository        repository.NoteRepository
 	appointmentRepository repository.AppointmentRepository
 }
 
 func NewHandler(db *gorm.DB) *Handler {
 	return &Handler{
-		db: db,
-		noteRepository: repository.NoteRepository{repository.Repository{DB: db}},
+		db:                    db,
+		noteRepository:        repository.NoteRepository{repository.Repository{DB: db}},
 		appointmentRepository: repository.AppointmentRepository{repository.Repository{DB: db}},
 	}
 }

@@ -1,9 +1,9 @@
 package handler
 
 import (
+	"github.com/cj123/calendar/entity"
 	"net/http"
 	"testing"
-	"github.com/cj123/calendar/entity"
 )
 
 func TestHandler_OptionsHandler(t *testing.T) {

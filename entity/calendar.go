@@ -3,11 +3,11 @@ package entity
 import (
 	"errors"
 	"math/rand"
+	"strings"
 	"time"
 
 	"github.com/heindl/caldav-go/icalendar"
 	"github.com/heindl/caldav-go/icalendar/values"
-	"strings"
 )
 
 func init() {
@@ -53,8 +53,7 @@ type Item struct {
 }
 
 func (i *Item) BeforeCreate() error {
-	i.UID = generateUID()
-	i.UIDPersistent = true
+	i.UID, i.UIDPersistent = generateUID(), true
 
 	// validate recurrence rule
 	if i.RecurrenceRule != "" {
