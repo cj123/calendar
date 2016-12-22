@@ -9,6 +9,7 @@ import (
 	"github.com/cj123/calendar/entity"
 	"github.com/gorilla/mux"
 	"gopkg.in/bluesuncorp/validator.v9"
+	"log"
 )
 
 func (h *Handler) GetAppointmentsHandler(w http.ResponseWriter, r *http.Request) {
@@ -74,9 +75,9 @@ func (h *Handler) CreateAppointmentHandler(w http.ResponseWriter, r *http.Reques
 
 type deleteAppointmentRequest struct {
 	Date time.Time `json:"date"`
+	DeleteAll bool `json:"delete_all"`
 }
 
-// @TODO delete this or all?
 func (h *Handler) DeleteAppointmentHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
@@ -88,14 +89,19 @@ func (h *Handler) DeleteAppointmentHandler(w http.ResponseWriter, r *http.Reques
 	)
 
 	if err = unmarshalRequest(r, &request); err != nil {
+		log.Print(err)
 		http.Error(w, "Unable to marshal request", http.StatusInternalServerError)
 		return
 	}
 
-	if request.Date.IsZero() {
+	if request.DeleteAll {
+		log.Printf("Deleting all appointments with id: %s\n", id)
+
 		// no specific date, delete all occurrences
 		err = h.db.Delete(entity.Appointment{}, "id = ?", id).Error
 	} else {
+		log.Printf("Deleting appointment recurrence at %s with id: %s\n", request.Date, id)
+
 		uid, err := strconv.ParseUint(id, 0, 10)
 
 		if err != nil {
@@ -113,6 +119,7 @@ func (h *Handler) DeleteAppointmentHandler(w http.ResponseWriter, r *http.Reques
 	}
 
 	if err != nil {
+		log.Print(err)
 		http.Error(w, "Unable to delete appointment: "+id, http.StatusInternalServerError)
 		return
 	}

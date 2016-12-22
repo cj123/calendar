@@ -3,38 +3,21 @@ angular.module("calendar").directive("dayView", [function() {
         restrict: "E",
         scope: {
             currentDate: '=',
+            days: '='
         },
         templateUrl: "calendar/view/day-view.html",
         controller: [
-            "$scope", "$document", "$uibModal", "Appointment", "CalendarOptions",
-            function($scope, $document, $uibModal, Appointment, CalendarOptions) {
-                $scope.appointments = [];
-                $scope.newAppointment = null;
-
-                // watch the current date of the view for changes.
+            "$scope", "$document", "$uibModal",
+            function($scope, $document, $uibModal) {
                 $scope.$watch(function() {
                     if ($scope.currentDate) {
                         return $scope.currentDate.format("x");
                     }
                 }, function() {
-                    loadAppointments($scope.currentDate);
+                    $scope.appointments = $scope.days[$scope.currentDate.date() - 1].events;
                 });
 
-                function loadAppointments(date) {
-                    if (!date) {
-                        return;
-                    }
-
-                    Appointment.getAppointments(date.clone(), date.clone()).then(function(appointments) {
-                        $scope.appointments = appointments;
-
-                        CalendarOptions.get().then(function(response) {
-                            var opts = response.data;
-
-                            angular.element(document.getElementById("day-view")).scrollTop(60 * opts.DayviewTimeStart, 0);
-                        });
-                    });
-                }
+                $scope.newAppointment = null;
 
                 $scope.viewAppointmentDetail = function(appointment) {
                     $uibModal.open({
@@ -44,6 +27,9 @@ angular.module("calendar").directive("dayView", [function() {
                         resolve: {
                             appointment: function() {
                                 return appointment;
+                            },
+                            currentDate: function() {
+                                return $scope.currentDate;
                             }
                         }
                     });

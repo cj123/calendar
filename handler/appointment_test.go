@@ -103,7 +103,7 @@ func TestHandler_CreateAppointmentHandler(t *testing.T) {
 
 func TestHandler_DeleteAppointmentHandler(t *testing.T) {
 	t.Run("Delete all occurrences", func(t *testing.T) {
-		request := deleteAppointmentRequest{}
+		request := deleteAppointmentRequest{DeleteAll: true}
 
 		// there should be an appointment "1"
 		res, err := makeRequest("DELETE", "/calendar/appointments/1", request, nil, nil)
@@ -115,12 +115,20 @@ func TestHandler_DeleteAppointmentHandler(t *testing.T) {
 		if res.StatusCode != http.StatusOK {
 			t.Fail()
 		}
+
+		var deleted entity.Appointment
+
+		err = db.Where("id = ?", 1).First(&deleted).Error
+
+		if err != gorm.ErrRecordNotFound {
+			t.Fail()
+		}
 	})
 
 	t.Run("Delete only one occurrence", func(t *testing.T) {
 		dateToDelete := time.Now()
 
-		request := deleteAppointmentRequest{Date: dateToDelete}
+		request := deleteAppointmentRequest{DeleteAll: false, Date: dateToDelete}
 
 		// there should be an appointment "2"
 		res, err := makeRequest("DELETE", "/calendar/appointments/2", request, nil, nil)

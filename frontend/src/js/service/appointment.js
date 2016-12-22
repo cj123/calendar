@@ -20,10 +20,18 @@ angular.module("calendar").factory("Appointment", [ "Item", "$http", "moment", "
         });
     };
 
+    /**
+     * Delete an appointment. if dateToDelete === null, all occurrences are deleted
+     *
+     * @param appointmentId
+     * @param dateToDelete
+     * @returns {*|boolean}
+     */
     appointmentFactory.delete = function(appointmentId, dateToDelete) {
         return $http.delete(API_BASE + "calendar/appointments/" + appointmentId, {
             data: {
-                date: dateToDelete
+                date: dateToDelete !== null && dateToDelete.toISOString() || moment().toISOString(),
+                delete_all: dateToDelete === null
             }
         });
     };
