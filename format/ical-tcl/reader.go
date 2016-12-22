@@ -161,7 +161,7 @@ func (c *CalendarReader) Read() (*entity.Calendar, error) {
 				return nil, err
 			}
 
-			err = set.mapToItem(&item.Item)
+			err = set.mapToAppointment(&item)
 
 			if err != nil {
 				return nil, err
@@ -183,7 +183,7 @@ func (c *CalendarReader) Read() (*entity.Calendar, error) {
 				return nil, err
 			}
 
-			err = set.mapToItem(&item.Item)
+			err = set.mapToNote(&item)
 
 			if err != nil {
 				return nil, err

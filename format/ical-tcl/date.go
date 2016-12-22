@@ -49,6 +49,52 @@ func (d *dateSet) mapToItem(i *entity.Item) error {
 	return nil
 }
 
+func (d *dateSet) mapToAppointment(a *entity.Appointment) error {
+	err := d.mapToItem(&a.Item)
+
+	if err != nil {
+		return err
+	}
+
+	if a.DeletedDates == nil {
+		a.DeletedDates = make([]entity.AppointmentDeletedDate, 0, 10)
+	}
+
+	// deleted dates must be separate
+	for _, deleted := range d.Deleted {
+		a.DeletedDates = append(a.DeletedDates, entity.AppointmentDeletedDate{
+			DeletedDate: entity.DeletedDate{
+				Date: deleted,
+			},
+		})
+	}
+
+	return err
+}
+
+func (d *dateSet) mapToNote(n *entity.Note) error {
+	err := d.mapToItem(&n.Item)
+
+	if err != nil {
+		return err
+	}
+
+	if n.DeletedDates == nil {
+		n.DeletedDates = make([]entity.NoteDeletedDate, 0, 10)
+	}
+
+	// deleted dates must be separate
+	for _, deleted := range d.Deleted {
+		n.DeletedDates = append(n.DeletedDates, entity.NoteDeletedDate{
+			DeletedDate: entity.DeletedDate{
+				Date: deleted,
+			},
+		})
+	}
+
+	return err
+}
+
 var days = map[int]ical.RecurrenceWeekday{
 	1: ical.SundayRecurrenceWeekday,
 	2: ical.MondayRecurrenceWeekday,
