@@ -1,0 +1,15 @@
+.modal {
+    &-content {
+        .modal-header {
+            .modal-title {
+                text-align: center;
+            }
+        }
+    }
+
+  &-footer {
+      .btn-close {
+          margin-right: 5px;
+      }
+  }
+}
