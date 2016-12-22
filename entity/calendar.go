@@ -98,13 +98,13 @@ type Alarm struct {
 
 type DeletedDate struct {
 	Model
-	Date          time.Time `json:"date"`
+	Date time.Time `json:"date"`
 }
 
 type AppointmentDeletedDate struct {
 	DeletedDate
 
-	AppointmentID uint      `json:"-"`
+	AppointmentID uint `json:"-"`
 }
 
 type NoteDeletedDate struct {

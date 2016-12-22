@@ -141,7 +141,7 @@ func TestHandler_DeleteAppointmentHandler(t *testing.T) {
 			t.Fail()
 		}
 
-		var deleted entity.DeletedDate
+		var deleted entity.AppointmentDeletedDate
 
 		err = db.Where("appointment_id = ?", 2).First(&deleted).Error
 

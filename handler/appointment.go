@@ -116,7 +116,7 @@ func (h *Handler) DeleteAppointmentHandler(w http.ResponseWriter, r *http.Reques
 		// there is a date, we just wish to add this to deleted
 		deletedDate := entity.AppointmentDeletedDate{
 			DeletedDate: entity.DeletedDate{
-				Date:          request.Date,
+				Date: request.Date,
 			},
 			AppointmentID: uint(uid),
 		}
