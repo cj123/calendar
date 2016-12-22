@@ -9,17 +9,17 @@ angular.module("calendar").directive("dayView", [function() {
         controller: [
             "$scope", "$document", "$uibModal",
             function($scope, $document, $uibModal) {
+                function loadAppointments() {
+                    $scope.appointments = $scope.days[$scope.currentDate.date() - 1].events;
+                }
+
                 $scope.$watch(function() {
                     if ($scope.currentDate) {
                         return $scope.currentDate.format("x");
                     }
-                }, function() {
-                    $scope.appointments = $scope.days[$scope.currentDate.date() - 1].events;
-                });
+                }, loadAppointments);
 
-                $scope.$watch("days", function() {
-                    $scope.appointments = $scope.days[$scope.currentDate.date() - 1].events;
-                });
+                $scope.$watch("days", loadAppointments);
 
                 $scope.newAppointment = null;
 
@@ -54,7 +54,7 @@ angular.module("calendar").directive("dayView", [function() {
                         finish: start.clone().add(30, "minutes")
                     };
 
-                    console.log($scope.newAppointment);
+                    //console.log($scope.newAppointment);
                 };
             }
         ]
