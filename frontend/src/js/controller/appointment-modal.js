@@ -1,6 +1,6 @@
 angular.module("calendar").controller("AppointmentModal", [
-    "$scope", "$uibModalInstance", "appointment", "currentDate", "Appointment", "CalendarOptions", "moment",
-    function($scope, $uibModalInstance, appointment, currentDate, Appointment, UserOptions, moment) {
+    "$scope", "$rootScope", "$uibModalInstance", "appointment", "currentDate", "Appointment", "CalendarOptions", "moment",
+    function($scope, $rootScope, $uibModalInstance, appointment, currentDate, Appointment, UserOptions, moment) {
         $scope.appointment = appointment;
 
         UserOptions.getAndMergeWithAppointment(appointment).then(function(mergedAppt) {
@@ -15,7 +15,7 @@ angular.module("calendar").controller("AppointmentModal", [
             var dateToDelete = null;
 
             if (!deleteRecurrences) {
-                dateToDelete = currentDate;
+                dateToDelete = currentDate.hour(appointment.start.hour()).minute(appointment.start.minute()).second(appointment.start.second());
             }
 
             Appointment.delete($scope.appointment.id, dateToDelete).then(function(response) {
@@ -25,6 +25,8 @@ angular.module("calendar").controller("AppointmentModal", [
 
                     // close the modal
                     $scope.cancel();
+
+                    $rootScope.$broadcast("refresh", true);
                 } else {
                     // @TODO display an error?
                 }

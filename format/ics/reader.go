@@ -71,11 +71,13 @@ func (r *ICSReader) mapToCalendar(icsCal *components.Calendar, cal *entity.Calen
 			appt.RecurrenceRule = ruleStr
 
 			if event.ExceptionDateTimes != nil && len(*event.ExceptionDateTimes) > 0 {
-				appt.Deleted = make([]entity.DeletedDate, 10)
+				appt.DeletedDates = make([]entity.AppointmentDeletedDate, 10)
 
 				for _, t := range *event.ExceptionDateTimes {
-					appt.Deleted = append(appt.Deleted, entity.DeletedDate{
-						Date: t.NativeTime(),
+					appt.DeletedDates = append(appt.DeletedDates, entity.AppointmentDeletedDate{
+						DeletedDate: entity.DeletedDate{
+							Date: t.NativeTime(),
+						},
 					})
 				}
 			}

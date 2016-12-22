@@ -17,6 +17,10 @@ angular.module("calendar").directive("dayView", [function() {
                     $scope.appointments = $scope.days[$scope.currentDate.date() - 1].events;
                 });
 
+                $scope.$watch("days", function() {
+                    $scope.appointments = $scope.days[$scope.currentDate.date() - 1].events;
+                });
+
                 $scope.newAppointment = null;
 
                 $scope.viewAppointmentDetail = function(appointment) {

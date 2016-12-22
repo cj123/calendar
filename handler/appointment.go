@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -9,7 +10,6 @@ import (
 	"github.com/cj123/calendar/entity"
 	"github.com/gorilla/mux"
 	"gopkg.in/bluesuncorp/validator.v9"
-	"log"
 )
 
 func (h *Handler) GetAppointmentsHandler(w http.ResponseWriter, r *http.Request) {
@@ -74,10 +74,14 @@ func (h *Handler) CreateAppointmentHandler(w http.ResponseWriter, r *http.Reques
 }
 
 type deleteAppointmentRequest struct {
-	Date time.Time `json:"date"`
-	DeleteAll bool `json:"delete_all"`
+	Date      time.Time `json:"date"`
+	DeleteAll bool      `json:"delete_all"`
 }
 
+/**
+ * @TODO: delete all future events means all events from a given date.
+ * so, we just need to modify the event to set the end date to be the date of the previous appointment?
+ */
 func (h *Handler) DeleteAppointmentHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
@@ -110,8 +114,10 @@ func (h *Handler) DeleteAppointmentHandler(w http.ResponseWriter, r *http.Reques
 		}
 
 		// there is a date, we just wish to add this to deleted
-		deletedDate := entity.DeletedDate{
-			Date:          request.Date,
+		deletedDate := entity.AppointmentDeletedDate{
+			DeletedDate: entity.DeletedDate{
+				Date:          request.Date,
+			},
 			AppointmentID: uint(uid),
 		}
 

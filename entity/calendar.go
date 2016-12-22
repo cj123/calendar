@@ -37,23 +37,24 @@ func generateUID() string {
 
 type Item struct {
 	Model
-	Text           string        `json:"text" validate:"required"`
-	Owner          string        `json:"owner"`
-	UID            string        `json:"uid" validate:"len=0"`
-	UIDPersistent  bool          `json:"uid_persistent" gorm:"column:uid_persistent"`
-	RemindStart    int64         `json:"remind_start"`
-	Hilite         string        `json:"hilite"`
-	Todo           bool          `json:"todo"`
-	Done           bool          `json:"done"`
-	Start          time.Time     `json:"start"`
-	Finish         time.Time     `json:"finish"`
-	RecurrenceRule string        `json:"recurrence_rule"`
-	CalendarID     uint          `json:"calendar_id"`
-	Deleted        []DeletedDate `json:"deleted"`
+	Text           string    `json:"text" validate:"required"`
+	Owner          string    `json:"owner"`
+	UID            string    `json:"uid" validate:"len=0"`
+	UIDPersistent  bool      `json:"uid_persistent" gorm:"column:uid_persistent"`
+	RemindStart    int64     `json:"remind_start"`
+	Hilite         string    `json:"hilite"`
+	Todo           bool      `json:"todo"`
+	Done           bool      `json:"done"`
+	Start          time.Time `json:"start"`
+	Finish         time.Time `json:"finish"`
+	RecurrenceRule string    `json:"recurrence_rule"`
+	CalendarID     uint      `json:"calendar_id"`
 }
 
 func (i *Item) BeforeCreate() error {
-	i.UID, i.UIDPersistent = generateUID(), true
+	if i.UID == "" {
+		i.UID, i.UIDPersistent = generateUID(), true
+	}
 
 	// validate recurrence rule
 	if i.RecurrenceRule != "" {
@@ -75,22 +76,41 @@ type Appointment struct {
 	Item
 	Timezone string  `json:"timezone"`
 	Alarms   []Alarm `json:"alarms"`
+
+	// DeletedDates cannot be inherited since we need to use gorm's preloading
+	// which does not support preloading on anonymous structs.
+	DeletedDates []AppointmentDeletedDate `json:"deleted"`
 }
 
 type Note struct {
 	Item
+
+	// DeletedDates cannot be inherited since we need to use gorm's preloading
+	// which does not support preloading on anonymous structs.
+	DeletedDates []NoteDeletedDate `json:"deleted"`
 }
 
 type Alarm struct {
 	Model
-	Time          int64
-	AppointmentID uint
+	Time          int64 `json:"time"`
+	AppointmentID uint  `json:"-"`
 }
 
 type DeletedDate struct {
 	Model
-	Date          time.Time
-	AppointmentID uint
+	Date          time.Time `json:"date"`
+}
+
+type AppointmentDeletedDate struct {
+	DeletedDate
+
+	AppointmentID uint      `json:"-"`
+}
+
+type NoteDeletedDate struct {
+	DeletedDate
+
+	NoteID uint `json:"-"`
 }
 
 type Option struct {

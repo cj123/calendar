@@ -22,6 +22,10 @@ angular.module("calendar").controller("CalendarController", [
             monthDays($scope.currentDate);
         });
 
+        $scope.$on("refresh", function() {
+            monthDays($scope.currentDate);
+        });
+
         function resetDayView() {
             CalendarOptions.get().then(function(response) {
                 var opts = response.data;
@@ -47,8 +51,24 @@ angular.module("calendar").controller("CalendarController", [
                     if (appt.recurrences.length > 0) {
                         for (var apptRecurrIndex = 0; apptRecurrIndex < appt.recurrences.length; apptRecurrIndex++) {
                             var recurrence = appt.recurrences[apptRecurrIndex];
+                            var recurrenceDate = moment(recurrence);
+                            var isDeleted = false;
 
-                            $scope.days[moment(recurrence).date() - 1].events.push(appt);
+                            if (appt.deleted && appt.deleted.length) {
+                                for (var deletedIndex = 0; deletedIndex < appt.deleted.length; deletedIndex++) {
+                                    var deletedDate = moment(appt.deleted[deletedIndex].date, "YYYY-MM-DDTHH:mm:ss");
+
+                                    if (deletedDate.diff(recurrenceDate) === 0) {
+                                        isDeleted = true;
+                                    }
+                                }
+
+                                if (isDeleted) {
+                                    continue;
+                                }
+                            }
+
+                            $scope.days[recurrenceDate.date() - 1].events.push(appt);
                         }
                     } else {
                         $scope.days[appt.start.date() - 1].events.push(appt);

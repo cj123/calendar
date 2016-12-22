@@ -1,5 +1,5 @@
 database:
-  dialect: sqlite3
+  dialect: mysql
   location: /tmp/cal-db1.db
   username: root
   password: abcd1234
