@@ -27,7 +27,6 @@ func newDateSet() *dateSet {
 	}
 }
 
-// @TODO map deleted dates to something too.
 func (d *dateSet) mapToItem(i *entity.Item) error {
 	i.Start = d.Start.Add(time.Duration(d.StartTime) * time.Minute)
 	i.Finish = d.Start.Add(time.Duration(d.StartTime+d.Length) * time.Minute)
@@ -445,17 +444,17 @@ func (r *dateReader) parseMonths() ([]int, error) {
 			break
 		}
 
-		day, err := r.l.GetNumber()
+		month, err := r.l.GetNumber()
 
 		if err != nil {
 			return nil, err
 		}
 
-		if day > 12 || day < 1 {
+		if month > 12 || month < 1 {
 			continue
 		}
 
-		months = append(months, int(day))
+		months = append(months, int(month))
 	}
 
 	return months, nil

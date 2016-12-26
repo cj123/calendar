@@ -6,10 +6,11 @@ import (
 	"io/ioutil"
 	"os"
 
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
-	_ "github.com/mattn/go-sqlite3"
 	"gopkg.in/yaml.v2"
+
+	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type Config struct {
@@ -28,8 +29,9 @@ type Database struct {
 }
 
 type Web struct {
-	Address string `yaml:"address"`
-	Port    int    `yaml:"port"`
+	Address     string `yaml:"address"`
+	Port        int    `yaml:"port"`
+	StaticFiles string `yaml:"static_files"`
 }
 
 func Parse(location string) (*Config, error) {
@@ -82,11 +84,6 @@ func ConfigTest() *Config {
 		Database: Database{
 			Dialect:  "sqlite3",
 			Location: "/tmp/calendar_test.db",
-			Username: "root",
-			Password: "abcd1234",
-			Hostname: "localhost",
-			Port:     3306,
-			Database: "calendar",
 		},
 		Web: Web{
 			Address: "0.0.0.0",

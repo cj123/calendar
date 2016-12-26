@@ -36,8 +36,6 @@ func (h *Handler) Router() *mux.Router {
 	r.Path("/calendar/appointments/{id}").Methods("PUT").HandlerFunc(h.UpdateAppointmentHandler)
 	r.Path("/calendar/appointments/{id}").Methods("DELETE").HandlerFunc(h.DeleteAppointmentHandler)
 
-	r.PathPrefix("/").Handler(http.FileServer(http.Dir("../../frontend"))) // @TODO parameterize
-
 	return r
 }
 

@@ -2,10 +2,8 @@ package entity
 
 import "github.com/jinzhu/gorm"
 
-func Migrate(db *gorm.DB) {
-	db.LogMode(true)
-
-	db.AutoMigrate(
+func Migrate(db *gorm.DB) error {
+	return db.AutoMigrate(
 		&AppointmentDeletedDate{},
 		&NoteDeletedDate{},
 		&Alarm{},
@@ -13,5 +11,5 @@ func Migrate(db *gorm.DB) {
 		&Note{},
 		&Option{},
 		&Calendar{},
-	)
+	).Error
 }

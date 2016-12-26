@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/cj123/calendar/config"
@@ -26,25 +26,36 @@ func main() {
 	c, err := config.Parse(configLocation)
 
 	if err != nil {
-		log.Printf("Could not read config, %s\n", err.Error())
-		os.Exit(1)
+		log.Fatalf("Could not read config, %s\n", err.Error())
 	}
+
+	log.Printf("Read configuration file at %s\n", configLocation)
 
 	db, err := c.OpenDatabaseConnection()
 
 	if err != nil {
-		log.Printf("Could not connect to database, %s\n", err.Error())
-		os.Exit(1)
+		log.Fatalf("Could not connect to database, %s\n", err.Error())
 	}
 
 	defer db.Close()
 
-	entity.Migrate(db)
+	err = entity.Migrate(db)
 
-	h := handler.NewHandler(db)
+	if err != nil {
+		log.Fatalf("Could not migrate entities: %s\n", err.Error())
+	}
+
+	log.Printf("Successfully connected to database and ran migrations\n")
+
+	router := handler.NewHandler(db).Router()
+
+	// create a file server for the static files on the frontend
+	fs := http.FileServer(http.Dir(filepath.Join(filepath.Dir(configLocation), c.Web.StaticFiles)))
+
+	router.PathPrefix("/").Handler(fs)
 
 	srv := &http.Server{
-		Handler:      h.Router(),
+		Handler:      router,
 		Addr:         fmt.Sprintf("%s:%d", c.Web.Address, c.Web.Port),
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
