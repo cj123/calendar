@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/cj123/calendar/entity"
+	"github.com/cj123/calendar/model"
 )
 
 const (
@@ -109,12 +109,12 @@ func (c *CalendarReader) getVersion() (float64, error) {
 	return version, err
 }
 
-func (c *CalendarReader) Read() (*entity.Calendar, error) {
+func (c *CalendarReader) Read() (*model.Calendar, error) {
 	if c.l.Status() == ERROR {
 		return nil, errors.New("Bad lexer status")
 	}
 
-	calendar := new(entity.Calendar)
+	calendar := new(model.Calendar)
 
 	version, err := c.getVersion()
 
@@ -124,8 +124,8 @@ func (c *CalendarReader) Read() (*entity.Calendar, error) {
 
 	calendar.Version = version
 
-	calendar.Appointments = make([]entity.Appointment, 0, 10)
-	calendar.Notes = make([]entity.Note, 0, 10)
+	calendar.Appointments = make([]model.Appointment, 0, 10)
+	calendar.Notes = make([]model.Note, 0, 10)
 
 	for {
 		c.l.SkipWhitespace()
@@ -151,7 +151,7 @@ func (c *CalendarReader) Read() (*entity.Calendar, error) {
 		case "Appt":
 
 			parser := new(AppointmentParser)
-			item := entity.Appointment{Item: entity.Item{}}
+			item := model.Appointment{Item: model.Item{}}
 			set := newDateSet()
 			reader := NewItemReader(c.l, parser, &item, set)
 
@@ -173,7 +173,7 @@ func (c *CalendarReader) Read() (*entity.Calendar, error) {
 
 		case "Note":
 			parser := new(NoteParser)
-			item := entity.Note{Item: entity.Item{}}
+			item := model.Note{Item: model.Item{}}
 			set := newDateSet()
 			reader := NewItemReader(c.l, parser, &item, set)
 
@@ -200,7 +200,7 @@ func (c *CalendarReader) Read() (*entity.Calendar, error) {
 			break
 
 		default:
-			option := new(entity.Option)
+			option := new(model.Option)
 			option.Name = keyword
 
 			option.Value = c.l.GetString()

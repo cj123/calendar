@@ -3,7 +3,7 @@ package format
 import (
 	"errors"
 
-	"github.com/cj123/calendar/entity"
+	"github.com/cj123/calendar/model"
 	"github.com/cj123/calendar/format/ical-tcl"
 	"github.com/cj123/calendar/format/ics"
 )
@@ -25,10 +25,10 @@ var (
 )
 
 type Reader interface {
-	Read() (*entity.Calendar, error)
+	Read() (*model.Calendar, error)
 }
 
-func ReadCalendar(b []byte, calType string) (*entity.Calendar, error) {
+func ReadCalendar(b []byte, calType string) (*model.Calendar, error) {
 	var reader Reader
 
 	if calType == "ical-tcl" {

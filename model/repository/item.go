@@ -3,7 +3,7 @@ package repository
 import (
 	"time"
 
-	"github.com/cj123/calendar/entity"
+	"github.com/cj123/calendar/model"
 	"github.com/jinzhu/gorm"
 )
 
@@ -15,10 +15,10 @@ type AppointmentRepository struct {
 	Repository
 }
 
-func (r *AppointmentRepository) FindBetweenDates(start, finish time.Time) ([]entity.Appointment, error) {
+func (r *AppointmentRepository) FindBetweenDates(start, finish time.Time) ([]model.Appointment, error) {
 	finish = finish.Add((time.Hour * 24) - time.Second)
 
-	var appointments []entity.Appointment
+	var appointments []model.Appointment
 
 	err := r.DB.
 		Preload("DeletedDates").
@@ -38,10 +38,10 @@ type NoteRepository struct {
 	Repository
 }
 
-func (r *NoteRepository) FindBetweenDates(start, finish time.Time) ([]entity.Note, error) {
+func (r *NoteRepository) FindBetweenDates(start, finish time.Time) ([]model.Note, error) {
 	finish = finish.Add((time.Hour * 24) - time.Second)
 
-	var notes []entity.Note
+	var notes []model.Note
 
 	err := r.DB.
 		Preload("DeletedDates").

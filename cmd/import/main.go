@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/cj123/calendar/config"
-	"github.com/cj123/calendar/entity"
+	"github.com/cj123/calendar/model"
 	"github.com/cj123/calendar/format"
 )
 
@@ -51,7 +51,7 @@ func main() {
 
 	defer db.Close()
 
-	entity.Migrate(db)
+	model.Migrate(db)
 
 	file, err := ioutil.ReadFile(importPath)
 

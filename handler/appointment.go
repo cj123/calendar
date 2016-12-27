@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/cj123/calendar/entity"
+	"github.com/cj123/calendar/model"
 	"github.com/gorilla/mux"
 	"gopkg.in/bluesuncorp/validator.v9"
 )
@@ -47,7 +47,7 @@ func (h *Handler) GetAppointmentsHandler(w http.ResponseWriter, r *http.Request)
 }
 
 func (h *Handler) CreateAppointmentHandler(w http.ResponseWriter, r *http.Request) {
-	var appointment entity.Appointment
+	var appointment model.Appointment
 
 	err := unmarshalRequest(r, &appointment)
 
@@ -58,8 +58,8 @@ func (h *Handler) CreateAppointmentHandler(w http.ResponseWriter, r *http.Reques
 
 	validate := validator.New()
 
-	if errs := validate.Struct(appointment); errs != nil {
-		http.Error(w, errs.Error(), http.StatusBadRequest)
+	if err := validate.Struct(appointment); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -79,7 +79,7 @@ type deleteAppointmentRequest struct {
 }
 
 /**
- * @TODO: delete all future events means all events from a given date.
+ * potential @TODO: #39 -- delete all future events means all events from a given date.
  * so, we just need to modify the event to set the end date to be the date of the previous appointment?
  */
 func (h *Handler) DeleteAppointmentHandler(w http.ResponseWriter, r *http.Request) {
@@ -94,7 +94,7 @@ func (h *Handler) DeleteAppointmentHandler(w http.ResponseWriter, r *http.Reques
 
 	if err = unmarshalRequest(r, &request); err != nil {
 		log.Print(err)
-		http.Error(w, "Unable to marshal request", http.StatusInternalServerError)
+		http.Error(w, "Unable to unmarshal request", http.StatusInternalServerError)
 		return
 	}
 
@@ -102,7 +102,7 @@ func (h *Handler) DeleteAppointmentHandler(w http.ResponseWriter, r *http.Reques
 		log.Printf("Deleting all appointments with id: %s\n", id)
 
 		// no specific date, delete all occurrences
-		err = h.db.Delete(entity.Appointment{}, "id = ?", id).Error
+		err = h.db.Delete(model.Appointment{}, "id = ?", id).Error
 	} else {
 		log.Printf("Deleting appointment recurrence at %s with id: %s\n", request.Date, id)
 
@@ -114,8 +114,8 @@ func (h *Handler) DeleteAppointmentHandler(w http.ResponseWriter, r *http.Reques
 		}
 
 		// there is a date, we just wish to add this to deleted
-		deletedDate := entity.AppointmentDeletedDate{
-			DeletedDate: entity.DeletedDate{
+		deletedDate := model.AppointmentDeletedDate{
+			DeletedDate: model.DeletedDate{
 				Date: request.Date,
 			},
 			AppointmentID: uint(uid),

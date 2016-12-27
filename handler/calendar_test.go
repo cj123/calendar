@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/cj123/calendar/entity"
+	"github.com/cj123/calendar/model"
 	"net/http"
 	"testing"
 )
@@ -29,7 +29,7 @@ func TestHandler_ImportHandler(t *testing.T) {
 }
 
 func TestHandler_NotesHandler(t *testing.T) {
-	var notes []entity.Note
+	var notes []model.Note
 
 	res, err := makeRequest("GET", "/calendar/notes?date=2016-09-30", nil, &notes, nil)
 

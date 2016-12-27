@@ -2,7 +2,7 @@ package icaltcl
 
 import (
 	"fmt"
-	"github.com/cj123/calendar/entity"
+	"github.com/cj123/calendar/model"
 	"testing"
 )
 
@@ -19,7 +19,7 @@ func getKeyword(l Lexer) (string, error) {
 	return keyword, err
 }
 
-func doParse(t *testing.T, input string, shouldErr bool) entity.Item {
+func doParse(t *testing.T, input string, shouldErr bool) model.Item {
 	l := NewICalLexer(input)
 	keyword, err := getKeyword(l)
 
@@ -28,7 +28,7 @@ func doParse(t *testing.T, input string, shouldErr bool) entity.Item {
 	}
 
 	p := ItemParser{}
-	item := entity.Item{}
+	item := model.Item{}
 
 	err = p.Parse(l, &item, keyword, nil)
 
@@ -41,7 +41,7 @@ func doParse(t *testing.T, input string, shouldErr bool) entity.Item {
 	return item
 }
 
-func doApptParse(t *testing.T, input string, shouldErr bool) (entity.Appointment, *dateSet) {
+func doApptParse(t *testing.T, input string, shouldErr bool) (model.Appointment, *dateSet) {
 	l := NewICalLexer(input)
 	keyword, err := getKeyword(l)
 
@@ -51,7 +51,7 @@ func doApptParse(t *testing.T, input string, shouldErr bool) (entity.Appointment
 
 	set := &dateSet{}
 	p := AppointmentParser{&ItemParser{}}
-	item := entity.Appointment{}
+	item := model.Appointment{}
 
 	err = p.Parse(l, &item, keyword, set)
 

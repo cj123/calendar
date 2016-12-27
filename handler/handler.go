@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/cj123/calendar/entity/repository"
+	"github.com/cj123/calendar/model/repository"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 )
@@ -33,8 +33,8 @@ func (h *Handler) Router() *mux.Router {
 
 	r.Path("/calendar/appointments").Methods("GET").HandlerFunc(h.GetAppointmentsHandler)
 	r.Path("/calendar/appointments").Methods("POST").HandlerFunc(h.CreateAppointmentHandler)
-	r.Path("/calendar/appointments/{id}").Methods("PUT").HandlerFunc(h.UpdateAppointmentHandler)
-	r.Path("/calendar/appointments/{id}").Methods("DELETE").HandlerFunc(h.DeleteAppointmentHandler)
+	r.Path("/calendar/appointment/{id}").Methods("PUT").HandlerFunc(h.UpdateAppointmentHandler)
+	r.Path("/calendar/appointment/{id}").Methods("DELETE").HandlerFunc(h.DeleteAppointmentHandler)
 
 	return r
 }

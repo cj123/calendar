@@ -5,13 +5,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cj123/calendar/entity"
+	"github.com/cj123/calendar/model"
 	"github.com/jinzhu/gorm"
 )
 
 func TestHandler_GetAppointmentsHandler(t *testing.T) {
 	t.Run("Get appointments", func(t *testing.T) {
-		var appointments []entity.Appointment
+		var appointments []model.Appointment
 
 		_, err := makeRequest("GET", "/calendar/appointments?start=2016-01-12&finish=2016-12-31", nil, &appointments, nil)
 
@@ -51,8 +51,8 @@ func TestHandler_GetAppointmentsHandler(t *testing.T) {
 
 func TestHandler_CreateAppointmentHandler(t *testing.T) {
 	t.Run("Valid", func(t *testing.T) {
-		appointment := entity.Appointment{
-			Item: entity.Item{
+		appointment := model.Appointment{
+			Item: model.Item{
 				Text:       "test appointment",
 				Start:      time.Now(),
 				Finish:     time.Now().Add(time.Hour),
@@ -70,9 +70,9 @@ func TestHandler_CreateAppointmentHandler(t *testing.T) {
 			t.Fail()
 		}
 
-		var created entity.Appointment
+		var created model.Appointment
 
-		db.Model(entity.Appointment{}).Order("id DESC").Limit(1).First(&created)
+		db.Model(model.Appointment{}).Order("id DESC").Limit(1).First(&created)
 
 		if created.Text != appointment.Text || !created.Start.Equal(appointment.Start) || !created.Finish.Equal(appointment.Finish) {
 			t.Fail()
@@ -80,8 +80,8 @@ func TestHandler_CreateAppointmentHandler(t *testing.T) {
 	})
 
 	t.Run("Invalid text", func(t *testing.T) {
-		appointment := entity.Appointment{
-			Item: entity.Item{
+		appointment := model.Appointment{
+			Item: model.Item{
 				Text:       "",
 				Start:      time.Now(),
 				Finish:     time.Now().Add(time.Hour),
@@ -106,7 +106,7 @@ func TestHandler_DeleteAppointmentHandler(t *testing.T) {
 		request := deleteAppointmentRequest{DeleteAll: true}
 
 		// there should be an appointment "1"
-		res, err := makeRequest("DELETE", "/calendar/appointments/1", request, nil, nil)
+		res, err := makeRequest("DELETE", "/calendar/appointment/1", request, nil, nil)
 
 		if err != nil {
 			t.Error(err)
@@ -116,7 +116,7 @@ func TestHandler_DeleteAppointmentHandler(t *testing.T) {
 			t.Fail()
 		}
 
-		var deleted entity.Appointment
+		var deleted model.Appointment
 
 		err = db.Where("id = ?", 1).First(&deleted).Error
 
@@ -131,7 +131,7 @@ func TestHandler_DeleteAppointmentHandler(t *testing.T) {
 		request := deleteAppointmentRequest{DeleteAll: false, Date: dateToDelete}
 
 		// there should be an appointment "2"
-		res, err := makeRequest("DELETE", "/calendar/appointments/2", request, nil, nil)
+		res, err := makeRequest("DELETE", "/calendar/appointment/2", request, nil, nil)
 
 		if err != nil {
 			t.Error(err)
@@ -141,7 +141,7 @@ func TestHandler_DeleteAppointmentHandler(t *testing.T) {
 			t.Fail()
 		}
 
-		var deleted entity.AppointmentDeletedDate
+		var deleted model.AppointmentDeletedDate
 
 		err = db.Where("appointment_id = ?", 2).First(&deleted).Error
 
@@ -162,7 +162,7 @@ func TestHandler_DeleteAppointmentHandler(t *testing.T) {
 		request := deleteAppointmentRequest{Date: dateToDelete}
 
 		// there should be an appointment "2"
-		res, err := makeRequest("DELETE", "/calendar/appointments/s2", request, nil, nil)
+		res, err := makeRequest("DELETE", "/calendar/appointment/s2", request, nil, nil)
 
 		if err != nil {
 			t.Error(err)

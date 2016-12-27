@@ -1,7 +1,7 @@
 package icaltcl
 
 import (
-	"github.com/cj123/calendar/entity"
+	"github.com/cj123/calendar/model"
 	"testing"
 )
 
@@ -21,7 +21,7 @@ func (p *testParser) Parse(l Lexer, s interface{}, keyword string, set *dateSet)
 func TestItemReader_Read(t *testing.T) {
 	t.Run("Read", func(t *testing.T) {
 		l := NewICalLexer("TestParser [d]]") // second ] to signal end of input
-		item := &entity.Item{}
+		item := &model.Item{}
 		r := NewItemReader(l, &testParser{t: t, checkLexer: true}, &item, nil)
 		r.Read()
 
@@ -34,7 +34,7 @@ func TestItemReader_Read(t *testing.T) {
 
 	t.Run("Incomplete Item", func(t *testing.T) {
 		l := NewICalLexer("TestParser []")
-		item := &entity.Item{}
+		item := &model.Item{}
 		r := NewItemReader(l, &testParser{t: t}, &item, nil)
 		err := r.Read()
 

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"regexp"
 
-	"github.com/cj123/calendar/entity"
+	"github.com/cj123/calendar/model"
 )
 
 type Parser interface {
@@ -14,7 +14,7 @@ type Parser interface {
 type ItemParser struct{}
 
 func (i *ItemParser) Parse(l Lexer, s interface{}, keyword string, set *dateSet) error {
-	item := s.(*entity.Item)
+	item := s.(*model.Item)
 
 	switch keyword {
 	case "Remind":
@@ -95,7 +95,7 @@ type AppointmentParser struct {
 }
 
 func (a *AppointmentParser) Parse(l Lexer, s interface{}, keyword string, set *dateSet) error {
-	item := s.(*entity.Appointment)
+	item := s.(*model.Appointment)
 
 	a.ItemParser.Parse(l, &item.Item, keyword, set)
 
@@ -137,7 +137,7 @@ func (a *AppointmentParser) Parse(l Lexer, s interface{}, keyword string, set *d
 		break
 
 	case "Alarms":
-		alarms := make([]entity.Alarm, 0, 10)
+		alarms := make([]model.Alarm, 0, 10)
 
 		for {
 			l.SkipWhitespace()
@@ -159,7 +159,7 @@ func (a *AppointmentParser) Parse(l Lexer, s interface{}, keyword string, set *d
 				return err
 			}
 
-			alarms = append(alarms, entity.Alarm{
+			alarms = append(alarms, model.Alarm{
 				Time: int64(num),
 			})
 		}
@@ -177,7 +177,7 @@ type NoteParser struct {
 }
 
 func (n *NoteParser) Parse(l Lexer, s interface{}, keyword string, set *dateSet) error {
-	note := s.(*entity.Note)
+	note := s.(*model.Note)
 
 	return n.ItemParser.Parse(l, &note.Item, keyword, set)
 }

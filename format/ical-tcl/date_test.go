@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cj123/calendar/entity"
+	"github.com/cj123/calendar/model"
 	ical "github.com/heindl/caldav-go/icalendar/values"
 )
 
@@ -279,7 +279,7 @@ func TestDateSetMapToItem(t *testing.T) {
 	d.StartTime = 600
 	d.Length = 60
 
-	item := entity.Item{}
+	item := model.Item{}
 
 	d.mapToItem(&item)
 

@@ -11,7 +11,7 @@ import (
 	"testing"
 
 	"github.com/cj123/calendar/config"
-	"github.com/cj123/calendar/entity"
+	"github.com/cj123/calendar/model"
 	"github.com/cj123/calendar/format"
 	"github.com/jinzhu/gorm"
 )
@@ -36,7 +36,7 @@ func TestMain(m *testing.M) {
 
 	defer db.Close()
 
-	entity.Migrate(db)
+	model.Migrate(db)
 
 	// @TODO: simplify + abstract this
 

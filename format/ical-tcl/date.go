@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"time"
 
-	"github.com/cj123/calendar/entity"
+	"github.com/cj123/calendar/model"
 	ical "github.com/heindl/caldav-go/icalendar/values"
 )
 
@@ -27,7 +27,7 @@ func newDateSet() *dateSet {
 	}
 }
 
-func (d *dateSet) mapToItem(i *entity.Item) error {
+func (d *dateSet) mapToItem(i *model.Item) error {
 	i.Start = d.Start.Add(time.Duration(d.StartTime) * time.Minute)
 	i.Finish = d.Start.Add(time.Duration(d.StartTime+d.Length) * time.Minute)
 
@@ -48,7 +48,7 @@ func (d *dateSet) mapToItem(i *entity.Item) error {
 	return nil
 }
 
-func (d *dateSet) mapToAppointment(a *entity.Appointment) error {
+func (d *dateSet) mapToAppointment(a *model.Appointment) error {
 	err := d.mapToItem(&a.Item)
 
 	if err != nil {
@@ -56,13 +56,13 @@ func (d *dateSet) mapToAppointment(a *entity.Appointment) error {
 	}
 
 	if a.DeletedDates == nil {
-		a.DeletedDates = make([]entity.AppointmentDeletedDate, 0, 10)
+		a.DeletedDates = make([]model.AppointmentDeletedDate, 0, 10)
 	}
 
 	// deleted dates must be separate
 	for _, deleted := range d.Deleted {
-		a.DeletedDates = append(a.DeletedDates, entity.AppointmentDeletedDate{
-			DeletedDate: entity.DeletedDate{
+		a.DeletedDates = append(a.DeletedDates, model.AppointmentDeletedDate{
+			DeletedDate: model.DeletedDate{
 				Date: deleted,
 			},
 		})
@@ -71,7 +71,7 @@ func (d *dateSet) mapToAppointment(a *entity.Appointment) error {
 	return err
 }
 
-func (d *dateSet) mapToNote(n *entity.Note) error {
+func (d *dateSet) mapToNote(n *model.Note) error {
 	err := d.mapToItem(&n.Item)
 
 	if err != nil {
@@ -79,13 +79,13 @@ func (d *dateSet) mapToNote(n *entity.Note) error {
 	}
 
 	if n.DeletedDates == nil {
-		n.DeletedDates = make([]entity.NoteDeletedDate, 0, 10)
+		n.DeletedDates = make([]model.NoteDeletedDate, 0, 10)
 	}
 
 	// deleted dates must be separate
 	for _, deleted := range d.Deleted {
-		n.DeletedDates = append(n.DeletedDates, entity.NoteDeletedDate{
-			DeletedDate: entity.DeletedDate{
+		n.DeletedDates = append(n.DeletedDates, model.NoteDeletedDate{
+			DeletedDate: model.DeletedDate{
 				Date: deleted,
 			},
 		})

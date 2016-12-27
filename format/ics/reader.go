@@ -3,7 +3,7 @@ package ics
 import (
 	"strconv"
 
-	"github.com/cj123/calendar/entity"
+	"github.com/cj123/calendar/model"
 
 	"github.com/heindl/caldav-go/icalendar"
 	"github.com/heindl/caldav-go/icalendar/components"
@@ -30,8 +30,8 @@ func stripEscapeChars(data string) string {
 	return data
 }
 
-func (r *ICSReader) Read() (*entity.Calendar, error) {
-	cal := &entity.Calendar{}
+func (r *ICSReader) Read() (*model.Calendar, error) {
+	cal := &model.Calendar{}
 
 	ical := new(components.Calendar)
 
@@ -46,11 +46,11 @@ func (r *ICSReader) Read() (*entity.Calendar, error) {
 	return cal, err
 }
 
-func (r *ICSReader) mapToCalendar(icsCal *components.Calendar, cal *entity.Calendar) error {
-	appointments := make([]entity.Appointment, 10)
+func (r *ICSReader) mapToCalendar(icsCal *components.Calendar, cal *model.Calendar) error {
+	appointments := make([]model.Appointment, 10)
 
 	for _, event := range icsCal.Events {
-		appt := entity.Appointment{}
+		appt := model.Appointment{}
 
 		appt.Text = stripEscapeChars(event.Summary + "\n" + event.Description)
 		appt.Start = event.DateStart.NativeTime()
@@ -71,11 +71,11 @@ func (r *ICSReader) mapToCalendar(icsCal *components.Calendar, cal *entity.Calen
 			appt.RecurrenceRule = ruleStr
 
 			if event.ExceptionDateTimes != nil && len(*event.ExceptionDateTimes) > 0 {
-				appt.DeletedDates = make([]entity.AppointmentDeletedDate, 10)
+				appt.DeletedDates = make([]model.AppointmentDeletedDate, 10)
 
 				for _, t := range *event.ExceptionDateTimes {
-					appt.DeletedDates = append(appt.DeletedDates, entity.AppointmentDeletedDate{
-						DeletedDate: entity.DeletedDate{
+					appt.DeletedDates = append(appt.DeletedDates, model.AppointmentDeletedDate{
+						DeletedDate: model.DeletedDate{
 							Date: t.NativeTime(),
 						},
 					})

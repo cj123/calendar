@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/cj123/calendar/config"
-	"github.com/cj123/calendar/entity"
+	"github.com/cj123/calendar/model"
 	"github.com/cj123/calendar/handler"
 )
 
@@ -39,7 +39,7 @@ func main() {
 
 	defer db.Close()
 
-	err = entity.Migrate(db)
+	err = model.Migrate(db)
 
 	if err != nil {
 		log.Fatalf("Could not migrate entities: %s\n", err.Error())
