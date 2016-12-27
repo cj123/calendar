@@ -7,10 +7,12 @@ angular.module("calendar").directive("dayView", [function() {
         },
         templateUrl: "calendar/view/day-view.html",
         controller: [
-            "$scope", "$document", "$uibModal",
-            function($scope, $document, $uibModal) {
+            "$scope", "$document", "$uibModal", "Appointment",
+            function($scope, $document, $uibModal, Appointment) {
                 function loadAppointments() {
                     $scope.appointments = $scope.days[$scope.currentDate.date() - 1].events;
+
+                    $scope.newAppointment = null; // clear out any newly created appointments
                 }
 
                 $scope.$watch(function() {
@@ -55,6 +57,16 @@ angular.module("calendar").directive("dayView", [function() {
                     };
 
                     //console.log($scope.newAppointment);
+                };
+
+                $scope.submitAppointment = function() {
+                    Appointment.create($scope.newAppointment).then(function(response) {
+                        console.log(response);
+
+                        $scope.$emit("refresh", true);
+                    }).catch(function(err) {
+                       console.log(err);
+                    });
                 };
             }
         ]

@@ -7,8 +7,8 @@ import (
 	"os"
 
 	"github.com/cj123/calendar/config"
-	"github.com/cj123/calendar/model"
 	"github.com/cj123/calendar/format"
+	"github.com/cj123/calendar/model"
 )
 
 var (

@@ -3,9 +3,9 @@ package format
 import (
 	"errors"
 
-	"github.com/cj123/calendar/model"
 	"github.com/cj123/calendar/format/ical-tcl"
 	"github.com/cj123/calendar/format/ics"
+	"github.com/cj123/calendar/model"
 )
 
 type calendarType string

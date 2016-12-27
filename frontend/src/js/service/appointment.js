@@ -28,12 +28,36 @@ angular.module("calendar").factory("Appointment", [ "Item", "$http", "moment", "
      * @returns {*|boolean}
      */
     appointmentFactory.delete = function(appointmentId, dateToDelete) {
-        return $http.delete(API_BASE + "calendar/appointments/" + appointmentId, {
+        return $http.delete(API_BASE + "calendar/appointment/" + appointmentId, {
             data: {
                 date: dateToDelete !== null && dateToDelete.toISOString() || moment().toISOString(),
                 delete_all: dateToDelete === null
             }
         });
+    };
+
+    /**
+     * Create an appointment.
+     *
+     * @param appointment
+     * @returns {*}
+     */
+    appointmentFactory.create = function(appointment) {
+        // @todo we may need to modify our representation of the appointment here so the payload succeeds validation
+        appointment.alarms = []; // @TODO alarms should be handled better!
+
+        return $http.post(API_BASE + "calendar/appointments", appointment);
+    };
+
+    /**
+     * Updates an appointment
+     *
+     * @param appointment
+     *
+     * @returns {*}
+     */
+    appointmentFactory.update = function(appointment) {
+        return $http.put(API_BASE + "calendar/appointment/" + appointment.id, appointment);
     };
 
     return appointmentFactory;

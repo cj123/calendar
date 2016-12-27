@@ -15,7 +15,7 @@ angular.module("calendar").controller("AppointmentModal", [
             var dateToDelete = null;
 
             if (!deleteRecurrences) {
-                dateToDelete = currentDate.hour(appointment.start.hour()).minute(appointment.start.minute()).second(appointment.start.second());
+                dateToDelete = currentDate.hour(appointment.start.hour()).minute(appointment.start.minute()).second(appointment.start.second()).millisecond(0);
             }
 
             Appointment.delete($scope.appointment.id, dateToDelete).then(function(response) {
@@ -31,5 +31,9 @@ angular.module("calendar").controller("AppointmentModal", [
                     // @TODO display an error?
                 }
             });
+        };
+
+        $scope.update = function() {
+              
         };
     }]);
