@@ -70,7 +70,7 @@ func (c *Config) OpenDatabaseConnection() (*gorm.DB, error) {
 			c.Database.Database,
 		)
 	} else if c.Database.Dialect == "sqlite3" && c.Database.Location != "" {
-		connection = fmt.Sprintf("%s", c.Database.Location)
+		connection = c.Database.Location
 	} else {
 		return nil, errors.New("invalid database driver specified: " + c.Database.Dialect)
 	}

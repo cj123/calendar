@@ -49,7 +49,7 @@ var defaultOptions = map[string]interface{}{
 	"AmPm":                false,
 	"MondayFirst":         true,
 	"AllowOverflow":       true,
-	"Visible":             "1", // @TODO find out what this does
+	"Visible":             true,
 	"IgnoreAlarms":        false,
 	"Color":               "<Default> <Default>",
 	"Timezone":            "<Local>",
@@ -105,4 +105,6 @@ func (h *Handler) ImportHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Could not create calendar: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
+
+	w.WriteHeader(http.StatusCreated)
 }

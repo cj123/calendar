@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
+	"mime/multipart"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -37,9 +38,6 @@ func TestMain(m *testing.M) {
 	defer db.Close()
 
 	model.Migrate(db)
-
-	// @TODO: simplify + abstract this
-
 	calendars := map[string]string{
 		"ical-tcl": icalTest,
 		"ics":      uniTimetable,
@@ -101,6 +99,50 @@ func makeRequest(method, url string, body interface{}, output interface{}, heade
 
 		err = json.Unmarshal(buf.Bytes(), &output)
 	}
+
+	return res, err
+}
+
+func makeFileUploadRequest(url string, params map[string]string, paramName, fileName string, file []byte) (*http.Response, error) {
+	body := new(bytes.Buffer)
+
+	writer := multipart.NewWriter(body)
+	part, err := writer.CreateFormFile(paramName, fileName)
+
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = part.Write(file)
+
+	if err != nil {
+		return nil, err
+	}
+
+	for key, val := range params {
+		err = writer.WriteField(key, val)
+
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	err = writer.Close()
+
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", server.URL+url, body)
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+
+	res, err := http.DefaultClient.Do(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer res.Body.Close()
 
 	return res, err
 }
