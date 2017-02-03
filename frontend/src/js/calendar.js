@@ -4,11 +4,12 @@ var calendar = angular.module("calendar", [
     "ui.router",
     "ui.bootstrap",
     "duScroll",
-    "ngFileUpload"
+    "ngFileUpload",
+    "ngResize"
 ]);
 
 // routing
-calendar.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
+calendar.config(function($stateProvider, $urlRouterProvider, $locationProvider, resizeProvider) {
     $stateProvider.state("index", {
         url: "/",
         templateUrl: "calendar/view/index.html",
@@ -24,6 +25,9 @@ calendar.config(function($stateProvider, $urlRouterProvider, $locationProvider) 
     $urlRouterProvider.otherwise("/");
 
     $locationProvider.html5Mode(false).hashPrefix('!');
+
+    resizeProvider.throttle = 100;
+    resizeProvider.initBind = false;
 });
 
 calendar.run();

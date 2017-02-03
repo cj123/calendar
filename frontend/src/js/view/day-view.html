@@ -18,6 +18,7 @@
             ng-show="newAppointment !== null"
             ng-style="{ 'top': newAppointment.offset + 'px', 'height': newAppointment.length + 'px' }"
             ng-dblclick="viewAppointmentDetail(newAppointment)"
+            ng-resize="setDimensions($event)"
         >
             <strong><label><textarea ng-blur="submitAppointment()" ng-model="newAppointment.text"></textarea></label></strong>
             <time>{{ newAppointment.start.format("HH:mm") }} - {{ newAppointment.finish.format("HH:mm") }}</time>

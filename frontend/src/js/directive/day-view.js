@@ -59,6 +59,8 @@ angular.module("calendar").directive("dayView", [function() {
                     //console.log($scope.newAppointment);
                 };
 
+
+
                 $scope.submitAppointment = function() {
                     Appointment.create($scope.newAppointment).then(function(response) {
                         console.log(response);

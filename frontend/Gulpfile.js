@@ -24,6 +24,7 @@ var paths = {
                 "./node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js",
                 "./node_modules/angular-scroll/angular-scroll.min.js",
                 "./node_modules/moment/min/moment.min.js",
+                "./node_modules/ng-resize/dist/ng-resize.min.js",
                 "./node_modules/moment-timezone/builds/moment-timezone-with-data.min.js",
                 "./node_modules/rrule/lib/nlp.js",
                 "./node_modules/rrule/lib/rrule.js",
