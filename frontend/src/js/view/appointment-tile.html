@@ -1,0 +1,12 @@
+<a
+    href="#"
+    class="appointment"
+    ng-class="{ 'appointment--selected': selectedAppointment === info }"
+    ng-style="{ 'top': info.offset + 'px', 'height': info.length + 'px' }"
+    ng-dblclick="viewDetail()"
+    r-directions="['bottom', 'right', 'top', 'left']"
+    resizable
+>
+    <textarea ng-blur="submit()" ng-model="info.text"></textarea>
+    <time>{{ info.start.format("HH:mm") }} - {{ info.finish.format("HH:mm") }}</time>
+</a>

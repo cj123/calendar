@@ -1,28 +1,8 @@
 <div class="day-view" id="day-view" ng-cloak du-scroll-container>
     <div class="day-view__appointments" ng-click="!!newAppointment || createAppointment($event);">
-        <a
-            href="#"
-            class="appointment"
-            ng-repeat="appointment in appointments"
-            ng-class="{ 'appointment--selected': selectedAppointment === appointment }"
-            ng-style="{ 'top': appointment.offset + 'px', 'height': appointment.length + 'px' }"
-            ng-dblclick="viewAppointmentDetail(appointment)"
-        >
-            <strong>{{ appointment.text }}</strong>
-            <time>{{ appointment.start.format("HH:mm") }} - {{ appointment.finish.format("HH:mm") }}</time>
-        </a>
+        <appointment-tile ng-repeat="appointment in appointments" info="appointment"></appointment-tile>
 
-        <a
-            href="#"
-            class="appointment appointment--creator"
-            ng-show="newAppointment !== null"
-            ng-style="{ 'top': newAppointment.offset + 'px', 'height': newAppointment.length + 'px' }"
-            ng-dblclick="viewAppointmentDetail(newAppointment)"
-            ng-resize="setDimensions($event)"
-        >
-            <strong><label><textarea ng-blur="submitAppointment()" ng-model="newAppointment.text"></textarea></label></strong>
-            <time>{{ newAppointment.start.format("HH:mm") }} - {{ newAppointment.finish.format("HH:mm") }}</time>
-        </a>
+        <appointment-tile ng-show="newAppointment !== null" info="newAppointment"></appointment-tile>
     </div>
 
     <table class="day-view__grid">

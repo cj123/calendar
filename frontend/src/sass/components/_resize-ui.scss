@@ -1,0 +1,29 @@
+.rg {
+  &-top, &-bottom, &-left, &-right {
+    span {
+      width: 8px;
+      height: 8px;
+      background: #000;
+      border: 1px solid #000;
+
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  &-top {
+    margin-top: -10px;
+  }
+
+  &-bottom {
+    margin-bottom: -8px;
+  }
+
+  &-left {
+    margin-left: -4px;
+  }
+
+  &-right {
+    margin-right: -4px;
+  }
+}

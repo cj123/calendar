@@ -34,6 +34,11 @@ angular.module("calendar").controller("AppointmentModal", [
         };
 
         $scope.update = function() {
-              
+            Appointment.update($scope.appointment).then(function(response) {
+                if (response.status === 200) {
+                    $uibModalInstance.close($scope.appointment);
+                    $rootScope.$broadcast("refresh", true);
+                }
+            });
         };
     }]);

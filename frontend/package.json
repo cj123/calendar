@@ -22,6 +22,7 @@
   "dependencies": {
     "angular": "^1.5.8",
     "angular-moment": "^1.0.0",
+    "angular-resizable": "^1.2.0",
     "angular-scroll": "^1.0.0",
     "angular-ui-bootstrap": "^2.2.0",
     "angular-ui-router": "^0.3.2",
@@ -42,7 +43,6 @@
     "moment": "^2.15.1",
     "moment-timezone": "^0.5.10",
     "ng-file-upload": "^12.2.13",
-    "ng-resize": "^1.2.0",
     "normalize-scss": "^5.0.3",
     "rrule": "https://github.com/cj123/rrule.git",
     "vinyl-buffer": "^1.0.0",

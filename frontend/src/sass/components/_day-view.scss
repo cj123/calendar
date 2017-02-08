@@ -67,7 +67,20 @@ $time-cell-width: 50px;
             color: $white;
             width: calc(100% - #{$time-cell-width});
             opacity: 0.9;
-            overflow-y: auto;
+            resize: both;
+
+            textarea {
+                background: transparent;
+                border: none;
+                resize: none;
+
+                position: absolute;
+                top: 0;
+                width: 80%;
+                height: 100%;
+
+                overflow-y: auto;
+            }
             
             &:hover, &:focus, &:visited, &:active {
                 text-decoration: none;
@@ -87,21 +100,6 @@ $time-cell-width: 50px;
                 position: absolute;
                 top: 5px;
                 right: 5px;
-            }
-
-            &--creator {
-                resize: both;
-
-                textarea {
-                    background: transparent;
-                    border: none;
-                    resize: none;
-
-                    position: absolute;
-                    top: 0px;
-                    width: 80%;
-                    height: 100%;
-                }
             }
         }
     }

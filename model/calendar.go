@@ -21,7 +21,7 @@ var (
 )
 
 type Model struct {
-	ID        uint      `gorm:"primary_key" json:"id" validate:"len=0"`
+	ID        uint      `gorm:"primary_key" json:"id"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
@@ -39,7 +39,7 @@ type Item struct {
 	Model
 	Text           string    `json:"text" validate:"required"`
 	Owner          string    `json:"owner"`
-	UID            string    `json:"uid" validate:"len=0"`
+	UID            string    `json:"uid"`
 	UIDPersistent  bool      `json:"uid_persistent" gorm:"column:uid_persistent"`
 	RemindStart    int64     `json:"remind_start"`
 	Hilite         string    `json:"hilite"`

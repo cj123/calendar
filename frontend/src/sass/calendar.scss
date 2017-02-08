@@ -7,6 +7,7 @@
 
 // third party
 @import "normalize/import-now";
+@import "angular-resizable.min";
 
 @import "variables";
 @import "bootstrap";
@@ -22,3 +23,4 @@
 @import "components/appointment-info";
 @import "components/upload";
 
+@import "components/resize-ui";

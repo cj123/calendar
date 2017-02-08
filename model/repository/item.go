@@ -34,6 +34,14 @@ func (r *AppointmentRepository) FindBetweenDates(start, finish time.Time) ([]mod
 	return appointments, err
 }
 
+func (r *AppointmentRepository) FindByID(id interface{}) (model.Appointment, error) {
+	var appointment model.Appointment
+
+	err := r.DB.Preload("DeletedDates").Preload("Alarms").First(&appointment, "id = ?", id).Error
+
+	return appointment, err
+}
+
 type NoteRepository struct {
 	Repository
 }

@@ -46,7 +46,7 @@ angular.module("calendar").factory("Appointment", [ "Item", "$http", "moment", "
         // @todo we may need to modify our representation of the appointment here so the payload succeeds validation
         appointment.alarms = []; // @TODO alarms should be handled better!
 
-        return $http.post(API_BASE + "calendar/appointments", appointment);
+        return $http.post(API_BASE + "calendar/appointments", prepareAppointment(appointment));
     };
 
     /**
@@ -57,8 +57,31 @@ angular.module("calendar").factory("Appointment", [ "Item", "$http", "moment", "
      * @returns {*}
      */
     appointmentFactory.update = function(appointment) {
-        return $http.put(API_BASE + "calendar/appointment/" + appointment.id, appointment);
+        // @TODO process alarms into correct data structure!
+        appointment.alarms = []; // @TODO alarms should be handled better!
+
+        if (!!appointment.offset) {
+            // parse this and set the start time of the appointment
+        }
+
+        if (!!appointment.length) {
+            // parse this given the start time to get the end time
+        }
+
+        return $http.put(API_BASE + "calendar/appointment/" + appointment.id, prepareAppointment(appointment));
     };
+
+    function prepareAppointment(a) {
+        a.start = a.start.clone()
+            .hour(0)
+            .minute(0)
+            .second(0)
+            .add(a.offset, "minutes");
+
+        a.finish = a.start.clone().add(a.length, "minutes");
+
+        return a;
+    }
 
     return appointmentFactory;
 }]);
