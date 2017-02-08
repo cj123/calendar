@@ -38,9 +38,9 @@ func TestMain(m *testing.M) {
 	defer db.Close()
 
 	model.Migrate(db)
-	calendars := map[string]string{
-		"ical-tcl": icalTest,
-		"ics":      uniTimetable,
+	calendars := map[format.CalendarType]string{
+		format.CalendarICalTCL: icalTest,
+		format.CalendarICS:     uniTimetable,
 	}
 
 	for calType, data := range calendars {
