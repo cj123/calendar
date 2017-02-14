@@ -7,10 +7,41 @@ angular.module("calendar").directive("dayView", [function() {
         },
         templateUrl: "calendar/view/day-view.html",
         controller: [
-            "$scope", "$document", "$uibModal",
-            function($scope, $document, $uibModal) {
+            "$scope",
+            function($scope) {
                 function loadAppointments() {
-                    $scope.appointments = $scope.days[$scope.currentDate.date() - 1].events;
+                    if ($scope.days.length === 0) {
+                        return;
+                    }
+
+                    var events = $scope.days[$scope.currentDate.date() - 1].events;
+
+                    for (var eventIndex = 0; eventIndex < events.length; eventIndex++) {
+                        for (var otherEventIndex = 0; otherEventIndex  < events.length; otherEventIndex++) {
+                            if (eventIndex === otherEventIndex) {
+                                continue;
+                            }
+                            
+                            var event = events[eventIndex];
+                            var otherEvent = events[otherEventIndex];
+
+                            if (event.start.isBetween(otherEvent.start, otherEvent.finish, 'second', '[]')) {
+                                if (!event.collisions[otherEvent.id]) {
+                                    event.collisions.push(otherEvent.id);
+                                }
+
+                                if (!otherEvent.collisions[event.id]) {
+                                    otherEvent.collisions.push(event.id);
+                                }
+                            }
+                        }
+                    }
+
+                    console.log(events);
+
+                    $scope.appointments = events;
+
+                    $scope.newAppointment = null; // clear out any newly created appointments
                 }
 
                 $scope.$watch(function() {
@@ -23,22 +54,6 @@ angular.module("calendar").directive("dayView", [function() {
 
                 $scope.newAppointment = null;
 
-                $scope.viewAppointmentDetail = function(appointment) {
-                    $uibModal.open({
-                        animation: true,
-                        templateUrl: "calendar/view/modals/appointment.html",
-                        controller: "AppointmentModal",
-                        resolve: {
-                            appointment: function() {
-                                return appointment;
-                            },
-                            currentDate: function() {
-                                return $scope.currentDate;
-                            }
-                        }
-                    });
-                };
-
                 $scope.createAppointment = function(event) {
                     var offset = event.offsetY - (event.offsetY % 30); // rounded to nearest 30min
 
@@ -50,12 +65,15 @@ angular.module("calendar").directive("dayView", [function() {
 
                     $scope.newAppointment = {
                         offset: offset,
+                        length: 30,
                         start: start,
                         finish: start.clone().add(30, "minutes")
                     };
 
                     //console.log($scope.newAppointment);
                 };
+
+
             }
         ]
     };

@@ -2,12 +2,12 @@ package ics
 
 import (
 	"strconv"
+	"strings"
 
 	"github.com/cj123/calendar/model"
 
 	"github.com/heindl/caldav-go/icalendar"
 	"github.com/heindl/caldav-go/icalendar/components"
-	"strings"
 )
 
 var escapeChars = [...]string{

@@ -23,7 +23,7 @@ angular.module("calendar").factory("CalendarOptions", [ "$http", "API_BASE", fun
             var opts = response.data;
 
             appointment.alarms   = appointment.alarms || opts.DefaultAlarms;
-            appointment.remind   = appointment.remind || opts.DefaultEarlyWarning;
+            appointment.remind_start   = appointment.remind_start || opts.DefaultEarlyWarning;
             appointment.timezone = appointment.timezone || opts.Timezone;
 
             return appointment;

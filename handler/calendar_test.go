@@ -25,7 +25,29 @@ func TestHandler_OptionsHandler(t *testing.T) {
 }
 
 func TestHandler_ImportHandler(t *testing.T) {
+	t.Run("Valid Filetype", func(t *testing.T) {
+		res, err := makeFileUploadRequest("/calendar/import", map[string]string{"format": "ical-tcl"}, "file", "file", []byte(icalTest))
 
+		if err != nil {
+			t.Error(err)
+		}
+
+		if res.StatusCode != http.StatusCreated {
+			t.Fail()
+		}
+	})
+
+	t.Run("Invalid Filetype", func(t *testing.T) {
+		res, err := makeFileUploadRequest("/calendar/import", map[string]string{"format": "calendar"}, "file", "file", []byte(icalTest))
+
+		if err != nil {
+			t.Error(err)
+		}
+
+		if res.StatusCode != http.StatusBadRequest {
+			t.Fail()
+		}
+	})
 }
 
 func TestHandler_NotesHandler(t *testing.T) {

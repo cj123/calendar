@@ -27,7 +27,6 @@ func NewHandler(db *gorm.DB) *Handler {
 func (h *Handler) Router() *mux.Router {
 	r := mux.NewRouter()
 
-	r.HandleFunc("/calendar/notes", h.NotesHandler)
 	r.HandleFunc("/calendar/options", h.OptionsHandler)
 	r.HandleFunc("/calendar/import", h.ImportHandler)
 
@@ -35,6 +34,11 @@ func (h *Handler) Router() *mux.Router {
 	r.Path("/calendar/appointments").Methods("POST").HandlerFunc(h.CreateAppointmentHandler)
 	r.Path("/calendar/appointment/{id}").Methods("PUT").HandlerFunc(h.UpdateAppointmentHandler)
 	r.Path("/calendar/appointment/{id}").Methods("DELETE").HandlerFunc(h.DeleteAppointmentHandler)
+
+	r.Path("/calendar/notes").Methods("GET").HandlerFunc(h.GetNotesHandler)
+	r.Path("/calendar/notes").Methods("POST").HandlerFunc(h.CreateNotesHandler)
+	r.Path("/calendar/notes/{id}").Methods("PUT").HandlerFunc(h.UpdateNotesHandler)
+	r.Path("/calendar/notes/{id}").Methods("DELETE").HandlerFunc(h.DeleteNotesHandler)
 
 	return r
 }

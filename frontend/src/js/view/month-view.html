@@ -15,14 +15,15 @@
 
     <div class="month-view__grid">
         <table>
-            <tr class="days" ng-if="!!weeks">
+            <tr class="days" ng-if="!!weeks" ng-show="!!opts">
+                <th ng-show="!opts.MondayFirst">Sun</th>
                 <th>Mon</th>
                 <th>Tue</th>
                 <th>Wed</th>
                 <th>Thu</th>
                 <th>Fri</th>
                 <th>Sat</th>
-                <th>Sun</th>
+                <th ng-show="opts.MondayFirst">Sun</th>
             </tr>
 
             <tr ng-repeat="week in weeks">

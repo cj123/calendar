@@ -7,8 +7,8 @@ import (
 	"os"
 
 	"github.com/cj123/calendar/config"
-	"github.com/cj123/calendar/model"
 	"github.com/cj123/calendar/format"
+	"github.com/cj123/calendar/model"
 )
 
 var (
@@ -60,7 +60,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	cal, err := format.ReadCalendar(file, calendarType)
+	cal, err := format.ReadCalendar(file, format.CalendarType(calendarType))
 
 	if err != nil {
 		log.Printf("Could not read calendar: %s\n", err.Error())

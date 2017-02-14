@@ -9,20 +9,21 @@ import (
 
 	"github.com/cj123/calendar/model"
 	"github.com/gorilla/mux"
+	"github.com/jinzhu/gorm"
 	"gopkg.in/bluesuncorp/validator.v9"
 )
 
 func (h *Handler) GetAppointmentsHandler(w http.ResponseWriter, r *http.Request) {
 	startDateStr, finishDateStr := r.URL.Query().Get("start"), r.URL.Query().Get("finish")
 
-	startDate, err := time.Parse(dateFormat, startDateStr)
+	startDate, err := time.Parse(requestDateFormat, startDateStr)
 
 	if err != nil {
 		http.Error(w, "Bad start date", http.StatusBadRequest)
 		return
 	}
 
-	finishDate, err := time.Parse(dateFormat, finishDateStr)
+	finishDate, err := time.Parse(requestDateFormat, finishDateStr)
 
 	if err != nil {
 		http.Error(w, "Bad finish date", http.StatusBadRequest)
@@ -69,6 +70,8 @@ func (h *Handler) CreateAppointmentHandler(w http.ResponseWriter, r *http.Reques
 		http.Error(w, "Unable to create appointment", http.StatusInternalServerError)
 		return
 	}
+
+	log.Printf("Created appointment with ID: %d\n", appointment.ID)
 
 	w.WriteHeader(http.StatusCreated)
 }
@@ -132,5 +135,45 @@ func (h *Handler) DeleteAppointmentHandler(w http.ResponseWriter, r *http.Reques
 }
 
 func (h *Handler) UpdateAppointmentHandler(w http.ResponseWriter, r *http.Request) {
+	id := mux.Vars(r)["id"]
 
+	appointment, err := h.appointmentRepository.FindByID(id)
+
+	if err == gorm.ErrRecordNotFound {
+		http.Error(w, "not found", http.StatusNotFound)
+		return
+	} else if err != nil {
+		http.Error(w, "internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	var updateRequest model.Appointment
+
+	err = unmarshalRequest(r, &updateRequest)
+
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Unable to unmarshal request", http.StatusInternalServerError)
+		return
+	}
+
+	log.Printf("Updating appointment with ID: %s", id)
+
+	validate := validator.New()
+
+	if err := validate.Struct(updateRequest); err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	err = h.db.Model(&appointment).Updates(updateRequest).Error
+
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "could not update appointment", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }

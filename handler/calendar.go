@@ -4,40 +4,13 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"time"
 
 	"github.com/cj123/calendar/format"
 )
 
 const (
-	dateFormat = "2006-01-02"
+	requestDateFormat = "2006-01-02"
 )
-
-func (h *Handler) NotesHandler(w http.ResponseWriter, r *http.Request) {
-	dateStr := r.URL.Query().Get("date")
-	date, err := time.Parse(dateFormat, dateStr)
-
-	if err != nil {
-		http.Error(w, "Bad start date", http.StatusBadRequest)
-		return
-	}
-
-	notes, err := h.noteRepository.FindBetweenDates(date, date)
-
-	if err != nil {
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
-		return
-	}
-
-	b, err := json.Marshal(&notes)
-
-	if err != nil {
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
-		return
-	}
-
-	w.Write(b)
-}
 
 var defaultOptions = map[string]interface{}{
 	"DefaultEarlyWarning": 1,
@@ -49,7 +22,7 @@ var defaultOptions = map[string]interface{}{
 	"AmPm":                false,
 	"MondayFirst":         true,
 	"AllowOverflow":       true,
-	"Visible":             "1", // @TODO find out what this does
+	"Visible":             true,
 	"IgnoreAlarms":        false,
 	"Color":               "<Default> <Default>",
 	"Timezone":            "<Local>",
@@ -92,7 +65,7 @@ func (h *Handler) ImportHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cal, err := format.ReadCalendar(b, calendarType)
+	cal, err := format.ReadCalendar(b, format.CalendarType(calendarType))
 
 	if err != nil {
 		http.Error(w, "Could not read calendar: "+err.Error(), http.StatusInternalServerError)
@@ -105,4 +78,6 @@ func (h *Handler) ImportHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Could not create calendar: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
+
+	w.WriteHeader(http.StatusCreated)
 }

@@ -3,22 +3,22 @@ package format
 import (
 	"errors"
 
-	"github.com/cj123/calendar/model"
 	"github.com/cj123/calendar/format/ical-tcl"
 	"github.com/cj123/calendar/format/ics"
+	"github.com/cj123/calendar/model"
 )
 
-type calendarType string
+type CalendarType string
 
 const (
-	CalendarICS     calendarType = "ics"
-	CalendarICalTCL calendarType = "ical-tcl"
+	CalendarICS     CalendarType = "ics"
+	CalendarICalTCL CalendarType = "ical-tcl"
 )
 
 var (
 	invalidCalendarTypeError = errors.New("invalid calendar type")
 
-	validCalendarTypes = map[calendarType]bool{
+	validCalendarTypes = map[CalendarType]bool{
 		CalendarICS:     true,
 		CalendarICalTCL: true,
 	}
@@ -28,14 +28,17 @@ type Reader interface {
 	Read() (*model.Calendar, error)
 }
 
-func ReadCalendar(b []byte, calType string) (*model.Calendar, error) {
+func ReadCalendar(b []byte, calType CalendarType) (*model.Calendar, error) {
 	var reader Reader
 
-	if calType == "ical-tcl" {
+	switch calType {
+	case CalendarICalTCL:
 		reader = icaltcl.NewCalendarReader(icaltcl.NewICalLexer(string(b)))
-	} else if calType == "ics" {
+		break
+	case CalendarICS:
 		reader = ics.NewICSReader(string(b))
-	} else {
+		break
+	default:
 		return nil, invalidCalendarTypeError
 	}
 
@@ -43,7 +46,7 @@ func ReadCalendar(b []byte, calType string) (*model.Calendar, error) {
 }
 
 func IsValidCalendarType(cType string) bool {
-	_, ok := validCalendarTypes[calendarType(cType)]
+	_, ok := validCalendarTypes[CalendarType(cType)]
 
 	return ok
 }

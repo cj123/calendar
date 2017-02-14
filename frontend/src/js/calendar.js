@@ -4,7 +4,8 @@ var calendar = angular.module("calendar", [
     "ui.router",
     "ui.bootstrap",
     "duScroll",
-    "ngFileUpload"
+    "ngFileUpload",
+    "angularResizable"
 ]);
 
 // routing

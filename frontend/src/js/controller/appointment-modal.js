@@ -15,21 +15,60 @@ angular.module("calendar").controller("AppointmentModal", [
             var dateToDelete = null;
 
             if (!deleteRecurrences) {
-                dateToDelete = currentDate.hour(appointment.start.hour()).minute(appointment.start.minute()).second(appointment.start.second());
+                dateToDelete = currentDate.hour(appointment.start.hour()).minute(appointment.start.minute()).second(appointment.start.second()).millisecond(0);
             }
 
-            Appointment.delete($scope.appointment.id, dateToDelete).then(function(response) {
+            return Appointment.delete($scope.appointment.id, dateToDelete).then(function(response) {
                 if (response.status === 200) {
                     // reset the view
                     currentDate = moment();
 
                     // close the modal
-                    $scope.cancel();
+                    $uibModalInstance.close($scope.appointment);
 
                     $rootScope.$broadcast("refresh", true);
                 } else {
                     // @TODO display an error?
                 }
             });
+        };
+
+        $scope.update = function(updateAllAppointments) {
+            console.log($scope.appointment.id);
+
+            if (!$scope.appointment.id) {
+                // need to create the appointment
+                Appointment.create($scope.appointment).then(function(response) {
+                    $uibModalInstance.close($scope.appointment);
+                    $rootScope.$broadcast("refresh", true);
+                }).catch(function(err) {
+                    console.log(err);
+                });
+            } else if (updateAllAppointments) {
+                Appointment.update($scope.appointment).then(function(response) {
+                    if (response.status === 200) {
+                        $uibModalInstance.close($scope.appointment);
+                        $rootScope.$broadcast("refresh", true);
+                    } else {
+                        console.log(response);
+                    }
+                });
+            } else {
+                var id = $scope.appointment.id;
+
+                Appointment.create($scope.appointment).then(function(response) {
+                    console.log(response);
+
+                    if (response.status === 201) {
+                        $scope.appointment.id = id;
+
+                        $scope.delete(false);
+                    } else {
+                        console.log(response);
+                    }
+                }).catch(function(err) {
+                    console.log(err);
+                });
+            }
         };
     }]);
