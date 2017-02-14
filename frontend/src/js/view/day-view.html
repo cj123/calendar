@@ -1,8 +1,9 @@
 <div class="day-view" id="day-view" ng-cloak du-scroll-container>
-    <div class="day-view__appointments" ng-click="!!newAppointment || createAppointment($event);">
-        <appointment-tile ng-repeat="appointment in appointments" info="appointment"></appointment-tile>
+    <div class="day-view__appointments" ng-dblclick="createAppointment($event);">
+        <appointment-tile ng-repeat="appointment in appointments" info="appointment" current-date="currentDate"></appointment-tile>
 
-        <appointment-tile ng-show="newAppointment !== null" info="newAppointment"></appointment-tile>
+        <!-- for new appointments -->
+        <appointment-tile ng-show="newAppointment !== null" info="newAppointment" current-date="currentDate"></appointment-tile>
     </div>
 
     <table class="day-view__grid">

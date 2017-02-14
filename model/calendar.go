@@ -58,7 +58,7 @@ func (i *Item) BeforeCreate() error {
 
 	// validate recurrence rule
 	if i.RecurrenceRule != "" {
-		i.RecurrenceRule = strings.Replace(i.RecurrenceRule, "RRULE:", "", -1)
+		i.RecurrenceRule = strings.TrimSpace(strings.Replace(i.RecurrenceRule, "RRULE:", "", -1))
 
 		var rrule values.RecurrenceRule
 

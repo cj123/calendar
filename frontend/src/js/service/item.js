@@ -17,6 +17,9 @@ angular.module("calendar").factory("Item", ["moment", function(moment) {
         for (var itemIndex = 0; itemIndex < items.length; itemIndex++) {
             var item = itemFactory.processTimes(items[itemIndex]);
 
+            // mark collisions
+            item.collisions = [];
+
             if (!!item.recurrence_rule) {
                 item.recurrences = recurrencesBetween(item.recurrence_rule, item.start, startDate, endDate);
 

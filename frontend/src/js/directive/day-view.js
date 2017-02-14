@@ -7,10 +7,39 @@ angular.module("calendar").directive("dayView", [function() {
         },
         templateUrl: "calendar/view/day-view.html",
         controller: [
-            "$scope", "$document", "$uibModal", "Appointment",
-            function($scope, $document, $uibModal, Appointment) {
+            "$scope",
+            function($scope) {
                 function loadAppointments() {
-                    $scope.appointments = $scope.days[$scope.currentDate.date() - 1].events;
+                    if ($scope.days.length === 0) {
+                        return;
+                    }
+
+                    var events = $scope.days[$scope.currentDate.date() - 1].events;
+
+                    for (var eventIndex = 0; eventIndex < events.length; eventIndex++) {
+                        for (var otherEventIndex = 0; otherEventIndex  < events.length; otherEventIndex++) {
+                            if (eventIndex === otherEventIndex) {
+                                continue;
+                            }
+                            
+                            var event = events[eventIndex];
+                            var otherEvent = events[otherEventIndex];
+
+                            if (event.start.isBetween(otherEvent.start, otherEvent.finish, 'second', '[]')) {
+                                if (!event.collisions[otherEvent.id]) {
+                                    event.collisions.push(otherEvent.id);
+                                }
+
+                                if (!otherEvent.collisions[event.id]) {
+                                    otherEvent.collisions.push(event.id);
+                                }
+                            }
+                        }
+                    }
+
+                    console.log(events);
+
+                    $scope.appointments = events;
 
                     $scope.newAppointment = null; // clear out any newly created appointments
                 }

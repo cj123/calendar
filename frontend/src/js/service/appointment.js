@@ -18,6 +18,8 @@ angular.module("calendar").factory("Appointment", [ "Item", "$http", "moment", "
         }).then(function(response) {
             return Item.filterBetweenDates(response.data, startDate, endDate);
         });
+
+        // @TODO here: mark conflicting appointments?
     };
 
     /**
@@ -43,9 +45,7 @@ angular.module("calendar").factory("Appointment", [ "Item", "$http", "moment", "
      * @returns {*}
      */
     appointmentFactory.create = function(appointment) {
-        // @todo we may need to modify our representation of the appointment here so the payload succeeds validation
-        appointment.alarms = []; // @TODO alarms should be handled better!
-
+        appointment.id = 0; // in the case we're duplicating appointments, don't pre-set the ID.
         return $http.post(API_BASE + "calendar/appointments", prepareAppointment(appointment));
     };
 
@@ -57,28 +57,49 @@ angular.module("calendar").factory("Appointment", [ "Item", "$http", "moment", "
      * @returns {*}
      */
     appointmentFactory.update = function(appointment) {
-        // @TODO process alarms into correct data structure!
-        appointment.alarms = []; // @TODO alarms should be handled better!
-
-        if (!!appointment.offset) {
-            // parse this and set the start time of the appointment
-        }
-
-        if (!!appointment.length) {
-            // parse this given the start time to get the end time
-        }
-
         return $http.put(API_BASE + "calendar/appointment/" + appointment.id, prepareAppointment(appointment));
     };
 
     function prepareAppointment(a) {
-        a.start = a.start.clone()
-            .hour(0)
-            .minute(0)
-            .second(0)
-            .add(a.offset, "minutes");
+        // @TODO process alarms into correct data structure!
+        a.alarms = []; // @TODO alarms should be handled better!
 
-        a.finish = a.start.clone().add(a.length, "minutes");
+        var hasUpdatedTime = false;
+
+        if (!!a.startTime) {
+            var start = moment(a.startTime);
+
+            a.start.hours(start.hours()).minutes(start.minutes()).seconds(0);
+
+            hasUpdatedTime = true;
+        }
+
+        if (!!a.finishTime) {
+            var finish = moment(a.finishTime);
+
+            a.finish.hours(finish.hours()).minutes(finish.minutes()).seconds(0);
+
+            hasUpdatedTime = true;
+        }
+
+        // usually this occurs when the appointment has been dragged, not updated
+        // in the modal.
+        if (!hasUpdatedTime) {
+            // take offset, set that up as the minutes and hours of the day.
+            a.start = a.start.clone()
+                .hour(0)
+                .minute(0)
+                .second(0)
+                .add(a.offset, "minutes");
+
+            // set the end as the start plus the length of appointment
+            a.finish = a.start.clone().add(a.length, "minutes");
+        }
+
+        // @TODO: all day appointment check here.
+        if (a.finish.isBefore(a.start) || a.finish.hour() !== 0 && a.finish.minute() !== 0 && a.start.date() !== a.finish.date()) {
+            throw "invalid date given";
+        }
 
         return a;
     }

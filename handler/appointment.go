@@ -157,6 +157,8 @@ func (h *Handler) UpdateAppointmentHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
+	log.Printf("Updating appointment with ID: %s", id)
+
 	validate := validator.New()
 
 	if err := validate.Struct(updateRequest); err != nil {

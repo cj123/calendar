@@ -10,6 +10,8 @@ angular.module("calendar").directive("appointmentTile", [function() {
         controller: [
             "$scope", "$document", "$uibModal", "Appointment",
             function($scope, $document, $uibModal, Appointment) {
+                $scope.active = false;
+
                 $scope.viewDetail = function() {
                     $uibModal.open({
                         animation: true,
@@ -26,6 +28,11 @@ angular.module("calendar").directive("appointmentTile", [function() {
                     });
                 };
 
+                $scope.$on("angular-resizable.resizing", function(evt, args) {
+                    console.log(evt, args);
+                    console.log(args.evt);
+                });
+
                 $scope.$on("angular-resizable.resizeEnd", function(evt, args) {
                     if (args.width) {
                         // @TODO dunno yet, probably save this and xOffset somewhere
@@ -34,7 +41,7 @@ angular.module("calendar").directive("appointmentTile", [function() {
                     if (args.height) {
                         console.log("I should update here");
                         // change the appointment
-                        $scope.info.length = args.height - (args.height % 15);
+                        $scope.info.length = args.height - (args.height % 5);
 
                         $scope.submit();
                     }

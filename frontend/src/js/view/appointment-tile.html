@@ -1,10 +1,12 @@
 <a
     href="#"
     class="appointment"
-    ng-class="{ 'appointment--selected': selectedAppointment === info }"
+    ng-class="{ 'appointment--selected': active }"
     ng-style="{ 'top': info.offset + 'px', 'height': info.length + 'px' }"
     ng-dblclick="viewDetail()"
-    r-directions="['bottom', 'right', 'top', 'left']"
+    r-directions="['bottom', 'top']"
+    ng-click="active = true"
+    ng-blur="active = false"
     resizable
 >
     <textarea ng-blur="submit()" ng-model="info.text"></textarea>

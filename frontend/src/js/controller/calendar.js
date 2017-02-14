@@ -23,7 +23,9 @@ angular.module("calendar").controller("CalendarController", [
         });
 
         $scope.$on("refresh", function() {
-            monthDays($scope.currentDate);
+            monthDays($scope.currentDate).then(function() {
+                resetDayView();
+            });
         });
 
         function resetDayView() {
@@ -38,13 +40,13 @@ angular.module("calendar").controller("CalendarController", [
             $scope.monthStart = anyDayInMonth.clone().date(1);
             var lastDayOfMonth = $scope.monthStart.clone().add(1, "month").subtract(1, "day");
 
-            $scope.days = [];
+            var days = [];
 
             for (var i = $scope.monthStart.date(); i <= lastDayOfMonth.date(); i++) {
-                $scope.days.push({day: i, events: []});
+                days.push({day: i, events: []});
             }
 
-            Appointment.getAppointments($scope.monthStart, lastDayOfMonth).then(function(appts) {
+            return Appointment.getAppointments($scope.monthStart, lastDayOfMonth).then(function(appts) {
                 for (var apptIndex = 0; apptIndex < appts.length; apptIndex++) {
                     var appt = appts[apptIndex];
 
@@ -68,12 +70,14 @@ angular.module("calendar").controller("CalendarController", [
                                 }
                             }
 
-                            $scope.days[recurrenceDate.date() - 1].events.push(appt);
+                            days[recurrenceDate.date() - 1].events.push(appt);
                         }
                     } else {
-                        $scope.days[appt.start.date() - 1].events.push(appt);
+                        days[appt.start.date() - 1].events.push(appt);
                     }
                 }
+            }).then(function() {
+                $scope.days = days;
             });
         }
     }

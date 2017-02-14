@@ -80,14 +80,34 @@ $time-cell-width: 50px;
                 height: 100%;
 
                 overflow-y: auto;
+
+                &:focus {
+                    outline: 0;
+                }
             }
             
             &:hover, &:focus, &:visited, &:active {
                 text-decoration: none;
             }
 
+            &:focus {
+                outline: 0;
+            }
+
+            .rg {
+                &-top, &-bottom, &-left, &-right {
+                    display: none;
+                }
+            }
+
             &--selected {
                 border: 1px solid $black;
+
+                .rg {
+                    &-top, &-bottom, &-left, &-right {
+                        display: block;
+                    }
+                }
             }
 
             strong {
