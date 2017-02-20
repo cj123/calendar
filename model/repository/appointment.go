@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/cj123/calendar/model"
+	"github.com/jinzhu/gorm"
 )
 
 var (
@@ -13,6 +14,14 @@ var (
 
 type AppointmentRepository struct {
 	Repository
+}
+
+func NewAppointmentRepository(db *gorm.DB) *AppointmentRepository {
+	return &AppointmentRepository{
+		Repository{
+			db: db,
+		},
+	}
 }
 
 func (r *AppointmentRepository) Model() Model {
@@ -31,7 +40,7 @@ func (r *AppointmentRepository) modelSlice(appointments []*model.Appointment) []
 
 func (r *AppointmentRepository) Create(m Model) error {
 	if appointment, ok := m.(*model.Appointment); ok {
-		return r.DB.Create(&appointment).Error
+		return r.db.Create(&appointment).Error
 	}
 
 	return InvalidAppointmentAssertionError
@@ -42,7 +51,7 @@ func (r *AppointmentRepository) FindBetweenDates(start, finish time.Time) ([]Mod
 
 	var appointments []*model.Appointment
 
-	err := r.DB.
+	err := r.db.
 		Preload("DeletedDates").
 		Preload("Alarms").
 		Where(`
@@ -59,13 +68,13 @@ func (r *AppointmentRepository) FindBetweenDates(start, finish time.Time) ([]Mod
 func (r *AppointmentRepository) FindByID(id interface{}) (model.Appointment, error) {
 	var appointment model.Appointment
 
-	err := r.DB.Preload("DeletedDates").Preload("Alarms").First(&appointment, "id = ?", id).Error
+	err := r.db.Preload("DeletedDates").Preload("Alarms").First(&appointment, "id = ?", id).Error
 
 	return appointment, err
 }
 
 func (r *AppointmentRepository) DeleteItem(uid uint) error {
-	return r.DB.Delete(model.Appointment{}, "id = ?", uid).Error
+	return r.db.Delete(model.Appointment{}, "id = ?", uid).Error
 }
 
 func (r *AppointmentRepository) DeleteRecurrence(itemID uint, date time.Time) error {
@@ -76,7 +85,7 @@ func (r *AppointmentRepository) DeleteRecurrence(itemID uint, date time.Time) er
 		AppointmentID: itemID,
 	}
 
-	return r.DB.Create(&deletedDate).Error
+	return r.db.Create(&deletedDate).Error
 }
 
 func (r *AppointmentRepository) Update(itemID uint, new Model) error {
@@ -87,7 +96,7 @@ func (r *AppointmentRepository) Update(itemID uint, new Model) error {
 	}
 
 	if updates, ok := new.(*model.Appointment); ok {
-		return r.DB.Model(&appointment).Updates(updates).Error
+		return r.db.Model(&appointment).Updates(updates).Error
 	}
 
 	return InvalidAppointmentAssertionError

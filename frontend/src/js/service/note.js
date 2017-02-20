@@ -38,15 +38,5 @@ angular.module("calendar").factory("Note", [ "$http", "API_BASE", function($http
         return $http.put(API_BASE + "calendar/note/" + note.id, note);
     };
 
-    /**
-     * Delete a note.
-     *
-     * @param note
-     * @returns {*}
-     */
-    noteFactory.delete = function(note) {
-        return $http.delete(API_BASE + "calendar/note/" + note.id);
-    };
-
     return noteFactory;
 }]);

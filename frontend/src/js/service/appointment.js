@@ -19,18 +19,7 @@ angular.module("calendar").factory("Appointment", [ "$http", "moment", "API_BASE
 
         // @TODO here: mark conflicting appointments?
     };
-
-    /**
-     * Delete an appointment. if dateToDelete === null, all occurrences are deleted
-     *
-     * @param appointment
-     * @param dateToDelete
-     * @returns {*|boolean}
-     */
-    appointmentFactory.delete = function(appointment, dateToDelete) {
-
-    };
-
+    
     /**
      * Create an appointment.
      *

@@ -8,11 +8,13 @@ angular.module("calendar").directive("appointmentTile", [function() {
         },
         templateUrl: "calendar/view/appointment-tile.html",
         controller: [
-            "$scope", "$document", "$uibModal", "Item",
-            function($scope, $document, $uibModal, Item) {
+            "$scope", "$document", "$uibModal", "$log", "Item",
+            function($scope, $document, $uibModal, $log, Item) {
                 $scope.active = false;
 
                 $scope.viewDetail = function() {
+                    $scope.active = false;
+
                     $uibModal.open({
                         animation: true,
                         templateUrl: "calendar/view/modals/item.html",
@@ -39,7 +41,7 @@ angular.module("calendar").directive("appointmentTile", [function() {
                     }
 
                     if (args.height) {
-                        console.log("I should update here");
+                        $log.debug("Item resize, adjusting length/offset accordingly.");
                         // change the appointment
                         $scope.info.length = args.height - (args.height % 5);
 
@@ -48,30 +50,34 @@ angular.module("calendar").directive("appointmentTile", [function() {
                 });
 
                 $scope.submit = function(reload) {
-                    if (!$scope.info) {
+                    if (!$scope.info || !$scope.info.text) {
                         return;
                     }
 
                     if (!$scope.info.id) {
-                        Item.create("appointment", $scope.info).then(function(response) {
-                            $scope.info = response.data;
+                        $log.debug("creating an appointment for the first time");
+
+                        Item.create("appointment", $scope.info).then(function(data) {
+                            $scope.info = data;
 
                             if (reload) {
                                 $scope.$emit("refresh", true);
                             }
                         }).catch(function(err) {
-                            console.log(err);
+                            $log.error(err);
                         });
                     } else {
+                        $log.debug("updating an appointment");
+
                         // update here
                         Item.update($scope.info).then(function(response) {
-                            console.log(response);
+                            $log.debug(response);
 
                             if (reload) {
                                 $scope.$emit("refresh", true);
                             }
                         }).catch(function(err) {
-                            console.log(err);
+                            $log.error(err);
                         });
                     }
                 };

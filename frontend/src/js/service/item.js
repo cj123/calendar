@@ -1,4 +1,4 @@
-angular.module("calendar").factory("Item", ["moment", "$http", "API_BASE", "Appointment", "Note", function(moment, $http, API_BASE, Appointment, Note) {
+angular.module("calendar").factory("Item", ["moment", "$http", "$log", "API_BASE", "Appointment", "Note", function(moment, $http, $log, API_BASE, Appointment, Note) {
     var itemFactory = {};
 
     function isAppointment(item) {
@@ -35,7 +35,10 @@ angular.module("calendar").factory("Item", ["moment", "$http", "API_BASE", "Appo
 
     itemFactory.create = function(itemType, item) {
         if (itemType == "appointment") {
-            return Appointment.create(item);
+            return Appointment.create(item).then(function(response) {
+                $log.debug("successfully created appointment, reattaching time information");
+                return itemFactory.processTimes(response.data);
+            });
         } else if (itemType == "note") {
             return Note.create(item);
         } else {

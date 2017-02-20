@@ -5,10 +5,19 @@ import (
 	"time"
 
 	"github.com/cj123/calendar/model"
+	"github.com/jinzhu/gorm"
 )
 
 type NoteRepository struct {
 	Repository
+}
+
+func NewNoteRepository(db *gorm.DB) *NoteRepository {
+	return &NoteRepository{
+		Repository: {
+			db: db,
+		},
+	}
 }
 
 func (r *NoteRepository) Model() Model {
@@ -17,7 +26,7 @@ func (r *NoteRepository) Model() Model {
 
 func (r *NoteRepository) Create(m Model) error {
 	if note, ok := m.(*model.Note); ok {
-		return r.DB.Create(&note).Error
+		return r.db.Create(&note).Error
 	}
 
 	return errors.New("invalid note type")
@@ -26,7 +35,7 @@ func (r *NoteRepository) Create(m Model) error {
 func (r *NoteRepository) FindByID(id interface{}) (model.Note, error) {
 	var note model.Note
 
-	err := r.DB.Preload("DeletedDates").First(&note, "id = ?", id).Error
+	err := r.db.Preload("DeletedDates").First(&note, "id = ?", id).Error
 
 	return note, err
 }
@@ -46,7 +55,7 @@ func (r *NoteRepository) FindBetweenDates(start, finish time.Time) ([]Model, err
 
 	var notes []*model.Note
 
-	err := r.DB.
+	err := r.db.
 		Preload("DeletedDates").
 		Where(`
 				start IS NOT NULL AND start <= ?
@@ -60,7 +69,7 @@ func (r *NoteRepository) FindBetweenDates(start, finish time.Time) ([]Model, err
 }
 
 func (r *NoteRepository) DeleteItem(uid uint) error {
-	return r.DB.Delete(model.Note{}, "id = ?", uid).Error
+	return r.db.Delete(model.Note{}, "id = ?", uid).Error
 }
 
 func (r *NoteRepository) DeleteRecurrence(itemID uint, date time.Time) error {
@@ -71,7 +80,7 @@ func (r *NoteRepository) DeleteRecurrence(itemID uint, date time.Time) error {
 		NoteID: itemID,
 	}
 
-	return r.DB.Create(&deletedDate).Error
+	return r.db.Create(&deletedDate).Error
 }
 
 func (r *NoteRepository) Update(itemID uint, new Model) error {
@@ -82,7 +91,7 @@ func (r *NoteRepository) Update(itemID uint, new Model) error {
 	}
 
 	if updates, ok := new.(*model.Note); ok {
-		return r.DB.Model(&note).Updates(updates).Error
+		return r.db.Model(&note).Updates(updates).Error
 	}
 
 	return InvalidAppointmentAssertionError

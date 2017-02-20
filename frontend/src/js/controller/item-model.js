@@ -1,6 +1,6 @@
 angular.module("calendar").controller("ItemModal", [
-    "$scope", "$rootScope", "$uibModalInstance", "item", "currentDate", "Item", "CalendarOptions", "moment",
-    function($scope, $rootScope, $uibModalInstance, item, currentDate, Item, UserOptions, moment) {
+    "$scope", "$rootScope", "$uibModalInstance", "$log", "item", "currentDate", "Item", "CalendarOptions", "moment",
+    function($scope, $rootScope, $uibModalInstance, $log, item, currentDate, Item, UserOptions, moment) {
         $scope.item = item;
 
         UserOptions.getAndMergeWithItem(item).then(function(mergedItem) {
@@ -15,7 +15,12 @@ angular.module("calendar").controller("ItemModal", [
             var dateToDelete = null;
 
             if (!deleteRecurrences) {
-                dateToDelete = currentDate.hour(item.start.hour()).minute(item.start.minute()).second(item.start.second()).millisecond(0);
+                dateToDelete = currentDate
+                    .hour(item.start.hour())
+                    .minute(item.start.minute())
+                    .second(item.start.second())
+                    .millisecond(0)
+                ;
             }
 
             return Item.delete($scope.item, dateToDelete).then(function(response) {
@@ -23,18 +28,20 @@ angular.module("calendar").controller("ItemModal", [
                     // reset the view
                     currentDate = moment();
 
-                    // close the modal
-                    $uibModalInstance.close($scope.item);
 
                     $rootScope.$broadcast("refresh", true);
+                    // close the modal
+                    $uibModalInstance.close($scope.item);
                 } else {
-                    // @TODO display an error?
+                    $log.error("invalid deletion status: ", response);
                 }
             });
         };
 
         $scope.update = function(updateAllItems) {
             if (!$scope.item.id) {
+                $log.debug("creating item from modal");
+
                 // need to create the item
                 Item.create($scope.item).then(function(response) {
                     $uibModalInstance.close($scope.item);
@@ -43,20 +50,20 @@ angular.module("calendar").controller("ItemModal", [
                     console.log(err);
                 });
             } else if (updateAllItems) {
+                $log.debug("updating all items from modal");
+
                 Item.update($scope.item).then(function(response) {
                     if (response.status === 200) {
                         $uibModalInstance.close($scope.item);
                         $rootScope.$broadcast("refresh", true);
                     } else {
-                        console.log(response);
+                        $log.error("invalid update status: ", response);
                     }
                 });
             } else {
                 var id = $scope.item.id;
 
                 Item.create($scope.item).then(function(response) {
-                    console.log(response);
-
                     if (response.status === 201) {
                         $scope.item.id = id;
 
@@ -69,4 +76,5 @@ angular.module("calendar").controller("ItemModal", [
                 });
             }
         };
-    }]);
+    }
+]);

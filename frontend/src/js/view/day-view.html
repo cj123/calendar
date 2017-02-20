@@ -3,7 +3,7 @@
         <appointment-tile ng-repeat="appointment in appointments" info="appointment" current-date="currentDate"></appointment-tile>
 
         <!-- for new appointments -->
-        <appointment-tile ng-show="newAppointment !== null" info="newAppointment" current-date="currentDate"></appointment-tile>
+        <appointment-tile ng-repeat="newAppointment in newAppointments" info="newAppointment" current-date="currentDate"></appointment-tile>
     </div>
 
     <table class="day-view__grid">

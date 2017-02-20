@@ -7,8 +7,8 @@ angular.module("calendar").directive("dayView", [function() {
         },
         templateUrl: "calendar/view/day-view.html",
         controller: [
-            "$scope",
-            function($scope) {
+            "$scope", "$log",
+            function($scope, $log) {
                 function loadAppointments() {
                     if ($scope.days.length === 0) {
                         return;
@@ -37,11 +37,9 @@ angular.module("calendar").directive("dayView", [function() {
                         }
                     }
 
-                    console.log(events);
+                    $log.debug(events);
 
                     $scope.appointments = events;
-
-                    $scope.newAppointment = null; // clear out any newly created appointments
                 }
 
                 $scope.$watch(function() {
@@ -52,7 +50,7 @@ angular.module("calendar").directive("dayView", [function() {
 
                 $scope.$watch("days", loadAppointments);
 
-                $scope.newAppointment = null;
+                $scope.newAppointments = [];
 
                 $scope.createAppointment = function(event) {
                     var offset = event.offsetY - (event.offsetY % 30); // rounded to nearest 30min
@@ -63,15 +61,13 @@ angular.module("calendar").directive("dayView", [function() {
                         .second(0)
                         .add(offset, "minutes");
 
-                    $scope.newAppointment = {
+                    $scope.newAppointments.push({
                         offset: offset,
                         length: 30,
                         start: start,
                         finish: start.clone().add(30, "minutes")
-                    };
+                    });
                 };
-
-
             }
         ]
     };

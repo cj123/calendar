@@ -19,8 +19,8 @@ type Handler struct {
 func NewHandler(db *gorm.DB) *Handler {
 	return &Handler{
 		db:                    db,
-		noteRepository:        &repository.NoteRepository{repository.Repository{DB: db}},
-		appointmentRepository: &repository.AppointmentRepository{repository.Repository{DB: db}},
+		noteRepository:        repository.NewNoteRepository(db),
+		appointmentRepository: repository.NewAppointmentRepository(db),
 	}
 }
 

@@ -1,6 +1,6 @@
 angular.module("calendar").controller("CalendarController", [
-    "$scope", "moment", "Item", "CalendarOptions",
-    function($scope, moment, Item, CalendarOptions) {
+    "$scope", "$log", "moment", "Item", "CalendarOptions",
+    function($scope, $log, moment, Item, CalendarOptions) {
         $scope.currentDate = moment();
         $scope.monthStart = null;
         $scope.days = [];
@@ -33,10 +33,14 @@ angular.module("calendar").controller("CalendarController", [
                 var opts = response.data;
 
                 angular.element(document.getElementById("day-view")).scrollTop(60 * opts.DayviewTimeStart, 0);
+
+                $log.debug("reloaded calendar options");
             });
         }
 
         function monthDays(anyDayInMonth) {
+            $log.debug("refreshing month days " + $scope.currentDate.format("YYYYMM"));
+
             $scope.monthStart = anyDayInMonth.clone().date(1);
             var lastDayOfMonth = $scope.monthStart.clone().add(1, "month").subtract(1, "day");
 

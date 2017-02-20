@@ -1,6 +1,6 @@
 angular.module("calendar").controller("UploadController", [
-    "$scope", "Upload", "API_BASE",
-    function($scope, Upload, API_BASE) {
+    "$scope", "$log", "Upload", "API_BASE",
+    function($scope, $log, Upload, API_BASE) {
         $scope.uploadAttempt = false;
         $scope.uploadSuccess = false;
 
@@ -18,9 +18,13 @@ angular.module("calendar").controller("UploadController", [
             }).then(function(resp) {
                 $scope.uploadSuccess = true;
                 $scope.uploadAttempt = true;
+
+                $log.debug("successfully imported " + $scope.calendarFormat + " calendar");
             }, function (resp) {
                 $scope.uploadSuccess = false;
                 $scope.uploadAttempt = true;
+
+                $log.error(resp);
             });
         };
     }

@@ -33,5 +33,5 @@ type ItemRepository interface {
 }
 
 type Repository struct {
-	DB *gorm.DB
+	db *gorm.DB
 }
