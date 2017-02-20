@@ -14,7 +14,7 @@ type NoteRepository struct {
 
 func NewNoteRepository(db *gorm.DB) *NoteRepository {
 	return &NoteRepository{
-		Repository: {
+		Repository{
 			db: db,
 		},
 	}
