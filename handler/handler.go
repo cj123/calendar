@@ -12,15 +12,15 @@ import (
 
 type Handler struct {
 	db                    *gorm.DB
-	noteRepository        repository.NoteRepository
-	appointmentRepository repository.AppointmentRepository
+	noteRepository        *repository.NoteRepository
+	appointmentRepository *repository.AppointmentRepository
 }
 
 func NewHandler(db *gorm.DB) *Handler {
 	return &Handler{
 		db:                    db,
-		noteRepository:        repository.NoteRepository{repository.Repository{DB: db}},
-		appointmentRepository: repository.AppointmentRepository{repository.Repository{DB: db}},
+		noteRepository:        &repository.NoteRepository{repository.Repository{DB: db}},
+		appointmentRepository: &repository.AppointmentRepository{repository.Repository{DB: db}},
 	}
 }
 
@@ -30,15 +30,15 @@ func (h *Handler) Router() *mux.Router {
 	r.HandleFunc("/calendar/options", h.OptionsHandler)
 	r.HandleFunc("/calendar/import", h.ImportHandler)
 
-	r.Path("/calendar/appointments").Methods("GET").HandlerFunc(h.GetAppointmentsHandler)
-	r.Path("/calendar/appointments").Methods("POST").HandlerFunc(h.CreateAppointmentHandler)
-	r.Path("/calendar/appointment/{id}").Methods("PUT").HandlerFunc(h.UpdateAppointmentHandler)
-	r.Path("/calendar/appointment/{id}").Methods("DELETE").HandlerFunc(h.DeleteAppointmentHandler)
+	r.Path("/calendar/appointments").Methods("GET").HandlerFunc(itemGetHandler(h.appointmentRepository))
+	r.Path("/calendar/appointments").Methods("POST").HandlerFunc(itemCreateHandler(h.appointmentRepository))
+	r.Path("/calendar/appointment/{id}").Methods("PUT").HandlerFunc(itemUpdateHandler(h.appointmentRepository))
+	r.Path("/calendar/appointment/{id}").Methods("DELETE").HandlerFunc(itemDeleteHandler(h.appointmentRepository))
 
-	r.Path("/calendar/notes").Methods("GET").HandlerFunc(h.GetNotesHandler)
-	r.Path("/calendar/notes").Methods("POST").HandlerFunc(h.CreateNotesHandler)
-	r.Path("/calendar/notes/{id}").Methods("PUT").HandlerFunc(h.UpdateNotesHandler)
-	r.Path("/calendar/notes/{id}").Methods("DELETE").HandlerFunc(h.DeleteNotesHandler)
+	r.Path("/calendar/notes").Methods("GET").HandlerFunc(itemGetHandler(h.noteRepository))
+	r.Path("/calendar/notes").Methods("POST").HandlerFunc(itemCreateHandler(h.noteRepository))
+	r.Path("/calendar/note/{id}").Methods("PUT").HandlerFunc(itemUpdateHandler(h.noteRepository))
+	r.Path("/calendar/note/{id}").Methods("DELETE").HandlerFunc(itemDeleteHandler(h.noteRepository))
 
 	return r
 }

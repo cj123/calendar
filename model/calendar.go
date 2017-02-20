@@ -10,6 +10,11 @@ import (
 	"github.com/heindl/caldav-go/icalendar/values"
 )
 
+const (
+	AppointmentItemType = "appointment"
+	NoteItemType        = "note"
+)
+
 func init() {
 	rand.Seed(time.Now().UnixNano())
 }
@@ -49,6 +54,11 @@ type Item struct {
 	Finish         time.Time `json:"finish"`
 	RecurrenceRule string    `json:"recurrence_rule"`
 	CalendarID     uint      `json:"calendar_id"`
+	DataType       string    `json:"data_type"`
+}
+
+func (i *Item) GetID() uint {
+	return i.Model.ID
 }
 
 func (i *Item) BeforeCreate() error {
@@ -82,12 +92,44 @@ type Appointment struct {
 	DeletedDates []AppointmentDeletedDate `json:"deleted"`
 }
 
+func (a *Appointment) BeforeCreate() error {
+	err := a.Item.BeforeCreate()
+
+	if err != nil {
+		return err
+	}
+
+	a.Item.DataType = AppointmentItemType
+
+	return nil
+}
+
+func (a *Appointment) Name() string {
+	return "appointment"
+}
+
 type Note struct {
 	Item
 
 	// DeletedDates cannot be inherited since we need to use gorm's preloading
 	// which does not support preloading on anonymous structs.
 	DeletedDates []NoteDeletedDate `json:"deleted"`
+}
+
+func (n *Note) Name() string {
+	return "note"
+}
+
+func (n *Note) BeforeCreate() error {
+	err := n.Item.BeforeCreate()
+
+	if err != nil {
+		return err
+	}
+
+	n.Item.DataType = NoteItemType
+
+	return nil
 }
 
 type Alarm struct {

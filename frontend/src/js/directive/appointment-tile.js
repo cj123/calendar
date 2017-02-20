@@ -8,17 +8,17 @@ angular.module("calendar").directive("appointmentTile", [function() {
         },
         templateUrl: "calendar/view/appointment-tile.html",
         controller: [
-            "$scope", "$document", "$uibModal", "Appointment",
-            function($scope, $document, $uibModal, Appointment) {
+            "$scope", "$document", "$uibModal", "Item",
+            function($scope, $document, $uibModal, Item) {
                 $scope.active = false;
 
                 $scope.viewDetail = function() {
                     $uibModal.open({
                         animation: true,
-                        templateUrl: "calendar/view/modals/appointment.html",
-                        controller: "AppointmentModal",
+                        templateUrl: "calendar/view/modals/item.html",
+                        controller: "ItemModal",
                         resolve: {
-                            appointment: function() {
+                            item: function() {
                                 return $scope.info;
                             },
                             currentDate: function() {
@@ -53,7 +53,7 @@ angular.module("calendar").directive("appointmentTile", [function() {
                     }
 
                     if (!$scope.info.id) {
-                        Appointment.create($scope.info).then(function(response) {
+                        Item.create("appointment", $scope.info).then(function(response) {
                             console.log(response);
 
                             $scope.$emit("refresh", true);
@@ -62,7 +62,7 @@ angular.module("calendar").directive("appointmentTile", [function() {
                         });
                     } else {
                         // update here
-                        Appointment.update($scope.info).then(function(response) {
+                        Item.update($scope.info).then(function(response) {
                             console.log(response);
 
                             $scope.$emit("refresh", true);

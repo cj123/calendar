@@ -69,8 +69,6 @@ angular.module("calendar").directive("dayView", [function() {
                         start: start,
                         finish: start.clone().add(30, "minutes")
                     };
-
-                    //console.log($scope.newAppointment);
                 };
 
 

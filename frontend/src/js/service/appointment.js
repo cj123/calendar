@@ -1,4 +1,4 @@
-angular.module("calendar").factory("Appointment", [ "Item", "$http", "moment", "API_BASE", function(Item, $http, moment, API_BASE) {
+angular.module("calendar").factory("Appointment", [ "$http", "moment", "API_BASE", function($http, moment, API_BASE) {
     var appointmentFactory = {};
 
     /**
@@ -9,14 +9,12 @@ angular.module("calendar").factory("Appointment", [ "Item", "$http", "moment", "
      * @param endDate
      * @returns {HttpPromise}
      */
-    appointmentFactory.getAppointments = function(startDate, endDate) {
+    appointmentFactory.get = function(startDate, endDate) {
         return $http.get(API_BASE + "calendar/appointments", {
             params: {
                 start: startDate.format("YYYY-MM-DD"),
                 finish: endDate.format("YYYY-MM-DD")
             }
-        }).then(function(response) {
-            return Item.filterBetweenDates(response.data, startDate, endDate);
         });
 
         // @TODO here: mark conflicting appointments?
@@ -25,17 +23,12 @@ angular.module("calendar").factory("Appointment", [ "Item", "$http", "moment", "
     /**
      * Delete an appointment. if dateToDelete === null, all occurrences are deleted
      *
-     * @param appointmentId
+     * @param appointment
      * @param dateToDelete
      * @returns {*|boolean}
      */
-    appointmentFactory.delete = function(appointmentId, dateToDelete) {
-        return $http.delete(API_BASE + "calendar/appointment/" + appointmentId, {
-            data: {
-                date: dateToDelete !== null && dateToDelete.toISOString() || moment().toISOString(),
-                delete_all: dateToDelete === null
-            }
-        });
+    appointmentFactory.delete = function(appointment, dateToDelete) {
+
     };
 
     /**

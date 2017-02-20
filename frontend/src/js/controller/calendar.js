@@ -1,6 +1,6 @@
 angular.module("calendar").controller("CalendarController", [
-    "$scope", "moment", "Appointment", "CalendarOptions",
-    function($scope, moment, Appointment, CalendarOptions) {
+    "$scope", "moment", "Item", "CalendarOptions",
+    function($scope, moment, Item, CalendarOptions) {
         $scope.currentDate = moment();
         $scope.monthStart = null;
         $scope.days = [];
@@ -46,7 +46,7 @@ angular.module("calendar").controller("CalendarController", [
                 days.push({day: i, events: []});
             }
 
-            return Appointment.getAppointments($scope.monthStart, lastDayOfMonth).then(function(appts) {
+            return Item.get("appointment", $scope.monthStart, lastDayOfMonth).then(function(appts) {
                 for (var apptIndex = 0; apptIndex < appts.length; apptIndex++) {
                     var appt = appts[apptIndex];
 

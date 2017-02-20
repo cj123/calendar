@@ -1,5 +1,70 @@
-angular.module("calendar").factory("Item", ["moment", function(moment) {
+angular.module("calendar").factory("Item", ["moment", "$http", "API_BASE", "Appointment", "Note", function(moment, $http, API_BASE, Appointment, Note) {
     var itemFactory = {};
+
+    function isAppointment(item) {
+        return item.data_type === "appointment";
+    }
+
+    function isNote(item) {
+        return item.data_type === "note";
+    }
+
+    /**
+     * Get a given item type, between start and end dates.
+     * 
+     * @param itemType
+     * @param startDate
+     * @param endDate
+     * @returns {*}
+     */
+    itemFactory.get = function(itemType, startDate, endDate) {
+        var response;
+
+        if (itemType == "appointment") {
+            response = Appointment.get(startDate, endDate);
+        } else if (itemType == "note") {
+            response = Note.get(startDate, endDate);
+        } else {
+            throw "Invalid item type" + itemType;
+        }
+
+        return response.then(function(response) {
+            return itemFactory.filterBetweenDates(response.data, startDate, endDate);
+        });
+    };
+
+    itemFactory.create = function(itemType, item) {
+        if (itemType == "appointment") {
+            return Appointment.create(item);
+        } else if (itemType == "note") {
+            return Note.create(item);
+        } else {
+            throw "Invalid item type";
+        }
+    };
+
+    itemFactory.delete = function(item, dateToDelete) {
+        if (!isAppointment(item) && !isNote(item)) {
+            throw "Invalid item type";
+        }
+
+        return $http.delete(API_BASE + "calendar/" + item.data_type + "/" + item.id, {
+            data: {
+                date: dateToDelete !== null && dateToDelete.toISOString() || moment().toISOString(),
+                delete_all: dateToDelete === null
+            }
+        });
+    };
+
+    itemFactory.update = function(item) {
+        if (isAppointment(item)) {
+            return Appointment.update(item);
+        } else if (isNote(item)) {
+            return Note.update(item);
+        } else {
+            throw "Invalid item type";
+        }
+    };
 
     /**
      * Filter items to only display those occuring between two dates. between two dates.

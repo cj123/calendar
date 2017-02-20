@@ -1,0 +1,11 @@
+<div class="note" ng-dblclick="viewDetail()">
+    <div class="col-xs-10">
+        <textarea ng-model="info.text" ng-change="update()" ng-blur="update()" ng-model-options='{ debounce: 1000 }'></textarea>
+    </div>
+    <div class="col-xs-2">
+        <a href="#"><i class="fa fa-check-square-o fa-fw"></i></a>
+        <a href="#" ng-click="delete()"><i class="fa fa-trash-o fa-fw"></i></a>
+    </div>
+
+    <div class="clearfix"></div>
+</div>

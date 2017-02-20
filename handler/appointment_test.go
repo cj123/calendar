@@ -103,7 +103,7 @@ func TestHandler_CreateAppointmentHandler(t *testing.T) {
 
 func TestHandler_DeleteAppointmentHandler(t *testing.T) {
 	t.Run("Delete all occurrences", func(t *testing.T) {
-		request := deleteAppointmentRequest{DeleteAll: true}
+		request := deleteItemRequest{DeleteAll: true}
 
 		// there should be an appointment "1"
 		res, err := makeRequest("DELETE", "/calendar/appointment/1", request, nil, nil)
@@ -128,7 +128,7 @@ func TestHandler_DeleteAppointmentHandler(t *testing.T) {
 	t.Run("Delete only one occurrence", func(t *testing.T) {
 		dateToDelete := time.Now()
 
-		request := deleteAppointmentRequest{DeleteAll: false, Date: dateToDelete}
+		request := deleteItemRequest{DeleteAll: false, Date: dateToDelete}
 
 		// there should be an appointment "2"
 		res, err := makeRequest("DELETE", "/calendar/appointment/2", request, nil, nil)
@@ -159,7 +159,7 @@ func TestHandler_DeleteAppointmentHandler(t *testing.T) {
 	t.Run("Delete cannot parse UID", func(t *testing.T) {
 		dateToDelete := time.Now()
 
-		request := deleteAppointmentRequest{Date: dateToDelete}
+		request := deleteItemRequest{Date: dateToDelete}
 
 		// there should be an appointment "2"
 		res, err := makeRequest("DELETE", "/calendar/appointment/s2", request, nil, nil)

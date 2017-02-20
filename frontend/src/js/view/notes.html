@@ -1,9 +1,8 @@
 <div class="notes">
-    <a href="#" class="note" ng-repeat="note in notes" ng-dblclick="viewNoteDetail(note)">
-        {{ note.text }}
-    </a>
+    <note-tile ng-repeat="note in notes" info="note" current-date="currentDate"></note-tile>
+    <note-tile ng-show="newNote !== null" info="newNote" current-date="currentDate"></note-tile>
 
-    <button class="btn btn-default add-note">
+    <button class="btn btn-default add-note" ng-click="new()">
         <i class="fa fa-sticky-note fa-fw"></i>Add a Note
     </button>
 </div>

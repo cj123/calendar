@@ -6,9 +6,10 @@ angular.module("calendar").directive("notes", [function() {
         },
         templateUrl: "calendar/view/notes.html",
         controller: [
-            "$scope", "$uibModal", "Note",
-            function($scope, $uibModal, Note) {
+            "$scope", "$uibModal", "Item",
+            function($scope, $uibModal, Item) {
                 $scope.notes = [];
+                $scope.newNote = null;
 
                 // watch the current date of the view for changes.
                 $scope.$watch(function() {
@@ -19,27 +20,32 @@ angular.module("calendar").directive("notes", [function() {
                     loadNotes($scope.currentDate);
                 });
 
+                $scope.$on("refresh", function() {
+                    loadNotes($scope.currentDate);
+                });
+
                 function loadNotes(date) {
                     if (!date) {
                         return;
                     }
 
-                    Note.getNotes(date.clone()).then(function(notes) {
+                    Item.get("note", date.clone(), date.clone()).then(function(notes) {
                         $scope.notes = notes;
+                        // clear out newNote
+                        $scope.newNote = null;
                     });
                 }
 
-                $scope.viewNoteDetail = function(note) {
-                    $uibModal.open({
-                        animation: true,
-                        templateUrl: "calendar/view/modals/appointment.html",
-                        controller: "AppointmentModal",
-                        resolve: {
-                            appointment: function() {
-                                return note;
-                            }
-                        }
-                    });
+                $scope.new = function() {
+                    var start = $scope.currentDate.clone()
+                        .hour(0)
+                        .minute(0)
+                        .second(0);
+
+                    $scope.newNote = {
+                        start: start,
+                        finish: start
+                    };
                 };
             }
         ]

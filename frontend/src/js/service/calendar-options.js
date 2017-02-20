@@ -13,20 +13,20 @@ angular.module("calendar").factory("CalendarOptions", [ "$http", "API_BASE", fun
     };
 
     /**
-     * Get calendar defaults and merge them with a given appointment.
+     * Get calendar defaults and merge them with a given item.
      *
-     * @param appointment
+     * @param item
      * @returns {*}
      */
-    calendarOptions.getAndMergeWithAppointment = function(appointment) {
+    calendarOptions.getAndMergeWithItem = function(item) {
         return this.get().then(function(response) {
             var opts = response.data;
 
-            appointment.alarms   = appointment.alarms || opts.DefaultAlarms;
-            appointment.remind_start   = appointment.remind_start || opts.DefaultEarlyWarning;
-            appointment.timezone = appointment.timezone || opts.Timezone;
+            item.alarms   = item.alarms || opts.DefaultAlarms;
+            item.remind_start   = item.remind_start || opts.DefaultEarlyWarning;
+            item.timezone = item.timezone || opts.Timezone;
 
-            return appointment;
+            return item;
         });
     };
 

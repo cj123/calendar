@@ -7,12 +7,12 @@
         <span aria-hidden="true">&times;</span>
     </button>
 
-    <h4 class="modal-title">Appointment Information</h4>
+    <h4 class="modal-title">Information</h4>
 </div>
 
 <div class="modal-body appointment-info">
     <div class="row">
-        <textarea ng-model="appointment.text" class="appointment-info__description">
+        <textarea ng-model="item.text" class="appointment-info__description">
 </textarea>
 
         <div class="appointment-info__time">
@@ -24,8 +24,8 @@
                     step="60"
                     name="start-time"
                     class="start-time"
-                    ng-value="appointment.start.format('HH:mm')"
-                    ng-model="appointment.startTime"
+                    ng-value="item.start.format('HH:mm')"
+                    ng-model="item.startTime"
                 >
             </label>
 
@@ -36,18 +36,18 @@
                     step="60"
                     name="finish-time"
                     class="finish-time"
-                    ng-value="appointment.finish.format('HH:mm')"
-                    ng-model="appointment.finishTime"
+                    ng-value="item.finish.format('HH:mm')"
+                    ng-model="item.finishTime"
                 >
             </label>
             <strong>Timezone</strong> -
             <div class="timezone">
-                {{ appointment.timezone }}
+                {{ item.timezone }}
             </div>
             <br>
 
             <strong>Repeats</strong> -
-            {{ appointment.rule.toText() || "none" }}
+            {{ item.rule.toText() || "none" }}
             <br>
         </div>
     </div>
@@ -73,7 +73,7 @@
             </label>
 
             <label>
-                <input type="checkbox" name="todo" value="{{ appointment.todo }}"> Todo Item
+                <input type="checkbox" name="todo" value="{{ item.todo }}"> Todo Item
             </label>
         </div>
 
@@ -81,14 +81,14 @@
             <h4>Early Warning</h4>
 
             <label for="early-warning">
-                {{ appointment.remind_start }}
-                <ng-pluralize count="appointment.remind_start"
+                {{ item.remind_start }}
+                <ng-pluralize count="item.remind_start"
                               when="{'0': 'days',
                                      '1': 'day',
                                      'other': 'days'}">
                 </ng-pluralize>
             </label>
-            <input type="range" name="early-warning" id="early-warning" min="0" max="15" ng-model="appointment.remind_start">
+            <input type="range" name="early-warning" id="early-warning" min="0" max="15" ng-model="item.remind_start">
         </div>
     </div>
 
@@ -96,7 +96,7 @@
         <div class="appointment-info__alarms">
             <h4>Alarms</h4>
 
-            <div ng-repeat="alarm in appointment.alarms">
+            <div ng-repeat="alarm in item.alarms">
                 <label> {{ alarm }}
                     <ng-pluralize count="alarm"
                                   when="{'0': 'minutes',
@@ -111,7 +111,7 @@
 </div>
 
 <div class="modal-footer">
-    <div uib-dropdown class="pull-left" ng-if="!!appointment.recurrence_rule">
+    <div uib-dropdown class="pull-left" ng-if="!!item.recurrence_rule">
         <a href="#" class="btn btn-danger" uib-dropdown-toggle>
             Delete <span class="caret"></span>
         </a>
@@ -127,15 +127,15 @@
 
     <button
         type="button"
-        ng-if="!appointment.recurrence_rule"
+        ng-if="!item.recurrence_rule"
         class="btn btn-danger pull-left"
         ng-click="delete(true)"
     >
         Delete
     </button>
 
-    <div uib-dropdown class="pull-right" ng-if="!!appointment.recurrence_rule">
-        <a href="#" class="btn btn-primary" uib-dropdown-toggle ng-disabled="!appointment.text">
+    <div uib-dropdown class="pull-right" ng-if="!!item.recurrence_rule">
+        <a href="#" class="btn btn-primary" uib-dropdown-toggle ng-disabled="!item.text">
             Save changes <span class="caret"></span>
         </a>
         <ul class="dropdown-menu" uib-dropdown-menu>
@@ -152,10 +152,10 @@
 
     <button
         type="button"
-        ng-if="!appointment.recurrence_rule"
+        ng-if="!item.recurrence_rule"
         ng-click="update(true)"
         class="btn btn-primary"
-        ng-disabled="!appointment.text"
+        ng-disabled="!item.text"
     >
         Save changes
     </button>
