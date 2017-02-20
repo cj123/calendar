@@ -55,3 +55,7 @@ func unmarshalRequest(r *http.Request, into interface{}) error {
 
 	return json.Unmarshal(bytes, &into)
 }
+
+func marshalResponse(item interface{}) ([]byte, error) {
+	return json.Marshal(&item)
+}

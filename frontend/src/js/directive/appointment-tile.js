@@ -47,16 +47,18 @@ angular.module("calendar").directive("appointmentTile", [function() {
                     }
                 });
 
-                $scope.submit = function() {
+                $scope.submit = function(reload) {
                     if (!$scope.info) {
                         return;
                     }
 
                     if (!$scope.info.id) {
                         Item.create("appointment", $scope.info).then(function(response) {
-                            console.log(response);
+                            $scope.info = response.data;
 
-                            $scope.$emit("refresh", true);
+                            if (reload) {
+                                $scope.$emit("refresh", true);
+                            }
                         }).catch(function(err) {
                             console.log(err);
                         });
@@ -65,7 +67,9 @@ angular.module("calendar").directive("appointmentTile", [function() {
                         Item.update($scope.info).then(function(response) {
                             console.log(response);
 
-                            $scope.$emit("refresh", true);
+                            if (reload) {
+                                $scope.$emit("refresh", true);
+                            }
                         }).catch(function(err) {
                             console.log(err);
                         });

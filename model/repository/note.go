@@ -52,7 +52,7 @@ func (r *NoteRepository) FindBetweenDates(start, finish time.Time) ([]Model, err
 				start IS NOT NULL AND start <= ?
 				AND (recurrence_rule != '' OR (start <= ? AND start >= ?))
 			`, finish, finish, start).
-		Order("start asc").
+		Order("id asc").
 		Find(&notes).
 		Error
 

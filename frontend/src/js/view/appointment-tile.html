@@ -9,6 +9,6 @@
     ng-blur="active = false"
     resizable
 >
-    <textarea ng-blur="submit()" ng-model="info.text"></textarea>
+    <textarea ng-blur="submit(true)" ng-change="submit(false)" ng-model="info.text" ng-model-options='{ debounce: 1000 }'></textarea>
     <time>{{ info.start.format("HH:mm") }} - {{ info.finish.format("HH:mm") }}</time>
 </a>

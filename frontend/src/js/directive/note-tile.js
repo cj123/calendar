@@ -26,15 +26,20 @@ angular.module("calendar").directive("noteTile", [function() {
                     });
                 };
 
-                $scope.update = function() {
+                $scope.update = function(reload) {
                     if (!!$scope.info.id) {
                         // this is an update request
+                        Item.update($scope.info).then(function(response) {
+                            console.log(response);
+
+                            if (reload) {
+                                $scope.$emit("refresh", true);
+                            }
+                        });
                     } else {
                         // this is a create request
                         Item.create("note", $scope.info).then(function(response) {
-                            console.log(response);
-
-                            $scope.$emit("refresh", true);
+                            $scope.info = response.data;
                         });
                     }
                 };

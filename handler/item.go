@@ -43,7 +43,15 @@ func itemCreateHandler(repo repository.ItemRepository) http.HandlerFunc {
 
 		log.Printf("Created %s with ID: %d\n", item.Name(), item.GetID())
 
+		data, err := marshalResponse(&item)
+
+		if err != nil {
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			return
+		}
+
 		w.WriteHeader(http.StatusCreated)
+		w.Write(data)
 	}
 }
 
