@@ -44,7 +44,8 @@ angular.module("calendar").directive("notes", [function() {
 
                     $scope.newNote = {
                         start: start,
-                        finish: start
+                        finish: start,
+                        data_type: "note"
                     };
                 };
             }

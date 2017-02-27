@@ -67,9 +67,20 @@ $middle-row-height: 170px;
     &__alarms {
         @include make-md-column(12);
 
-        label {
-            width: 100%;
-            font-weight: normal;
+        .alarm {
+            &__slider {
+                display: inline-block;
+                width: 90%;
+                font-weight: normal;
+            }
+
+            &__delete {
+                display: inline-block;
+                width: 10%;
+                text-align: center;
+            }
+
+            @include clearfix();
         }
     }
 

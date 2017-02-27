@@ -135,7 +135,7 @@ func (n *Note) BeforeCreate() error {
 type Alarm struct {
 	Model
 	Time          int64 `json:"time"`
-	AppointmentID uint  `json:"-"`
+	AppointmentID uint  `json:"appointment_id"`
 }
 
 type DeletedDate struct {

@@ -1,9 +1,10 @@
 angular.module("calendar").controller("CalendarController", [
-    "$scope", "$log", "moment", "Item", "CalendarOptions",
-    function($scope, $log, moment, Item, CalendarOptions) {
+    "$scope", "$log", "$interval", "moment", "Item", "CalendarOptions",
+    function($scope, $log, $interval, moment, Item, CalendarOptions) {
         $scope.currentDate = moment();
         $scope.monthStart = null;
         $scope.days = [];
+        $scope.alarms = []; // array of date and appointment
 
         // watch the current date of the view for changes.
         $scope.$watch(function() {
@@ -41,6 +42,9 @@ angular.module("calendar").controller("CalendarController", [
         function monthDays(anyDayInMonth) {
             $log.debug("refreshing month days " + $scope.currentDate.format("YYYYMM"));
 
+            // reset alarms
+            $scope.alarms = [];
+
             $scope.monthStart = anyDayInMonth.clone().date(1);
             var lastDayOfMonth = $scope.monthStart.clone().add(1, "month").subtract(1, "day");
 
@@ -75,14 +79,52 @@ angular.module("calendar").controller("CalendarController", [
                             }
 
                             days[recurrenceDate.date() - 1].events.push(appt);
+                            populateAlarms(appt, recurrenceDate);
                         }
                     } else {
                         days[appt.start.date() - 1].events.push(appt);
+                        populateAlarms(appt, appt.start);
                     }
                 }
             }).then(function() {
                 $scope.days = days;
+
+                $log.debug($scope.alarms);
             });
         }
+
+        /**
+         * Attach alarms to scope
+         * @param appt
+         * @param momentDate
+         */
+        function populateAlarms(appt, momentDate) {
+            if (appt.alarms && appt.alarms.length) {
+                for (var alarmIndex = 0; alarmIndex < appt.alarms.length; alarmIndex++) {
+                    $scope.alarms.push({id: appt.id, alert: momentDate.clone().subtract(appt.alarms[alarmIndex].time, 'minutes')});
+                }
+            }
+        }
+
+        // watch for alarms
+        $interval(function() {
+            if (!$scope.alarms) {
+                console.log('no alarms');
+                return;
+            }
+
+            var currentTime = moment();
+
+            for (var alarmIndex = 0; alarmIndex < $scope.alarms.length; alarmIndex++) {
+                if ($scope.alarms[alarmIndex].alert.isSame(currentTime, 'minute')) {
+                    console.log("JEEEZUS CHRIST ALARM " + $scope.alarms[alarmIndex].id);
+
+                    // @TODO alarm noise!
+                    // @TODO open alarm popup
+                } else {
+                    console.log("invalid alarm time right now :(");
+                }
+            }
+        }, 1000); // 1 minute
     }
 ]);

@@ -65,7 +65,8 @@ angular.module("calendar").directive("dayView", [function() {
                         offset: offset,
                         length: 30,
                         start: start,
-                        finish: start.clone().add(30, "minutes")
+                        finish: start.clone().add(30, "minutes"),
+                        data_type: "appointment"
                     });
                 };
             }

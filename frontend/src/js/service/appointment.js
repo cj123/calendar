@@ -43,9 +43,6 @@ angular.module("calendar").factory("Appointment", [ "$http", "moment", "API_BASE
     };
 
     function prepareAppointment(a) {
-        // @TODO process alarms into correct data structure!
-        a.alarms = []; // @TODO alarms should be handled better!
-
         var hasUpdatedTime = false;
 
         if (!!a.startTime) {

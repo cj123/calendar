@@ -12,8 +12,7 @@
 
 <div class="modal-body appointment-info">
     <div class="row">
-        <textarea ng-model="item.text" class="appointment-info__description">
-</textarea>
+        <textarea ng-model="item.text" class="appointment-info__description"></textarea>
 
         <div class="appointment-info__time">
             <label>
@@ -61,15 +60,15 @@
         <div class="appointment-info__highlight">
             <h4>Highlight</h4>
 
-            <label><input type="radio" name="highlight" value="always" checked> Always</label>
-            <label><input type="radio" name="highlight" value="never"> Never</label>
+            <label><input type="radio" name="highlight" ng-model="item.hilite" value="always" checked> Always</label>
+            <label><input type="radio" name="highlight" ng-model="item.hilite" value="never"> Never</label>
 
             <label>
-                <input type="radio" name="highlight" value="until-expiration"> Until Expiration
+                <input type="radio" name="highlight" ng-model="item.hilite" value="until-expiration"> Until Expiration
             </label>
 
             <label>
-                <input type="radio" name="highlight" value="as-holiday"> As Holiday
+                <input type="radio" name="highlight" ng-model="item.hilite" value="as-holiday"> As Holiday
             </label>
 
             <label>
@@ -96,16 +95,27 @@
         <div class="appointment-info__alarms">
             <h4>Alarms</h4>
 
-            <div ng-repeat="alarm in item.alarms">
-                <label> {{ alarm }}
-                    <ng-pluralize count="alarm"
-                                  when="{'0': 'minutes',
-                                         '1': 'minute',
-                                         'other': 'minutes'}">
-                    </ng-pluralize>
-                    <input type="range" name="points" min="0" max="60" ng-model="alarm">
-                </label>
+            <div ng-repeat="(i, alarm) in item.alarms">
+                <div class="alarm">
+                    <label class="alarm__slider"> {{ alarm.time }}
+                        <ng-pluralize count="alarm.time"
+                                      when="{'0': 'minutes',
+                                             '1': 'minute',
+                                             'other': 'minutes'}">
+                        </ng-pluralize>
+                        <input type="range" name="points" min="0" max="60" ng-model="alarm.time">
+                    </label><div class="alarm__delete">
+                        <button
+                            class="btn btn-danger btn-sm pull-right"
+                            ng-click="removeAlarm(i)"
+                        >
+                            <i class="fa fa-trash-o fa-fw"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
+
+            <button class="btn btn-default btn-sm pull-right" ng-click="addAlarm()"><i class="fa fa-plus fa-fw"></i></button>
         </div>
     </div>
 </div>

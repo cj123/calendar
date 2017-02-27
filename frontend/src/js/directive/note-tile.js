@@ -45,6 +45,11 @@ angular.module("calendar").directive("noteTile", [function() {
                 };
 
                 $scope.delete = function() {
+                    if (!$scope.info.id) {
+                        $scope.$emit("refresh", true);
+                        return;
+                    }
+
                     Item.delete($scope.info, null).then(function(response) {
                         $scope.$emit("refresh", true);
                     });
