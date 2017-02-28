@@ -1,6 +1,6 @@
 ### Application Specific ###
 /assets/
-
+!/assets/sounds/
 ### Node ###
 # Logs
 logs

@@ -99,7 +99,7 @@ func (r *AppointmentRepository) Update(itemID uint, new Model) error {
 	spew.Dump(appointment)
 
 	if updates, ok := new.(*model.Appointment); ok {
-		var alarmIDs []uint
+		/*var alarmIDs []uint
 
 		for _, alarm := range updates.Alarms {
 			alarmIDs = append(alarmIDs, alarm.ID)
@@ -113,7 +113,7 @@ func (r *AppointmentRepository) Update(itemID uint, new Model) error {
 			if err != nil {
 				return err
 			}
-		}
+		}*/
 
 		return r.db.Model(&appointment).Updates(updates).Error
 	}

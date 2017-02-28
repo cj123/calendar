@@ -1,0 +1,27 @@
+<div class="modal-header">
+    <button
+            type="button"
+            class="close"
+            aria-label="Close" ng-click="close()"
+    >
+        <span aria-hidden="true">&times;</span>
+    </button>
+
+    <h4 class="modal-title">Alarm!</h4>
+</div>
+
+<div class="modal-body">
+    <div class="row" ng-repeat="alarm in activeAlarms">
+        <div class="col-xs-12">
+            <p>
+                {{ alarm.appointment.text }}
+                - <strong>{{ alarm.appointment.start.format('HH:mm') }} - {{ alarm.appointment.finish.format('HH:mm') }}</strong>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-default btn-close" ng-click="close()">Close</button>
+</div>
+

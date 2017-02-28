@@ -1,6 +1,6 @@
 angular.module("calendar").controller("CalendarController", [
-    "$scope", "$log", "$interval", "moment", "Item", "CalendarOptions",
-    function($scope, $log, $interval, moment, Item, CalendarOptions) {
+    "$scope", "$log", "$interval", "$uibModal", "moment", "Item", "CalendarOptions",
+    function($scope, $log, $interval, $uibModal, moment, Item, CalendarOptions) {
         $scope.currentDate = moment();
         $scope.monthStart = null;
         $scope.days = [];
@@ -101,10 +101,15 @@ angular.module("calendar").controller("CalendarController", [
         function populateAlarms(appt, momentDate) {
             if (appt.alarms && appt.alarms.length) {
                 for (var alarmIndex = 0; alarmIndex < appt.alarms.length; alarmIndex++) {
-                    $scope.alarms.push({id: appt.id, alert: momentDate.clone().subtract(appt.alarms[alarmIndex].time, 'minutes')});
+                    $scope.alarms.push({
+                        alert: momentDate.clone().subtract(appt.alarms[alarmIndex].time, 'minutes'),
+                        appointment: appt
+                    });
                 }
             }
         }
+
+        $scope.activeAlarms = [];
 
         // watch for alarms
         $interval(function() {
@@ -117,14 +122,42 @@ angular.module("calendar").controller("CalendarController", [
 
             for (var alarmIndex = 0; alarmIndex < $scope.alarms.length; alarmIndex++) {
                 if ($scope.alarms[alarmIndex].alert.isSame(currentTime, 'minute')) {
-                    console.log("JEEEZUS CHRIST ALARM " + $scope.alarms[alarmIndex].id);
+                    console.log("ALARM " + $scope.alarms[alarmIndex].id);
+
+                    // add to active alarms
+                    $scope.activeAlarms.push($scope.alarms[alarmIndex]);
 
                     // @TODO alarm noise!
                     // @TODO open alarm popup
+                    triggerAlarm();
+
+                    // remove alarm from index
+                    $scope.alarms.splice(alarmIndex, 1);
                 } else {
                     console.log("invalid alarm time right now :(");
                 }
             }
         }, 1000); // 1 minute
+
+
+        var audio = new Audio('/assets/sounds/alert.wav');
+
+        function triggerAlarm() {
+            audio.play();
+
+            $uibModal.open({
+                animation: true,
+                templateUrl: "calendar/view/modals/alarm.html",
+                controller: "AlarmModal",
+                resolve: {
+                    activeAlarms: function() {
+                        return $scope.activeAlarms;
+                    },
+                    currentDate: function() {
+                        return $scope.currentDate;
+                    }
+                }
+            });
+        }
     }
 ]);
