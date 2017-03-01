@@ -134,8 +134,9 @@ func (n *Note) BeforeCreate() error {
 
 type Alarm struct {
 	Model
-	Time          int64 `json:"time"`
-	AppointmentID uint  `json:"appointment_id"`
+	Time          uint `json:"time"`
+	CalendarID    uint `json:"calendar_id"`
+	AppointmentID uint `json:"appointment_id"`
 }
 
 type DeletedDate struct {
@@ -155,17 +156,11 @@ type NoteDeletedDate struct {
 	NoteID uint `json:"-"`
 }
 
-type Option struct {
-	Model
-	Name  string
-	Value string
-}
-
 type Calendar struct {
 	Model
 	Version      float64
 	Appointments []Appointment
 	Notes        []Note
-	Options      []Option
+	Options      CalendarOptions
 	Hidden       bool
 }

@@ -96,6 +96,7 @@ func TestCalendarReader_GetVersion(t *testing.T) {
 
 const cal = `Calendar [v2.0]
 MondayFirst [1]
+DefaultAlarms [0 10 20 30 800]
 Appt [
 Start [630]
 Length [30]
@@ -153,5 +154,23 @@ func TestCalendarReader_Read(t *testing.T) {
 
 	if h != 10 || m != 30 || s != 0 {
 		t.Fail()
+	}
+
+	if cal.Options.MondayFirst != true {
+		t.Fail()
+	}
+
+	var alarmIndexToExpected = map[int]uint{
+		0: 0,
+		1: 10,
+		2: 20,
+		3: 30,
+		4: 800,
+	}
+
+	for index, expected := range alarmIndexToExpected {
+		if cal.Options.DefaultAlarms[index].Time != expected {
+			t.Fail()
+		}
 	}
 }

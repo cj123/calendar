@@ -9,7 +9,7 @@ func Migrate(db *gorm.DB) error {
 		&Alarm{},
 		&Appointment{},
 		&Note{},
-		&Option{},
+		&CalendarOptions{},
 		&Calendar{},
 	).Error
 }
