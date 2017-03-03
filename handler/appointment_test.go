@@ -13,7 +13,7 @@ func TestHandler_GetAppointmentsHandler(t *testing.T) {
 	t.Run("Get appointments", func(t *testing.T) {
 		var appointments []model.Appointment
 
-		_, err := makeRequest("GET", "/calendar/appointments?start=2016-01-12&finish=2016-12-31", nil, &appointments, nil)
+		_, err := makeRequest("GET", "/calendar/1/appointments?start=2016-01-12&finish=2016-12-31", nil, &appointments, nil)
 
 		if err != nil {
 			t.Error(err)
@@ -25,7 +25,7 @@ func TestHandler_GetAppointmentsHandler(t *testing.T) {
 	})
 
 	t.Run("Get appointments invalid start", func(t *testing.T) {
-		res, err := makeRequest("GET", "/calendar/appointments?start=2016-0d-12&finish=2016-12-31", nil, nil, nil)
+		res, err := makeRequest("GET", "/calendar/1/appointments?start=2016-0d-12&finish=2016-12-31", nil, nil, nil)
 
 		if err != nil {
 			t.Error(err)
@@ -37,7 +37,7 @@ func TestHandler_GetAppointmentsHandler(t *testing.T) {
 	})
 
 	t.Run("Get appointments invalid finish", func(t *testing.T) {
-		res, err := makeRequest("GET", "/calendar/appointments?start=2016-01-12&finish=2016-12-33", nil, nil, nil)
+		res, err := makeRequest("GET", "/calendar/1/appointments?start=2016-01-12&finish=2016-12-33", nil, nil, nil)
 
 		if err != nil {
 			t.Error(err)
@@ -60,7 +60,7 @@ func TestHandler_CreateAppointmentHandler(t *testing.T) {
 			},
 		}
 
-		res, err := makeRequest("POST", "/calendar/appointments", &appointment, nil, nil)
+		res, err := makeRequest("POST", "/calendar/1/appointments", &appointment, nil, nil)
 
 		if err != nil {
 			t.Error(err)
@@ -89,7 +89,7 @@ func TestHandler_CreateAppointmentHandler(t *testing.T) {
 			},
 		}
 
-		res, err := makeRequest("POST", "/calendar/appointments", &appointment, nil, nil)
+		res, err := makeRequest("POST", "/calendar/1/appointments", &appointment, nil, nil)
 
 		if err != nil {
 			t.Error(err)
@@ -106,7 +106,7 @@ func TestHandler_DeleteAppointmentHandler(t *testing.T) {
 		request := deleteItemRequest{DeleteAll: true}
 
 		// there should be an appointment "1"
-		res, err := makeRequest("DELETE", "/calendar/appointment/1", request, nil, nil)
+		res, err := makeRequest("DELETE", "/calendar/1/appointment/1", request, nil, nil)
 
 		if err != nil {
 			t.Error(err)
@@ -131,7 +131,7 @@ func TestHandler_DeleteAppointmentHandler(t *testing.T) {
 		request := deleteItemRequest{DeleteAll: false, Date: dateToDelete}
 
 		// there should be an appointment "2"
-		res, err := makeRequest("DELETE", "/calendar/appointment/2", request, nil, nil)
+		res, err := makeRequest("DELETE", "/calendar/1/appointment/2", request, nil, nil)
 
 		if err != nil {
 			t.Error(err)
@@ -162,7 +162,7 @@ func TestHandler_DeleteAppointmentHandler(t *testing.T) {
 		request := deleteItemRequest{Date: dateToDelete}
 
 		// there should be an appointment "2"
-		res, err := makeRequest("DELETE", "/calendar/appointment/s2", request, nil, nil)
+		res, err := makeRequest("DELETE", "/calendar/1/appointment/s2", request, nil, nil)
 
 		if err != nil {
 			t.Error(err)
