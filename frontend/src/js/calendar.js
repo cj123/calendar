@@ -11,7 +11,7 @@ var calendar = angular.module("calendar", [
 // routing
 calendar.config(function($stateProvider, $urlRouterProvider, $locationProvider, $logProvider) {
     $stateProvider.state("index", {
-        url: "/",
+        url: "/{calendarID}",
         templateUrl: "calendar/view/index.html",
         controller: "CalendarController"
     });
@@ -22,7 +22,7 @@ calendar.config(function($stateProvider, $urlRouterProvider, $locationProvider, 
         controller: "UploadController"
     });
 
-    $urlRouterProvider.otherwise("/");
+    $urlRouterProvider.otherwise("/1");
 
     $locationProvider.html5Mode(false).hashPrefix('!');
 

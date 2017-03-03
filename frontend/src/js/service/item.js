@@ -10,8 +10,16 @@ angular.module("calendar").factory("Item", ["moment", "$http", "$log", "API_BASE
     }
 
     /**
+     * Set up calendar ID for modification
+     * @param id
+     */
+    itemFactory.setCalendarID = function(id) {
+        itemFactory.calendarID = id;
+    };
+
+    /**
      * Get a given item type, between start and end dates.
-     * 
+     *
      * @param itemType
      * @param startDate
      * @param endDate
@@ -21,9 +29,9 @@ angular.module("calendar").factory("Item", ["moment", "$http", "$log", "API_BASE
         var response;
 
         if (itemType == "appointment") {
-            response = Appointment.get(startDate, endDate);
+            response = Appointment.get(itemFactory.calendarID, startDate, endDate);
         } else if (itemType == "note") {
-            response = Note.get(startDate, endDate);
+            response = Note.get(itemFactory.calendarID, startDate, endDate);
         } else {
             throw "Invalid item type" + itemType;
         }
@@ -35,12 +43,12 @@ angular.module("calendar").factory("Item", ["moment", "$http", "$log", "API_BASE
 
     itemFactory.create = function(itemType, item) {
         if (itemType == "appointment") {
-            return Appointment.create(item).then(function(response) {
+            return Appointment.create(itemFactory.calendarID, item).then(function(response) {
                 $log.debug("successfully created appointment, reattaching time information");
                 return itemFactory.processTimes(response.data);
             });
         } else if (itemType == "note") {
-            return Note.create(item);
+            return Note.create(itemFactory.calendarID, item);
         } else {
             throw "Invalid item type";
         }
@@ -51,7 +59,7 @@ angular.module("calendar").factory("Item", ["moment", "$http", "$log", "API_BASE
             throw "Invalid item type";
         }
 
-        return $http.delete(API_BASE + "calendar/" + item.data_type + "/" + item.id, {
+        return $http.delete(API_BASE + "calendar/" + itemFactory.calendarID + "/" + item.data_type + "/" + item.id, {
             data: {
                 date: dateToDelete !== null && dateToDelete.toISOString() || moment().toISOString(),
                 delete_all: dateToDelete === null
@@ -61,9 +69,9 @@ angular.module("calendar").factory("Item", ["moment", "$http", "$log", "API_BASE
 
     itemFactory.update = function(item) {
         if (isAppointment(item)) {
-            return Appointment.update(item);
+            return Appointment.update(itemFactory.calendarID, item);
         } else if (isNote(item)) {
-            return Note.update(item);
+            return Note.update(itemFactory.calendarID, item);
         } else {
             throw "Invalid item type";
         }

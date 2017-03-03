@@ -5,12 +5,13 @@ angular.module("calendar").factory("Appointment", [ "$http", "moment", "API_BASE
      * Get Appointments for a given date range.
      * Sets time of startDate to be 00:00:00 and endDate to be 23:59:59.
      *
+     * @param calID
      * @param startDate
      * @param endDate
      * @returns {HttpPromise}
      */
-    appointmentFactory.get = function(startDate, endDate) {
-        return $http.get(API_BASE + "calendar/appointments", {
+    appointmentFactory.get = function(calID, startDate, endDate) {
+        return $http.get(API_BASE + "calendar/" + calID + "/appointments", {
             params: {
                 start: startDate.format("YYYY-MM-DD"),
                 finish: endDate.format("YYYY-MM-DD")
@@ -23,23 +24,25 @@ angular.module("calendar").factory("Appointment", [ "$http", "moment", "API_BASE
     /**
      * Create an appointment.
      *
+     * @param calID
      * @param appointment
      * @returns {*}
      */
-    appointmentFactory.create = function(appointment) {
+    appointmentFactory.create = function(calID, appointment) {
         appointment.id = 0; // in the case we're duplicating appointments, don't pre-set the ID.
-        return $http.post(API_BASE + "calendar/appointments", prepareAppointment(appointment));
+        return $http.post(API_BASE + "calendar/" + calID + "/appointments", prepareAppointment(appointment));
     };
 
     /**
      * Updates an appointment
      *
+     * @param calID
      * @param appointment
      *
      * @returns {*}
      */
-    appointmentFactory.update = function(appointment) {
-        return $http.put(API_BASE + "calendar/appointment/" + appointment.id, prepareAppointment(appointment));
+    appointmentFactory.update = function(calID, appointment) {
+        return $http.put(API_BASE + "calendar/" + calID + "/appointment/" + appointment.id, prepareAppointment(appointment));
     };
 
     function prepareAppointment(a) {

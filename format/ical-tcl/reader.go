@@ -207,11 +207,13 @@ func (c *CalendarReader) Read() (*model.Calendar, error) {
 				return nil, err
 			}
 
-			alarms := make([]model.Alarm, 0, 10)
+			alarms := make([]model.DefaultAlarm, 0, 10)
 
 			for _, alarm := range alarmUints {
-				alarms = append(alarms, model.Alarm{
-					Time: alarm,
+				alarms = append(alarms, model.DefaultAlarm{
+					Alarm: model.Alarm{
+						Time: alarm,
+					},
 				})
 			}
 

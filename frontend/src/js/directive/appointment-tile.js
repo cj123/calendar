@@ -11,6 +11,7 @@ angular.module("calendar").directive("appointmentTile", [function() {
             "$scope", "$document", "$uibModal", "$log", "Item",
             function($scope, $document, $uibModal, $log, Item) {
                 $scope.active = false;
+                $scope.calendarID = $scope.$parent.calendarID;
 
                 $scope.viewDetail = function() {
                     $scope.active = false;

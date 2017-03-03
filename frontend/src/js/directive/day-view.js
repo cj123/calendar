@@ -9,6 +9,7 @@ angular.module("calendar").directive("dayView", [function() {
         controller: [
             "$scope", "$log",
             function($scope, $log) {
+
                 function loadAppointments() {
                     if ($scope.days.length === 0) {
                         return;

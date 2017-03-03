@@ -54,6 +54,10 @@ $time-cell-width: 50px;
 
         padding-left: ($time-cell-width);
 
+        a {
+            cursor: pointer;
+        }
+
         .appointment {
             display: block;
             position: absolute;

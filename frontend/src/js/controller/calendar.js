@@ -1,10 +1,12 @@
 angular.module("calendar").controller("CalendarController", [
-    "$scope", "$log", "$interval", "$uibModal", "moment", "Item", "CalendarOptions",
-    function($scope, $log, $interval, $uibModal, moment, Item, CalendarOptions) {
+    "$scope", "$log", "$interval", "$uibModal", "$stateParams", "moment", "Item", "CalendarOptions",
+    function($scope, $log, $interval, $uibModal, $stateParams, moment, Item, CalendarOptions) {
         $scope.currentDate = moment();
         $scope.monthStart = null;
         $scope.days = [];
         $scope.alarms = []; // array of date and appointment
+
+        Item.setCalendarID($stateParams.calendarID);
 
         // watch the current date of the view for changes.
         $scope.$watch(function() {
@@ -126,9 +128,6 @@ angular.module("calendar").controller("CalendarController", [
 
                     // add to active alarms
                     $scope.activeAlarms.push($scope.alarms[alarmIndex]);
-
-                    // @TODO alarm noise!
-                    // @TODO open alarm popup
                     triggerAlarm();
 
                     // remove alarm from index
@@ -138,7 +137,6 @@ angular.module("calendar").controller("CalendarController", [
                 }
             }
         }, 1000); // 1 minute
-
 
         var audio = new Audio('/assets/sounds/alert.wav');
 

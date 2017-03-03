@@ -82,32 +82,6 @@ func (i *Item) BeforeCreate() error {
 	return nil
 }
 
-type Appointment struct {
-	Item
-	Timezone string  `json:"timezone"`
-	Alarms   []Alarm `json:"alarms"`
-
-	// DeletedDates cannot be inherited since we need to use gorm's preloading
-	// which does not support preloading on anonymous structs.
-	DeletedDates []AppointmentDeletedDate `json:"deleted"`
-}
-
-func (a *Appointment) BeforeCreate() error {
-	err := a.Item.BeforeCreate()
-
-	if err != nil {
-		return err
-	}
-
-	a.Item.DataType = AppointmentItemType
-
-	return nil
-}
-
-func (a *Appointment) Name() string {
-	return "appointment"
-}
-
 type Note struct {
 	Item
 
@@ -134,20 +108,18 @@ func (n *Note) BeforeCreate() error {
 
 type Alarm struct {
 	Model
-	Time          uint `json:"time"`
-	CalendarID    uint `json:"calendar_id"`
-	AppointmentID uint `json:"appointment_id"`
+	Time uint `json:"time"`
+}
+
+type DefaultAlarm struct {
+	Alarm
+
+	CalendarOptionsID uint `json:"calendar_id"`
 }
 
 type DeletedDate struct {
 	Model
 	Date time.Time `json:"date"`
-}
-
-type AppointmentDeletedDate struct {
-	DeletedDate
-
-	AppointmentID uint `json:"-"`
 }
 
 type NoteDeletedDate struct {

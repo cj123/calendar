@@ -14,6 +14,8 @@ const (
 )
 
 func (h *Handler) OptionsHandler(w http.ResponseWriter, r *http.Request) {
+	// @TODO get actual options!
+	// calID := muxVarAsUint(r, "calID")
 	b, err := json.Marshal(model.DefaultCalendarOptions())
 
 	if err != nil {

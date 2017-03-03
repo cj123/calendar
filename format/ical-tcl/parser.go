@@ -137,7 +137,7 @@ func (a *AppointmentParser) Parse(l Lexer, s interface{}, keyword string, set *d
 		break
 
 	case "Alarms":
-		alarms := make([]model.Alarm, 0, 10)
+		alarms := make([]model.AppointmentAlarm, 0, 10)
 
 		alarmUints, err := parseUintList(l)
 
@@ -146,8 +146,10 @@ func (a *AppointmentParser) Parse(l Lexer, s interface{}, keyword string, set *d
 		}
 
 		for _, alarm := range alarmUints {
-			alarms = append(alarms, model.Alarm{
-				Time: alarm,
+			alarms = append(alarms, model.AppointmentAlarm{
+				Alarm: model.Alarm{
+					Time: alarm,
+				},
 			})
 		}
 

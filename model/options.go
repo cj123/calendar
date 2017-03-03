@@ -11,24 +11,24 @@ type CalendarOptions struct {
 	Model
 	CalendarID uint
 
-	DefaultEarlyWarning uint    // how many days in advance should an appointment be alerted by?
-	DefaultAlarms       []Alarm // what alarms are defaults?
-	DayviewTimeStart    uint    // when should the calendar view start from by default?
-	DayviewTimeFinish   uint    // when should the calendar view finish by default?
-	ItemWidth           uint    // how wide is an item (deprecated)
-	NoticeHeight        uint    // how tall is a notice (deprecated)
-	AmPm                bool    // display times in AM/PM?
-	MondayFirst         bool    // show monday first?
-	AllowOverflow       bool    // allow overflow? not sure. deprecated
-	Visible             bool    // is the calendar visible
-	IgnoreAlarms        bool    // ignore alarm notifications
-	Color               string  // default color
-	Timezone            string  // timezone of calendar (by default)
+	DefaultEarlyWarning uint           // how many days in advance should an appointment be alerted by?
+	DefaultAlarms       []DefaultAlarm // what alarms are defaults?
+	DayviewTimeStart    uint           // when should the calendar view start from by default?
+	DayviewTimeFinish   uint           // when should the calendar view finish by default?
+	ItemWidth           uint           // how wide is an item (deprecated)
+	NoticeHeight        uint           // how tall is a notice (deprecated)
+	AmPm                bool           // display times in AM/PM?
+	MondayFirst         bool           // show monday first?
+	AllowOverflow       bool           // allow overflow? not sure. deprecated
+	Visible             bool           // is the calendar visible
+	IgnoreAlarms        bool           // ignore alarm notifications
+	Color               string         // default color
+	Timezone            string         // timezone of calendar (by default)
 }
 
 var defaultCalendarOptions = CalendarOptions{
 	DefaultEarlyWarning: 1,
-	DefaultAlarms:       []Alarm{{Time: 0}, {Time: 5}, {Time: 10}, {Time: 15}},
+	DefaultAlarms:       []DefaultAlarm{{Alarm: Alarm{Time: 0}}, {Alarm: Alarm{Time: 5}}, {Alarm: Alarm{Time: 10}}, {Alarm: Alarm{Time: 15}}},
 	DayviewTimeStart:    8,
 	DayviewTimeFinish:   18,
 	ItemWidth:           9,
