@@ -72,7 +72,7 @@ func (r *NoteRepository) FindBetweenDates(calID uint, start, finish time.Time) (
 }
 
 func (r *NoteRepository) DeleteItem(calID, uid uint) error {
-	return r.db.Delete(model.Note{}, "id = ? AND calendar_id = ?", calID, uid).Error
+	return r.db.Delete(model.Note{}, "id = ? AND calendar_id = ?", uid, calID).Error
 }
 
 func (r *NoteRepository) DeleteRecurrence(itemID uint, date time.Time) error {
