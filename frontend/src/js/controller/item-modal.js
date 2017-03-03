@@ -92,7 +92,7 @@ angular.module("calendar").controller("ItemModal", [
         };
 
         $scope.addAlarm = function() {
-            if (!$scope.item.alarms) {
+            if (!($scope.item.alarms instanceof Array)) {
                 $scope.item.alarms = [];
             }
 

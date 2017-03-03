@@ -1,4 +1,7 @@
-angular.module("calendar").factory("Item", ["moment", "$http", "$log", "API_BASE", "Appointment", "Note", function(moment, $http, $log, API_BASE, Appointment, Note) {
+angular.module("calendar").factory("Item", [
+    "moment", "$http", "$log", "API_BASE", "Appointment", "Note",
+    function(moment, $http, $log, API_BASE, Appointment, Note)
+{
     var itemFactory = {};
 
     function isAppointment(item) {
@@ -68,17 +71,23 @@ angular.module("calendar").factory("Item", ["moment", "$http", "$log", "API_BASE
     };
 
     itemFactory.update = function(item) {
+        var out;
+
         if (isAppointment(item)) {
-            return Appointment.update(itemFactory.calendarID, item);
+            out = Appointment.update(itemFactory.calendarID, item);
         } else if (isNote(item)) {
-            return Note.update(itemFactory.calendarID, item);
+            out = Note.update(itemFactory.calendarID, item);
         } else {
             throw "Invalid item type";
         }
+
+        return out.then(function(response) {
+            return response.data;
+        });
     };
 
     /**
-     * Filter items to only display those occuring between two dates. between two dates.
+     * Filter items to only display those occurring between two dates. between two dates.
      * @param items
      * @param startDate
      * @param endDate
@@ -150,7 +159,7 @@ angular.module("calendar").factory("Item", ["moment", "$http", "$log", "API_BASE
      * @returns {*}
      */
     itemFactory.processTimes = function(item) {
-        if (!item.timezone) {
+        if (!item.timezone || item.timezone == "<Local>") {
             item.timezone = moment.tz.guess();
         }
 
