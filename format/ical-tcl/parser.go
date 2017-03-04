@@ -137,30 +137,19 @@ func (a *AppointmentParser) Parse(l Lexer, s interface{}, keyword string, set *d
 		break
 
 	case "Alarms":
-		alarms := make([]model.Alarm, 0, 10)
+		alarms := make([]model.AppointmentAlarm, 0, 10)
 
-		for {
-			l.SkipWhitespace()
-			c := l.Peek()
+		alarmUints, err := parseUintList(l)
 
-			match, err := regexp.MatchString("[0-9]", c)
+		if err != nil {
+			return err
+		}
 
-			if err != nil {
-				return err
-			}
-
-			if !match {
-				break
-			}
-
-			num, err := l.GetNumber()
-
-			if err != nil {
-				return err
-			}
-
-			alarms = append(alarms, model.Alarm{
-				Time: int64(num),
+		for _, alarm := range alarmUints {
+			alarms = append(alarms, model.AppointmentAlarm{
+				Alarm: model.Alarm{
+					Time: alarm,
+				},
 			})
 		}
 
@@ -180,4 +169,33 @@ func (n *NoteParser) Parse(l Lexer, s interface{}, keyword string, set *dateSet)
 	note := s.(*model.Note)
 
 	return n.ItemParser.Parse(l, &note.Item, keyword, set)
+}
+
+func parseUintList(l Lexer) ([]uint, error) {
+	var list []uint
+
+	for {
+		l.SkipWhitespace()
+		c := l.Peek()
+
+		match, err := regexp.MatchString("[0-9]", c)
+
+		if err != nil {
+			return nil, err
+		}
+
+		if !match {
+			break
+		}
+
+		num, err := l.GetNumber()
+
+		if err != nil {
+			return nil, err
+		}
+
+		list = append(list, uint(num))
+	}
+
+	return list, nil
 }

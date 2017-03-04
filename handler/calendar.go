@@ -6,30 +6,17 @@ import (
 	"net/http"
 
 	"github.com/cj123/calendar/format"
+	"github.com/cj123/calendar/model"
 )
 
 const (
 	requestDateFormat = "2006-01-02"
 )
 
-var defaultOptions = map[string]interface{}{
-	"DefaultEarlyWarning": 1,
-	"DefaultAlarms":       [...]int{0, 5, 10, 15},
-	"DayviewTimeStart":    8,
-	"DayviewTimeFinish":   18,
-	"ItemWidth":           9,
-	"NoticeHeight":        6,
-	"AmPm":                false,
-	"MondayFirst":         true,
-	"AllowOverflow":       true,
-	"Visible":             true,
-	"IgnoreAlarms":        false,
-	"Color":               "<Default> <Default>",
-	"Timezone":            "<Local>",
-}
-
 func (h *Handler) OptionsHandler(w http.ResponseWriter, r *http.Request) {
-	b, err := json.Marshal(defaultOptions)
+	// @TODO get actual options!
+	// calID := muxVarAsUint(r, "calID")
+	b, err := json.Marshal(model.DefaultCalendarOptions())
 
 	if err != nil {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)

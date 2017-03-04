@@ -10,19 +10,19 @@ var calendar = angular.module("calendar", [
 
 // routing
 calendar.config(function($stateProvider, $urlRouterProvider, $locationProvider, $logProvider) {
-    $stateProvider.state("index", {
-        url: "/",
-        templateUrl: "calendar/view/index.html",
-        controller: "CalendarController"
-    });
-
     $stateProvider.state("upload", {
         url: "/upload",
         templateUrl: "calendar/view/upload.html",
         controller: "UploadController"
     });
 
-    $urlRouterProvider.otherwise("/");
+    $stateProvider.state("index", {
+        url: "/{calendarID}",
+        templateUrl: "calendar/view/index.html",
+        controller: "CalendarController"
+    });
+
+    $urlRouterProvider.otherwise("/1");
 
     $locationProvider.html5Mode(false).hashPrefix('!');
 

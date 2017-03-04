@@ -14,11 +14,20 @@ import (
 	"gopkg.in/bluesuncorp/validator.v9"
 )
 
+func muxVarAsUint(r *http.Request, name string) uint {
+	val := mux.Vars(r)[name]
+
+	parsed, _ := strconv.ParseUint(val, 10, 0)
+
+	return uint(parsed)
+}
+
 // itemCreateHandler returns a http HandlerFunc which can be used to create
 // a given item, e.g. Appointment or Note.
 func itemCreateHandler(repo repository.ItemRepository) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		item := repo.Model()
+		calID := muxVarAsUint(r, "calID")
 
 		err := unmarshalRequest(r, &item)
 
@@ -34,7 +43,7 @@ func itemCreateHandler(repo repository.ItemRepository) http.HandlerFunc {
 			return
 		}
 
-		err = repo.Create(item)
+		err = repo.Create(calID, item)
 
 		if err != nil {
 			http.Error(w, "Unable to create "+item.Name(), http.StatusInternalServerError)
@@ -62,6 +71,7 @@ func parseQueryDate(d string) (time.Time, error) {
 func itemGetHandler(repo repository.ItemRepository) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		startDate, err := parseQueryDate(r.URL.Query().Get("start"))
+		calID := muxVarAsUint(r, "calID")
 
 		if err != nil {
 			http.Error(w, "bad start date", http.StatusBadRequest)
@@ -75,7 +85,7 @@ func itemGetHandler(repo repository.ItemRepository) http.HandlerFunc {
 			return
 		}
 
-		items, err := repo.FindBetweenDates(startDate, finishDate)
+		items, err := repo.FindBetweenDates(calID, startDate, finishDate)
 
 		if err != nil {
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
@@ -103,6 +113,7 @@ func itemDeleteHandler(repo repository.ItemRepository) http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		id := mux.Vars(r)["id"]
+		calID := muxVarAsUint(r, "calID")
 
 		var (
 			request deleteItemRequest
@@ -126,7 +137,7 @@ func itemDeleteHandler(repo repository.ItemRepository) http.HandlerFunc {
 			log.Printf("Deleting all %ss with id: %s\n", modelName, id)
 
 			// no specific date, delete all occurrences
-			err = repo.DeleteItem(uint(uid))
+			err = repo.DeleteItem(calID, uint(uid))
 		} else {
 			log.Printf("Deleting %s recurrence at %s with id: %s\n", modelName, request.Date, id)
 
@@ -146,6 +157,7 @@ func itemDeleteHandler(repo repository.ItemRepository) http.HandlerFunc {
 func itemUpdateHandler(repo repository.ItemRepository) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id := mux.Vars(r)["id"]
+		calID := muxVarAsUint(r, "calID")
 
 		updateRequest := repo.Model()
 
@@ -167,7 +179,7 @@ func itemUpdateHandler(repo repository.ItemRepository) http.HandlerFunc {
 
 		uid, err := strconv.ParseUint(id, 0, 10)
 
-		err = repo.Update(uint(uid), updateRequest)
+		err = repo.Update(calID, uint(uid), updateRequest)
 
 		if err == gorm.ErrRecordNotFound {
 			http.Error(w, "not found", http.StatusNotFound)

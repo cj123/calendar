@@ -2,6 +2,7 @@ angular.module("calendar").controller("ItemModal", [
     "$scope", "$rootScope", "$uibModalInstance", "$log", "item", "currentDate", "Item", "CalendarOptions", "moment",
     function($scope, $rootScope, $uibModalInstance, $log, item, currentDate, Item, UserOptions, moment) {
         $scope.item = item;
+
         var itemClone = JSON.parse(JSON.stringify(item));
 
         UserOptions.getAndMergeWithItem(item).then(function(mergedItem) {
@@ -91,7 +92,7 @@ angular.module("calendar").controller("ItemModal", [
         };
 
         $scope.addAlarm = function() {
-            if (!$scope.item.alarms) {
+            if (!($scope.item.alarms instanceof Array)) {
                 $scope.item.alarms = [];
             }
 

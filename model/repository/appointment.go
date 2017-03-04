@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/cj123/calendar/model"
+
 	"github.com/jinzhu/gorm"
-	"github.com/davecgh/go-spew/spew"
 )
 
 var (
@@ -39,15 +39,17 @@ func (r *AppointmentRepository) modelSlice(appointments []*model.Appointment) []
 	return models
 }
 
-func (r *AppointmentRepository) Create(m Model) error {
+func (r *AppointmentRepository) Create(calID uint, m Model) error {
 	if appointment, ok := m.(*model.Appointment); ok {
+		appointment.CalendarID = calID
+
 		return r.db.Create(&appointment).Error
 	}
 
 	return InvalidAppointmentAssertionError
 }
 
-func (r *AppointmentRepository) FindBetweenDates(start, finish time.Time) ([]Model, error) {
+func (r *AppointmentRepository) FindBetweenDates(calID uint, start, finish time.Time) ([]Model, error) {
 	finish = finish.Add((time.Hour * 24) - time.Second)
 
 	var appointments []*model.Appointment
@@ -56,9 +58,10 @@ func (r *AppointmentRepository) FindBetweenDates(start, finish time.Time) ([]Mod
 		Preload("DeletedDates").
 		Preload("Alarms").
 		Where(`
+				calendar_id = ? AND
 				start IS NOT NULL AND start <= ?
 				AND (recurrence_rule != '' OR (start <= ? AND start >= ?))
-			`, finish, finish, start).
+			`, calID, finish, finish, start).
 		Order("start asc").
 		Find(&appointments).
 		Error
@@ -66,16 +69,16 @@ func (r *AppointmentRepository) FindBetweenDates(start, finish time.Time) ([]Mod
 	return r.modelSlice(appointments), err
 }
 
-func (r *AppointmentRepository) FindByID(id interface{}) (model.Appointment, error) {
+func (r *AppointmentRepository) FindByID(calID, uid uint) (model.Appointment, error) {
 	var appointment model.Appointment
 
-	err := r.db.Preload("DeletedDates").Preload("Alarms").First(&appointment, "id = ?", id).Error
+	err := r.db.Preload("DeletedDates").Preload("Alarms").First(&appointment, "id = ? AND calendar_id = ?", uid, calID).Error
 
 	return appointment, err
 }
 
-func (r *AppointmentRepository) DeleteItem(uid uint) error {
-	return r.db.Delete(model.Appointment{}, "id = ?", uid).Error
+func (r *AppointmentRepository) DeleteItem(calID, uid uint) error {
+	return r.db.Delete(model.Appointment{}, "id = ? AND calendar_id = ?", uid, calID).Error
 }
 
 func (r *AppointmentRepository) DeleteRecurrence(itemID uint, date time.Time) error {
@@ -89,31 +92,27 @@ func (r *AppointmentRepository) DeleteRecurrence(itemID uint, date time.Time) er
 	return r.db.Create(&deletedDate).Error
 }
 
-func (r *AppointmentRepository) Update(itemID uint, new Model) error {
-	appointment, err := r.FindByID(itemID)
+func (r *AppointmentRepository) Update(calID, itemID uint, new Model) error {
+	appointment, err := r.FindByID(calID, itemID)
 
 	if err != nil {
 		return err
 	}
 
-	spew.Dump(appointment)
-
 	if updates, ok := new.(*model.Appointment); ok {
-		/*var alarmIDs []uint
+		var alarmIDs []uint
 
 		for _, alarm := range updates.Alarms {
 			alarmIDs = append(alarmIDs, alarm.ID)
 		}
 
-		spew.Dump(alarmIDs)
-
 		if len(alarmIDs) > 0 {
-			err := r.db.Where("appointment_id NOT IN (?)", alarmIDs).Delete(model.Alarm{}).Error
+			err := r.db.Where("id NOT IN (?)", alarmIDs).Delete(model.AppointmentAlarm{}).Error
 
 			if err != nil {
 				return err
 			}
-		}*/
+		}
 
 		return r.db.Model(&appointment).Updates(updates).Error
 	}

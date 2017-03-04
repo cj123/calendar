@@ -9,7 +9,7 @@ import (
 func TestHandler_OptionsHandler(t *testing.T) {
 	var out map[string]interface{}
 
-	res, err := makeRequest("GET", "/calendar/options", nil, &out, nil)
+	res, err := makeRequest("GET", "/calendar/1/options", nil, &out, nil)
 
 	if err != nil {
 		t.Error(err)
@@ -53,7 +53,7 @@ func TestHandler_ImportHandler(t *testing.T) {
 func TestHandler_NotesHandler(t *testing.T) {
 	var notes []model.Note
 
-	res, err := makeRequest("GET", "/calendar/notes?start=2016-09-30&finish=2016-09-30", nil, &notes, nil)
+	res, err := makeRequest("GET", "/calendar/1/notes?start=2016-09-30&finish=2016-09-30", nil, &notes, nil)
 
 	if err != nil {
 		t.Error(err)

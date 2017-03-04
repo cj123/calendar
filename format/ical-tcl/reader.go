@@ -115,6 +115,7 @@ func (c *CalendarReader) Read() (*model.Calendar, error) {
 	}
 
 	calendar := new(model.Calendar)
+	calendar.Options = model.DefaultCalendarOptions()
 
 	version, err := c.getVersion()
 
@@ -199,11 +200,28 @@ func (c *CalendarReader) Read() (*model.Calendar, error) {
 			calendar.Hidden = true
 			break
 
-		default:
-			option := new(model.Option)
-			option.Name = keyword
+		case "DefaultAlarms":
+			alarmUints, err := parseUintList(c.l)
 
-			option.Value = c.l.GetString()
+			if err != nil {
+				return nil, err
+			}
+
+			alarms := make([]model.DefaultAlarm, 0, 10)
+
+			for _, alarm := range alarmUints {
+				alarms = append(alarms, model.DefaultAlarm{
+					Alarm: model.Alarm{
+						Time: alarm,
+					},
+				})
+			}
+
+			calendar.Options.DefaultAlarms = alarms
+
+			break
+		default:
+			calendar.Options.Set(keyword, c.l.GetString())
 		}
 
 		c.l.SkipWhitespace()

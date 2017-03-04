@@ -11,6 +11,7 @@ angular.module("calendar").directive("appointmentTile", [function() {
             "$scope", "$document", "$uibModal", "$log", "Item",
             function($scope, $document, $uibModal, $log, Item) {
                 $scope.active = false;
+                $scope.calendarID = $scope.$parent.calendarID;
 
                 $scope.viewDetail = function() {
                     $scope.active = false;
@@ -29,11 +30,6 @@ angular.module("calendar").directive("appointmentTile", [function() {
                         }
                     });
                 };
-
-                $scope.$on("angular-resizable.resizing", function(evt, args) {
-                    console.log(evt, args);
-                    console.log(args.evt);
-                });
 
                 $scope.$on("angular-resizable.resizeEnd", function(evt, args) {
                     if (args.width) {
@@ -75,6 +71,8 @@ angular.module("calendar").directive("appointmentTile", [function() {
 
                             if (reload) {
                                 $scope.$emit("refresh", true);
+                            } else {
+
                             }
                         }).catch(function(err) {
                             $log.error(err);

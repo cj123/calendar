@@ -27,18 +27,18 @@ func NewHandler(db *gorm.DB) *Handler {
 func (h *Handler) Router() *mux.Router {
 	r := mux.NewRouter()
 
-	r.HandleFunc("/calendar/options", h.OptionsHandler)
+	r.HandleFunc("/calendar/{calID}/options", h.OptionsHandler)
 	r.HandleFunc("/calendar/import", h.ImportHandler)
 
-	r.Path("/calendar/appointments").Methods("GET").HandlerFunc(itemGetHandler(h.appointmentRepository))
-	r.Path("/calendar/appointments").Methods("POST").HandlerFunc(itemCreateHandler(h.appointmentRepository))
-	r.Path("/calendar/appointment/{id}").Methods("PUT").HandlerFunc(itemUpdateHandler(h.appointmentRepository))
-	r.Path("/calendar/appointment/{id}").Methods("DELETE").HandlerFunc(itemDeleteHandler(h.appointmentRepository))
+	r.Path("/calendar/{calID}/appointments").Methods("GET").HandlerFunc(itemGetHandler(h.appointmentRepository))
+	r.Path("/calendar/{calID}/appointments").Methods("POST").HandlerFunc(itemCreateHandler(h.appointmentRepository))
+	r.Path("/calendar/{calID}/appointment/{id}").Methods("PUT").HandlerFunc(itemUpdateHandler(h.appointmentRepository))
+	r.Path("/calendar/{calID}/appointment/{id}").Methods("DELETE").HandlerFunc(itemDeleteHandler(h.appointmentRepository))
 
-	r.Path("/calendar/notes").Methods("GET").HandlerFunc(itemGetHandler(h.noteRepository))
-	r.Path("/calendar/notes").Methods("POST").HandlerFunc(itemCreateHandler(h.noteRepository))
-	r.Path("/calendar/note/{id}").Methods("PUT").HandlerFunc(itemUpdateHandler(h.noteRepository))
-	r.Path("/calendar/note/{id}").Methods("DELETE").HandlerFunc(itemDeleteHandler(h.noteRepository))
+	r.Path("/calendar/{calID}/notes").Methods("GET").HandlerFunc(itemGetHandler(h.noteRepository))
+	r.Path("/calendar/{calID}/notes").Methods("POST").HandlerFunc(itemCreateHandler(h.noteRepository))
+	r.Path("/calendar/{calID}/note/{id}").Methods("PUT").HandlerFunc(itemUpdateHandler(h.noteRepository))
+	r.Path("/calendar/{calID}/note/{id}").Methods("DELETE").HandlerFunc(itemDeleteHandler(h.noteRepository))
 
 	return r
 }

@@ -1,15 +1,15 @@
 <div class="month-view" ng-cloak>
     <div class="month-view__controls">
         <div class="month-controls">
-            <a href="#" class="btn btn-default previous-month" ng-click="currentDate.subtract(1, 'months')">&larr;</a>
+            <a class="btn btn-default previous-month" ng-click="currentDate.subtract(1, 'months')">&larr;</a>
             <span class="month">{{ currentDate.format("MMMM") }}</span>
-            <a href="#" class="btn btn-default next-month" ng-click="currentDate.add(1, 'months')">&rarr;</a>
+            <a class="btn btn-default next-month" ng-click="currentDate.add(1, 'months')">&rarr;</a>
         </div>
 
         <div class="year-controls">
-            <a href="#" class="btn btn-default previous-year" ng-click="currentDate.subtract(1, 'years')">&larr;</a>
+            <a class="btn btn-default previous-year" ng-click="currentDate.subtract(1, 'years')">&larr;</a>
             <span class="year">{{ currentDate.format("Y") }}</span>
-            <a href="#" class="btn btn-default next-year" ng-click="currentDate.add(1, 'years')">&rarr;</a>
+            <a class="btn btn-default next-year" ng-click="currentDate.add(1, 'years')">&rarr;</a>
         </div>
     </div>
 
@@ -31,7 +31,6 @@
                     ng-repeat="day in week"
                 >
                     <a
-                        href="#"
                         class="day"
                         ng-if="!!day.day"
                         ng-class="{'day--has-appointments': day.events.length > 0, 'day--selected': currentDate.date() === day.day}"
@@ -45,15 +44,15 @@
     </div>
 
     <div class="month-view__skip">
-        <a href="#" class="btn btn-default previous-day" ng-click="currentDate.subtract(1, 'days')">
+        <a class="btn btn-default previous-day" ng-click="currentDate.subtract(1, 'days')">
             Previous
         </a>
 
-        <a href="#" class="btn btn-default today" ng-click="currentDate = today.clone()">
+        <a class="btn btn-default today" ng-click="currentDate = today.clone()">
             Today
         </a>
 
-        <a href="#" class="btn btn-default next-day" ng-click="currentDate.add(1, 'days')">
+        <a class="btn btn-default next-day" ng-click="currentDate.add(1, 'days')">
             Next
         </a>
     </div>

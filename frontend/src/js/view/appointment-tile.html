@@ -1,5 +1,4 @@
 <a
-    href="#"
     class="appointment"
     ng-class="{ 'appointment--selected': active }"
     ng-style="{ 'top': info.offset + 'px', 'height': info.length + 'px' }"
@@ -9,6 +8,6 @@
     ng-blur="active = false"
     resizable
 >
-    <textarea ng-blur="submit(true)" ng-change="submit(false)" ng-model="info.text" ng-model-options='{ debounce: 1000 }'></textarea>
+    <textarea ng-change="submit(false)" ng-model="info.text" ng-model-options='{ debounce: 1000 }'></textarea>
     <time>{{ info.start.format("HH:mm") }} - {{ info.finish.format("HH:mm") }}</time>
 </a>

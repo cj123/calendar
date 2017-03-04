@@ -6,10 +6,11 @@ func Migrate(db *gorm.DB) error {
 	return db.AutoMigrate(
 		&AppointmentDeletedDate{},
 		&NoteDeletedDate{},
-		&Alarm{},
+		&AppointmentAlarm{},
+		&DefaultAlarm{},
 		&Appointment{},
 		&Note{},
-		&Option{},
+		&CalendarOptions{},
 		&Calendar{},
 	).Error
 }

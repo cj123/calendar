@@ -2,6 +2,10 @@
     height: auto;
     border-bottom: 1px solid $gray-light;
 
+    a {
+        cursor: pointer;
+    }
+
     &__controls {
         text-align: center;
         margin: 30px;
