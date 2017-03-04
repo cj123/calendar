@@ -71,19 +71,13 @@ angular.module("calendar").factory("Item", [
     };
 
     itemFactory.update = function(item) {
-        var out;
-
         if (isAppointment(item)) {
-            out = Appointment.update(itemFactory.calendarID, item);
+            return Appointment.update(itemFactory.calendarID, item);
         } else if (isNote(item)) {
-            out = Note.update(itemFactory.calendarID, item);
+            return Note.update(itemFactory.calendarID, item);
         } else {
             throw "Invalid item type";
         }
-
-        return out.then(function(response) {
-            return response.data;
-        });
     };
 
     /**

@@ -7,8 +7,13 @@ angular.module("calendar").directive("dayView", [function() {
         },
         templateUrl: "calendar/view/day-view.html",
         controller: [
-            "$scope", "$log",
-            function($scope, $log) {
+            "$scope", "$log", "CalendarOptions",
+            function($scope, $log, CalendarOptions) {
+                var opts = {};
+
+                CalendarOptions.get().then(function(response) {
+                    opts = response.data;
+                });
 
                 function loadAppointments() {
                     if ($scope.days.length === 0) {
@@ -62,12 +67,15 @@ angular.module("calendar").directive("dayView", [function() {
                         .second(0)
                         .add(offset, "minutes");
 
+                    console.log("hehehe", opts.DefaultAlarms);
+
                     $scope.newAppointments.push({
                         offset: offset,
                         length: 30,
                         start: start,
                         finish: start.clone().add(30, "minutes"),
-                        data_type: "appointment"
+                        data_type: "appointment",
+                        alarms: opts.DefaultAlarms
                     });
                 };
             }
