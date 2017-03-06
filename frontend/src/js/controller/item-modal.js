@@ -11,10 +11,15 @@ angular.module("calendar").controller("ItemModal", [
 
         $scope.cancel = function() {
             $scope.item = itemClone;
-            $uibModalInstance.dismiss("cancel");
+            $uibModalInstance.dismiss("close");
         };
 
         $scope.delete = function(deleteRecurrences) {
+            if (!$scope.item.id) {
+                $rootScope.$broadcast("refresh", true);
+                return;
+            }
+
             var dateToDelete = null;
 
             if (!deleteRecurrences) {
@@ -41,6 +46,8 @@ angular.module("calendar").controller("ItemModal", [
         };
 
         $scope.update = function(updateAllItems) {
+            console.log($scope.item);
+
             if (!$scope.item.id) {
                 $log.debug("creating item from modal");
 
@@ -63,11 +70,18 @@ angular.module("calendar").controller("ItemModal", [
                     }
                 });
             } else {
+                $log.debug("cloning item id: " + $scope.item.uid);
+
                 $scope.item.recurrence_rule = "";
+                $scope.item.uid = ""; // unset UID, allow it to be recreated
 
                 // create a new appointment with the current item, then
                 // delete the recurrence of the old one.
                 Item.create($scope.item.data_type, $scope.item).then(function(newItem) {
+                    $scope.item = newItem;
+
+                    $log.debug("created item id: " + $scope.item.uid);
+
                     var dateToDelete = currentDate
                         .hour(item.start.hour())
                         .minute(item.start.minute())
@@ -75,11 +89,10 @@ angular.module("calendar").controller("ItemModal", [
                         .millisecond(0)
                     ;
 
-                    Item.delete($scope.item, dateToDelete).then(function(response) {
-                        $log.debug(response);
-
+                    Item.delete(itemClone, dateToDelete).then(function(response) {
                         if (response.status === 200) {
-                            $scope.item = itemClone; // put back item clone to prevent changes to appointment
+                            //$scope.item = itemClone; // put back item clone to prevent changes to appointment
+                            $log.debug("deleted item id: " + $scope.item.uid);
 
                             $uibModalInstance.close($scope.item);
                             $rootScope.$broadcast("refresh", true);

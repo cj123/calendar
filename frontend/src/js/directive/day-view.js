@@ -9,10 +9,10 @@ angular.module("calendar").directive("dayView", [function() {
         controller: [
             "$scope", "$log", "CalendarOptions",
             function($scope, $log, CalendarOptions) {
-                var opts = {};
+                $scope.opts = {};
 
                 CalendarOptions.get().then(function(response) {
-                    opts = response.data;
+                    $scope.opts = response.data;
                 });
 
                 function loadAppointments() {
@@ -43,8 +43,6 @@ angular.module("calendar").directive("dayView", [function() {
                         }
                     }
 
-                    $log.debug(events);
-
                     $scope.appointments = events;
                 }
 
@@ -56,8 +54,6 @@ angular.module("calendar").directive("dayView", [function() {
 
                 $scope.$watch("days", loadAppointments);
 
-                $scope.newAppointments = [];
-
                 $scope.createAppointment = function(event) {
                     var offset = event.offsetY - (event.offsetY % 30); // rounded to nearest 30min
 
@@ -67,15 +63,13 @@ angular.module("calendar").directive("dayView", [function() {
                         .second(0)
                         .add(offset, "minutes");
 
-                    console.log("hehehe", opts.DefaultAlarms);
-
-                    $scope.newAppointments.push({
+                    $scope.appointments.push({
                         offset: offset,
                         length: 30,
                         start: start,
                         finish: start.clone().add(30, "minutes"),
                         data_type: "appointment",
-                        alarms: opts.DefaultAlarms
+                        alarms: $scope.opts.DefaultAlarms
                     });
                 };
             }

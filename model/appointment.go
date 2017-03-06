@@ -54,11 +54,15 @@ func (a *Appointment) AfterCreate(tx *gorm.DB) error {
 		alarms := make([]AppointmentAlarm, len(opts.DefaultAlarms))
 
 		for i, defaultAlarm := range opts.DefaultAlarms {
-			alarms[i] = AppointmentAlarm{Alarm: defaultAlarm.Alarm}
+			alarms[i] = AppointmentAlarm{Alarm: defaultAlarm.Alarm, AppointmentID: a.ID}
 		}
 
+		app := *a
+
+		app.Alarms = alarms
+
 		// update the alarms
-		err = tx.Model(a).Update("alarms", alarms).Error
+		err = tx.Model(a).Updates(app).Error
 
 		if err != nil {
 			return err

@@ -2,7 +2,7 @@ $middle-row-height: 170px;
 
 .appointment-info {
     &__description {
-        @include make-md-column(8);
+        @include make-md-column(6);
 
         white-space: pre-wrap;
         margin-bottom: 20px;
@@ -16,7 +16,7 @@ $middle-row-height: 170px;
     }
 
     &__time {
-        @include make-md-column(4);
+        @include make-md-column(6);
 
         label {
             font-weight: normal;

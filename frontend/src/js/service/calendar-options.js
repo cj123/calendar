@@ -11,9 +11,7 @@ angular.module("calendar").factory("CalendarOptions", [ "$http", "API_BASE", fun
      * @returns {HttpPromise}
      */
     calendarOptions.get = function() {
-        return $http.get(API_BASE + "calendar/" + calendarOptions.calendarID + "/options", {
-            cache: true
-        });
+        return $http.get(API_BASE + "calendar/" + calendarOptions.calendarID + "/options");
     };
 
     /**

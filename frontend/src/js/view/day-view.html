@@ -1,18 +1,50 @@
 <div class="day-view" id="day-view" ng-cloak du-scroll-container>
     <div class="day-view__appointments" ng-dblclick="createAppointment($event);">
         <appointment-tile ng-repeat="appointment in appointments" info="appointment" current-date="currentDate"></appointment-tile>
-
-        <!-- for new appointments -->
-        <appointment-tile ng-repeat="newAppointment in newAppointments" info="newAppointment" current-date="currentDate"></appointment-tile>
     </div>
 
-    <table class="day-view__grid">
+    <table ng-show="!opts.AmPm" class="day-view__grid">
         <tr class="time-slot" ng-repeat="hour in [24] | range">
             <td class="time">
-                {{ hour }}:00
+                <span ng-if="hour < 10">0</span>{{ hour }}:00
             </td>
 
             <td></td>
         </tr>
     </table>
+
+    <table ng-show="opts.AmPm" class="day-view__grid">
+        <tr class="time-slot">
+            <td class="time">
+                12am
+            </td>
+
+            <td></td>
+        </tr>
+        <tr class="time-slot" ng-repeat="hour in [1, 12] | range">
+            <td class="time">
+                {{ hour }}am
+            </td>
+
+            <td></td>
+        </tr>
+        <tr class="time-slot">
+            <td class="time">
+                12pm
+            </td>
+
+            <td></td>
+        </tr>
+        <tr class="time-slot" ng-repeat="hour in [1, 11] | range">
+            <td class="time">
+                {{ hour }}pm
+            </td>
+
+            <td></td>
+        </tr>
+    </table>
+
+    <button class="create-appointment" ng-click="createAppointment($event);">
+        <i class="fa fa-fw fa-plus"></i>
+    </button>
 </div>

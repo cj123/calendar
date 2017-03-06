@@ -1,6 +1,6 @@
 angular.module("calendar").controller("CalendarController", [
-    "$scope", "$log", "$interval", "$uibModal", "$stateParams", "moment", "Item", "CalendarOptions",
-    function($scope, $log, $interval, $uibModal, $stateParams, moment, Item, CalendarOptions) {
+    "$scope", "$log", "$interval", "$uibModal", "$document", "$stateParams", "moment", "Item", "CalendarOptions",
+    function($scope, $log, $interval, $uibModal, $document, $stateParams, moment, Item, CalendarOptions) {
         $scope.currentDate = moment();
         $scope.monthStart = null;
         $scope.days = [];
@@ -32,6 +32,8 @@ angular.module("calendar").controller("CalendarController", [
         });
 
         function resetDayView() {
+            $document[0].title = "Calendar - " + $scope.currentDate.format("DD/MM/YYYY");
+
             CalendarOptions.get().then(function(response) {
                 var opts = response.data;
 
@@ -132,8 +134,6 @@ angular.module("calendar").controller("CalendarController", [
 
                     // remove alarm from index
                     $scope.alarms.splice(alarmIndex, 1);
-                } else {
-                    console.log("invalid alarm time right now :(");
                 }
             }
         }, 1000); // 1 minute
