@@ -6,7 +6,7 @@ angular.module("calendar").directive("appointmentTile", [function() {
             info: '=',
             isNew: '='
         },
-        templateUrl: "calendar/view/appointment-tile.html",
+        templateUrl: "calendar/view/tiles/appointment-tile.html",
         controller: [
             "$scope", "$document", "$uibModal", "$log", "Item",
             function($scope, $document, $uibModal, $log, Item) {

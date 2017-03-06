@@ -148,12 +148,27 @@ angular.module("calendar").factory("Item", [
     }
 
     /**
+     * Remove exdate from recurrence rule.
+     *
+     * @param rule
+     * @returns {string}
+     */
+    function stripExDate(rule) {
+        // strip exclusion dates from the recurrence rule, because despite the library saying it
+        // supports them, it does not.
+        if (rule.indexOf(";EXDATE") !== -1) {
+            rule = rule.substring(0, rule.indexOf(';EXDATE'));
+        }
+        return "RRULE:" + rule;
+    }
+
+    /**
      * Given an item, assign it a length, offset and start and end moment objects.
      * @param item
      * @returns {*}
      */
     itemFactory.processTimes = function(item) {
-        if (!item.timezone || item.timezone == "<Local>") {
+        if (!item.timezone || item.timezone == "<Local>" || item.timezone == "Local") {
             item.timezone = moment.tz.guess();
         }
 
@@ -161,6 +176,14 @@ angular.module("calendar").factory("Item", [
         item.finish = moment.tz(item.finish, "YYYY-MM-DDTHH:mm:ss", item.timezone);
         item.length = Math.abs(moment.duration(item.finish.diff(item.start)).asMinutes());
         item.offset = Math.abs((item.start.hour() * 60) + item.start.minute());
+
+        if (!!item.recurrence_rule) {
+            item.rule = rrulestr(stripExDate(item.recurrence_rule), {
+                dtstart: item.start.toDate(),
+            });
+
+            console.log(item.rule);
+        }
 
         return item;
     };

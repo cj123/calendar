@@ -37,14 +37,19 @@ func TestMain(m *testing.M) {
 
 	defer db.Close()
 
-	model.Migrate(db)
-	calendars := map[format.CalendarType]string{
-		format.CalendarICalTCL: icalTest,
-		format.CalendarICS:     uniTimetable,
+	type Cal struct {
+		CType format.CalendarType
+		S     string
 	}
 
-	for calType, data := range calendars {
-		cal, err := format.ReadCalendar([]byte(data), calType)
+	model.Migrate(db)
+	calendars := []Cal{
+		{format.CalendarICalTCL, icalTest},
+		{format.CalendarICS,     uniTimetable},
+	}
+
+	for _, data := range calendars {
+		cal, err := format.ReadCalendar([]byte(data.S), data.CType)
 
 		if err != nil {
 			panic(err)

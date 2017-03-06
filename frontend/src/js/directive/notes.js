@@ -9,7 +9,6 @@ angular.module("calendar").directive("notes", [function() {
             "$scope", "$uibModal", "Item",
             function($scope, $uibModal, Item) {
                 $scope.notes = [];
-                $scope.newNote = null;
 
                 // watch the current date of the view for changes.
                 $scope.$watch(function() {
@@ -31,8 +30,6 @@ angular.module("calendar").directive("notes", [function() {
 
                     Item.get("note", date.clone(), date.clone()).then(function(notes) {
                         $scope.notes = notes;
-                        // clear out newNote
-                        $scope.newNote = null;
                     });
                 }
 
@@ -42,11 +39,11 @@ angular.module("calendar").directive("notes", [function() {
                         .minute(0)
                         .second(0);
 
-                    $scope.newNote = {
+                    $scope.notes.push({
                         start: start,
                         finish: start,
                         data_type: "note"
-                    };
+                    });
                 };
             }
         ]

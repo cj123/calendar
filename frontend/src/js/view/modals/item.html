@@ -39,6 +39,8 @@
                     ng-model="item.finishTime"
                 >
             </label>
+            <br>
+
             <strong>Timezone</strong> -
             <div class="timezone">
                 {{ item.timezone }}
@@ -140,7 +142,6 @@
         ng-if="!item.recurrence_rule"
         class="btn btn-danger pull-left"
         ng-click="delete(true)"
-        ng-disabled="!item.id"
     >
         Delete
     </button>
