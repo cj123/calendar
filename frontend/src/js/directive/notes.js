@@ -4,7 +4,7 @@ angular.module("calendar").directive("notes", [function() {
         scope: {
             currentDate: '='
         },
-        templateUrl: "calendar/view/notes.html",
+        templateUrl: "calendar/view/directives/notes.html",
         controller: [
             "$scope", "$uibModal", "Item",
             function($scope, $uibModal, Item) {

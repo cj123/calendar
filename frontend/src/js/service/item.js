@@ -21,6 +21,14 @@ angular.module("calendar").factory("Item", [
     };
 
     /**
+     * Get calendar ID
+     * @returns {*}
+     */
+    itemFactory.getCalendarID = function() {
+        return itemFactory.calendarID;
+    };
+
+    /**
      * Get a given item type, between start and end dates.
      *
      * @param itemType
@@ -181,8 +189,6 @@ angular.module("calendar").factory("Item", [
             item.rule = rrulestr(stripExDate(item.recurrence_rule), {
                 dtstart: item.start.toDate(),
             });
-
-            console.log(item.rule);
         }
 
         return item;

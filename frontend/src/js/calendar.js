@@ -11,9 +11,15 @@ var calendar = angular.module("calendar", [
 // routing
 calendar.config(function($stateProvider, $urlRouterProvider, $locationProvider, $logProvider) {
     $stateProvider.state("upload", {
-        url: "/upload",
+        url: "/{calendarID}/upload",
         templateUrl: "calendar/view/upload.html",
         controller: "UploadController"
+    });
+
+    $stateProvider.state("options", {
+        url: "/{calendarID}/options",
+        templateUrl: "calendar/view/options.html",
+        controller: "OptionsController"
     });
 
     $stateProvider.state("index", {
@@ -29,7 +35,12 @@ calendar.config(function($stateProvider, $urlRouterProvider, $locationProvider, 
     $logProvider.debugEnabled(true);
 });
 
-calendar.run();
+calendar.run(["$rootScope", "$state", "$stateParams",
+    function($rootScope, $state, $stateParams) {
+        $rootScope.$state = $state;
+        $rootScope.$stateParams = $stateParams;
+    }
+]);
 
 // template cache.
 angular.module("templates", []);

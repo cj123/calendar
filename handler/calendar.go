@@ -1,30 +1,17 @@
 package handler
 
 import (
-	"encoding/json"
 	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/cj123/calendar/format"
-	"github.com/cj123/calendar/model"
+	"github.com/jinzhu/gorm"
 )
 
 const (
 	requestDateFormat = "2006-01-02"
 )
-
-func (h *Handler) OptionsHandler(w http.ResponseWriter, r *http.Request) {
-	// @TODO get actual options!
-	// calID := muxVarAsUint(r, "calID")
-	b, err := json.Marshal(model.DefaultCalendarOptions())
-
-	if err != nil {
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
-		return
-	}
-
-	w.Write(b)
-}
 
 func (h *Handler) ImportHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(32 << 20)
@@ -59,7 +46,28 @@ func (h *Handler) ImportHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.db.Create(cal).Error
+	dbCal, err := h.calendarRepository.FindByID(muxVarAsUint(r, "calID"))
+
+	if err == gorm.ErrRecordNotFound {
+		log.Println("Creating new calendar")
+		err = h.db.Create(cal).Error
+	} else if err == nil {
+		for _, appt := range cal.Appointments {
+			err := h.appointmentRepository.Create(dbCal.ID, &appt)
+
+			if err != nil {
+				log.Printf("could not create appointment %d", appt.UID)
+			}
+		}
+
+		for _, note := range cal.Notes {
+			err := h.noteRepository.Create(dbCal.ID, &note)
+
+			if err != nil {
+				log.Printf("could not create note %d", note.UID)
+			}
+		}
+	}
 
 	if err != nil {
 		http.Error(w, "Could not create calendar: "+err.Error(), http.StatusInternalServerError)

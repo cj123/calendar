@@ -52,7 +52,7 @@
         <div class="upload__response" ng-show="uploadAttempt">
             <div ng-show="uploadSuccess">
                 Your file (<code>{{ file.name }}</code>) has successfully been uploaded and imported.
-                <a ui-sref="index">View calendar</a>.
+                <a ui-sref="index({calendarID: calendarID})">View calendar</a>.
             </div>
 
             <div ng-show="!uploadSuccess">

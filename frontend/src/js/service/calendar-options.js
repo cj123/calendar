@@ -15,6 +15,16 @@ angular.module("calendar").factory("CalendarOptions", [ "$http", "API_BASE", fun
     };
 
     /**
+     * Update calendar options
+     *
+     * @param calID
+     * @param opts
+     */
+    calendarOptions.update = function(opts) {
+        return $http.put(API_BASE + "calendar/" + calendarOptions.calendarID + "/options", opts);
+    };
+
+    /**
      * Get calendar defaults and merge them with a given item.
      *
      * @param item

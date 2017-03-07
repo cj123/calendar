@@ -12,8 +12,10 @@ import (
 
 type Handler struct {
 	db                    *gorm.DB
-	noteRepository        *repository.NoteRepository
-	appointmentRepository *repository.AppointmentRepository
+	noteRepository        repository.ItemRepository
+	appointmentRepository repository.ItemRepository
+	optionsRepository     repository.OptionsRepository
+	calendarRepository    repository.CalendarRepository
 }
 
 func NewHandler(db *gorm.DB) *Handler {
@@ -21,14 +23,17 @@ func NewHandler(db *gorm.DB) *Handler {
 		db:                    db,
 		noteRepository:        repository.NewNoteRepository(db),
 		appointmentRepository: repository.NewAppointmentRepository(db),
+		optionsRepository:     repository.NewOptionsRepository(db),
+		calendarRepository:    repository.NewCalendarRepository(db),
 	}
 }
 
 func (h *Handler) Router() *mux.Router {
 	r := mux.NewRouter()
 
-	r.HandleFunc("/calendar/{calID}/options", h.OptionsHandler)
-	r.HandleFunc("/calendar/import", h.ImportHandler)
+	r.Path("/calendar/{calID}/options").Methods("GET").HandlerFunc(h.optionsGetHandler)
+	r.Path("/calendar/{calID}/options").Methods("PUT").HandlerFunc(h.optionsUpdateHandler)
+	r.HandleFunc("/calendar/{calID}/import", h.ImportHandler)
 
 	r.Path("/calendar/{calID}/appointments").Methods("GET").HandlerFunc(itemGetHandler(h.appointmentRepository))
 	r.Path("/calendar/{calID}/appointments").Methods("POST").HandlerFunc(itemCreateHandler(h.appointmentRepository))

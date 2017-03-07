@@ -45,7 +45,7 @@ func TestMain(m *testing.M) {
 	model.Migrate(db)
 	calendars := []Cal{
 		{format.CalendarICalTCL, icalTest},
-		{format.CalendarICS,     uniTimetable},
+		{format.CalendarICS, uniTimetable},
 	}
 
 	for _, data := range calendars {

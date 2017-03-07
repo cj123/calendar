@@ -5,7 +5,7 @@ angular.module("calendar").directive("dayView", [function() {
             currentDate: '=',
             days: '='
         },
-        templateUrl: "calendar/view/day-view.html",
+        templateUrl: "calendar/view/directives/day-view.html",
         controller: [
             "$scope", "$log", "CalendarOptions",
             function($scope, $log, CalendarOptions) {
@@ -40,6 +40,8 @@ angular.module("calendar").directive("dayView", [function() {
                                     otherEvent.collisions.push(event.id);
                                 }
                             }
+
+                            console.log(event);
                         }
                     }
 

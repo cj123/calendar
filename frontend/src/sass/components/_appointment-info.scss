@@ -67,21 +67,7 @@ $middle-row-height: 170px;
     &__alarms {
         @include make-md-column(12);
 
-        .alarm {
-            &__slider {
-                display: inline-block;
-                width: 90%;
-                font-weight: normal;
-            }
 
-            &__delete {
-                display: inline-block;
-                width: 10%;
-                text-align: center;
-            }
-
-            @include clearfix();
-        }
     }
 
     .row:not(:last-child) {
@@ -91,4 +77,20 @@ $middle-row-height: 170px;
     .modal-title {
         text-align: center;
     }
+}
+
+.alarm {
+    &__slider {
+        display: inline-block;
+        width: 90%;
+        font-weight: normal;
+    }
+
+    &__delete {
+        display: inline-block;
+        width: 10%;
+        text-align: center;
+    }
+
+    @include clearfix();
 }

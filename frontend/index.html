@@ -27,8 +27,9 @@
         <a class="navbar-brand" href="#"><i class="fa fa-fw fa-calendar"></i> Calendar</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse" uib-collapse="isCollapsed">
-        <ul class="nav navbar-nav">
-            <li><a href="#" ui-sref="upload" ui-sref-active="active">Upload a Calendar</a></li>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#" ui-sref="upload({calendarID: $stateParams.calendarID})" ui-sref-active="active">Upload a Calendar</a></li>
+            <li><a href="#" ui-sref="options({calendarID: $stateParams.calendarID})" ui-sref-active="active">Options</a></li>
         </ul>
     </div>
 </nav>

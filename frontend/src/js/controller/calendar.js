@@ -6,6 +6,7 @@ angular.module("calendar").controller("CalendarController", [
         $scope.days = [];
         $scope.alarms = []; // array of date and appointment
 
+        $scope.calendarID = $stateParams.calendarID;
         Item.setCalendarID($stateParams.calendarID);
 
         // watch the current date of the view for changes.

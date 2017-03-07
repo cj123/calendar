@@ -1,0 +1,82 @@
+<div class="options">
+    <h1>Options</h1>
+
+    <div class="option">
+        <label>
+            <strong>Default Early Warning</strong>
+            <input type="number" ng-model="opts.DefaultEarlyWarning">
+        </label>
+        <small>How many days in advance to alert about an appointment</small>
+    </div>
+
+    <div class="option">
+        <label>
+            <strong>Dayview - scroll to time</strong>
+            <input type="number" ng-model="opts.DayviewTimeStart">
+        </label>
+        <small>What time should day view automatically scroll to? In hours after midnight. (Avoids the calendar view starting at midnight)</small>
+    </div>
+
+    <div class="option">
+        <label>
+            <strong>Show AM/PM times instead of 24 hour?</strong>
+            <input type="checkbox" ng-model="opts.AmPm">
+        </label>
+        <small>Uses AM/PM where possible instead of showing 24 hour clock.</small>
+    </div>
+
+    <div class="option">
+        <label>
+            <strong>Start the week on a Monday?</strong>
+            <input type="checkbox" ng-model="opts.MondayFirst">
+        </label>
+    </div>
+
+    <div class="option">
+        <label>
+            <strong>Ignore Alarms?</strong>
+            <input type="checkbox" ng-model="opts.IgnoreAlarms">
+        </label>
+        <small>Ignore all alarm alerts. Off until switched back on.</small>
+    </div>
+
+    <div class="option">
+        <label>
+            <strong>Default Timezone</strong>
+            <input type="text" ng-model="opts.Timezone">
+        </label>
+        <small>Default timezone for appointments.</small>
+    </div>
+
+    <hr>
+
+    <h4>Default Alarms</h4>
+
+    <div ng-repeat="(i, alarm) in opts.DefaultAlarms">
+        <div class="alarm">
+            <label class="alarm__slider"> {{ alarm.time }}
+                <ng-pluralize count="alarm.time"
+                              when="{'0': 'minutes',
+                                     '1': 'minute',
+                                     'other': 'minutes'}">
+                </ng-pluralize>
+                <input type="range" name="points" min="0" max="60" ng-model="alarm.time">
+            </label><div class="alarm__delete">
+            <button
+                class="btn btn-danger btn-sm pull-right"
+                ng-click="removeAlarm(i)"
+            >
+                <i class="fa fa-trash-o fa-fw"></i>
+            </button>
+        </div>
+        </div>
+    </div>
+
+    <button class="btn btn-default btn-sm pull-right" ng-click="addAlarm()"><i class="fa fa-plus fa-fw"></i></button>
+
+    <div class="clearfix"></div>
+
+    <div class="text-center">
+        <button class="btn btn-primary save" ng-click="save()">Save Options</button>
+    </div>
+</div>

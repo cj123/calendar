@@ -1,0 +1,37 @@
+.options {
+    padding-top: $navbar-height;
+
+    @include make-lg-column(6);
+    @include make-md-column(6);
+    @include make-sm-column(6);
+    @include make-lg-column-offset(3);
+    @include make-md-column-offset(3);
+    @include make-sm-column-offset(3);
+
+    h1 {
+        text-align: center;
+    }
+
+  .option {
+    display: block;
+
+    small {
+      display: block;
+    }
+
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    input {
+      margin-left: 20px;
+    }
+
+    input[type="number"] {
+      width: 50px;
+    }
+  }
+  
+  button.save {
+    text-align: center;
+  }
+}
