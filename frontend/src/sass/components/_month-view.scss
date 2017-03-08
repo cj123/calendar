@@ -81,6 +81,26 @@
                     }
                 }
             }
+
+            &.days--sunday-first {
+                td {
+                    &:nth-child(6) {
+                        color: $black;
+
+                        a.day--has-appointments {
+                            color: $black;
+                        }
+                    }
+
+                    &:nth-child(1) {
+                        color: $brand-primary;
+
+                        a.day--has-appointments {
+                            color: purple;
+                        }
+                    }
+                }
+            }
         }
     }
 

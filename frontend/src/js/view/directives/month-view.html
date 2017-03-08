@@ -26,7 +26,7 @@
                 <th ng-show="opts.MondayFirst">Sun</th>
             </tr>
 
-            <tr ng-repeat="week in weeks">
+            <tr ng-repeat="week in weeks" ng-class="{'days--sunday-first': !opts.MondayFirst }">
                 <td
                     ng-repeat="day in week"
                 >

@@ -1,4 +1,4 @@
-angular.module("calendar").factory("CalendarOptions", [ "$http", "API_BASE", function($http, API_BASE) {
+angular.module("calendar").factory("CalendarOptions", [ "$http", "$cacheFactory", "API_BASE", function($http, $cacheFactory, API_BASE) {
     var calendarOptions = {};
 
     calendarOptions.setCalendarID = function(id) {
@@ -11,7 +11,9 @@ angular.module("calendar").factory("CalendarOptions", [ "$http", "API_BASE", fun
      * @returns {HttpPromise}
      */
     calendarOptions.get = function() {
-        return $http.get(API_BASE + "calendar/" + calendarOptions.calendarID + "/options");
+        return $http.get(API_BASE + "calendar/" + calendarOptions.calendarID + "/options", {
+            cache: true
+        });
     };
 
     /**
@@ -21,7 +23,11 @@ angular.module("calendar").factory("CalendarOptions", [ "$http", "API_BASE", fun
      * @param opts
      */
     calendarOptions.update = function(opts) {
-        return $http.put(API_BASE + "calendar/" + calendarOptions.calendarID + "/options", opts);
+        return $http.put(API_BASE + "calendar/" + calendarOptions.calendarID + "/options", opts).then(function(response) {
+            $cacheFactory.get('$http').removeAll();
+
+            return response;
+        });
     };
 
     /**

@@ -2,6 +2,7 @@ angular.module("calendar").controller("OptionsController", [
     "$scope", "$stateParams", "CalendarOptions",
     function($scope, $stateParams, CalendarOptions) {
         $scope.opts = {};
+        $scope.message = "";
 
         CalendarOptions.setCalendarID($stateParams.calendarID);
 
@@ -11,7 +12,13 @@ angular.module("calendar").controller("OptionsController", [
 
         $scope.save = function() {
             CalendarOptions.update($scope.opts).then(function(response) {
-                console.log(response);
+                if (response.status === 200) {
+                    $scope.message = "Your options have successfully been saved";
+                } else {
+                    $scope.message = "Failed to save options";
+                }
+            }).catch(function(err) {
+                $scope.message = "Failed to save options";
             });
         };
 

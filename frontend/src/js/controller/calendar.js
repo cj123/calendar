@@ -5,9 +5,11 @@ angular.module("calendar").controller("CalendarController", [
         $scope.monthStart = null;
         $scope.days = [];
         $scope.alarms = []; // array of date and appointment
+        $scope.opts = {};
 
         $scope.calendarID = $stateParams.calendarID;
         Item.setCalendarID($stateParams.calendarID);
+        CalendarOptions.setCalendarID($stateParams.calendarID);
 
         // watch the current date of the view for changes.
         $scope.$watch(function() {
@@ -36,9 +38,9 @@ angular.module("calendar").controller("CalendarController", [
             $document[0].title = "Calendar - " + $scope.currentDate.format("DD/MM/YYYY");
 
             CalendarOptions.get().then(function(response) {
-                var opts = response.data;
+                $scope.opts = response.data;
 
-                angular.element(document.getElementById("day-view")).scrollTop(60 * opts.DayviewTimeStart, 0);
+                angular.element(document.getElementById("day-view")).scrollTop(60 * $scope.opts.DayviewTimeStart, 0);
 
                 $log.debug("reloaded calendar options");
             });
@@ -108,6 +110,7 @@ angular.module("calendar").controller("CalendarController", [
                 for (var alarmIndex = 0; alarmIndex < appt.alarms.length; alarmIndex++) {
                     $scope.alarms.push({
                         alert: momentDate.clone().subtract(appt.alarms[alarmIndex].time, 'minutes'),
+                        time: appt.alarms[alarmIndex].time,
                         appointment: appt
                     });
                 }
@@ -142,6 +145,10 @@ angular.module("calendar").controller("CalendarController", [
         var audio = new Audio('/assets/sounds/alert.wav');
 
         function triggerAlarm() {
+            if ($scope.opts.IgnoreAlarms) {
+                return;
+            }
+
             audio.play();
 
             $uibModal.open({

@@ -16,6 +16,8 @@
             <p>
                 {{ alarm.appointment.text }}
                 - <strong>{{ alarm.appointment.start.format('HH:mm') }} - {{ alarm.appointment.finish.format('HH:mm') }}</strong>
+
+                ({{ alarm.time }} minutes before)
             </p>
         </div>
     </div>
