@@ -1,4 +1,4 @@
-<a
+<div
     class="appointment"
     ng-class="{ 'appointment--selected': active }"
     ng-style="{ 'top': info.offset + 'px', 'height': info.length + 'px'}"
@@ -10,4 +10,5 @@
 >
     <textarea ng-change="submit(false)" ng-model="info.text" ng-model-options='{ debounce: 1000 }'></textarea>
     <time>{{ info.start.format("HH:mm") }} - {{ info.finish.format("HH:mm") }}</time>
-</a>
+    <a class="view-detail" ng-click="viewDetail();"><i class="fa fa-fw fa-info-circle"></i></a>
+</div>

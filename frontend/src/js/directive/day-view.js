@@ -7,8 +7,8 @@ angular.module("calendar").directive("dayView", [function() {
         },
         templateUrl: "calendar/view/directives/day-view.html",
         controller: [
-            "$scope", "$log", "CalendarOptions",
-            function($scope, $log, CalendarOptions) {
+            "$scope", "$log", "$uibModal", "CalendarOptions",
+            function($scope, $log, $uibModal, CalendarOptions) {
                 $scope.opts = {};
 
                 CalendarOptions.get().then(function(response) {
@@ -72,6 +72,26 @@ angular.module("calendar").directive("dayView", [function() {
                         finish: start.clone().add(30, "minutes"),
                         data_type: "appointment",
                         alarms: $scope.opts.DefaultAlarms
+                    });
+                };
+
+                $scope.createAppointmentButton = function() {
+                    $scope.createAppointment({offsetY: 600});
+
+                    var appointment = $scope.appointments[$scope.appointments.length - 1];
+
+                    $uibModal.open({
+                        animation: true,
+                        templateUrl: "calendar/view/modals/item.html",
+                        controller: "ItemModal",
+                        resolve: {
+                            item: function() {
+                                return appointment;
+                            },
+                            currentDate: function() {
+                                return $scope.currentDate;
+                            }
+                        }
                     });
                 };
             }

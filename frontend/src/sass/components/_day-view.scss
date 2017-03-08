@@ -125,6 +125,15 @@ $time-cell-width: 50px;
                 top: 5px;
                 right: 5px;
             }
+
+            a.view-detail {
+                position: absolute;
+                bottom: 5px;
+                right: 5px;
+                padding: 4px;
+
+                color: $white;
+            }
         }
     }
 
