@@ -16,6 +16,7 @@ angular.module("calendar").controller("ItemModal", [
 
         $scope.delete = function(deleteRecurrences) {
             if (!$scope.item.id) {
+                $uibModalInstance.close($scope.item);
                 $rootScope.$broadcast("refresh", true);
                 return;
             }

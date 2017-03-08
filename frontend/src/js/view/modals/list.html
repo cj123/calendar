@@ -1,0 +1,32 @@
+<div class="modal-header">
+    <button
+        type="button"
+        class="close"
+        aria-label="Close" ng-click="close()"
+    >
+        <span aria-hidden="true">&times;</span>
+    </button>
+
+    <h4 class="modal-title">Calendar Items</h4>
+</div>
+
+<div class="modal-body">
+    <div class="row" ng-repeat="(date, items) in appointments">
+        <div class="col-xs-12">
+            <h4>{{ date | amDateFormat:'dddd, MMMM Do YYYY' }}</h4>
+            <ul>
+                <li ng-repeat="item in items">
+                    <p style="white-space: pre;">{{ item.text }}</p>
+                    <p style="font-style: italic;">
+                        <time>{{ item.start | amDateFormat:'HH:mm' }}</time> to
+                        <time>{{ item.finish | amDateFormat:'HH:mm' }}</time>
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-default btn-close" ng-click="close()">Close</button>
+</div>

@@ -9,7 +9,7 @@
 </head>
 <body ng-app="calendar">
 
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-default navbar-fixed-top" ng-controller="NavigationController">
     <div class="navbar-header">
         <button
             type="button"
@@ -24,10 +24,25 @@
             <span class="icon-bar"></span>
         </button>
 
-        <a class="navbar-brand" href="#"><i class="fa fa-fw fa-calendar"></i> Calendar</a>
+        <a class="navbar-brand" ng-href="/#!/{{$stateParams.calendarID}}"><i class="fa fa-fw fa-calendar"></i> Calendar</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse" uib-collapse="isCollapsed">
         <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown" uib-dropdown>
+                <a href="#" class="dropdown-toggle" role="button" uib-dropdown-toggle>
+                    List <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" uib-dropdown-menu>
+                    <li><a ng-click="listView(1, 'day', false)">One Day</a></li>
+                    <li><a ng-click="listView(7, 'days', false)">Seven Days</a></li>
+                    <li><a ng-click="listView(10, 'days', false)">Ten Days</a></li>
+                    <li><a ng-click="listView(30, 'days', false)">Thirty Days</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a ng-click="listView(1, 'week', true)">Week</a></li>
+                    <li><a ng-click="listView(1, 'month', true)">Month</a></li>
+                    <li><a ng-click="listView(1, 'year', true)">Year</a></li>
+                </ul>
+            </li>
             <li><a href="#" ui-sref="upload({calendarID: $stateParams.calendarID})" ui-sref-active="active">Upload a Calendar</a></li>
             <li><a href="#" ui-sref="options({calendarID: $stateParams.calendarID})" ui-sref-active="active">Options</a></li>
         </ul>

@@ -34,7 +34,7 @@ angular.module("calendar").directive("monthView", [function() {
                     }
 
                     if (!$scope.opts.MondayFirst) {
-                        shiftedDays.unshift({});
+                        monthStartDay++;
                     }
 
                     for (var i = 1; i < monthStartDay; i++) {
