@@ -7,8 +7,8 @@ angular.module("calendar").directive("dayView", [function() {
         },
         templateUrl: "calendar/view/directives/day-view.html",
         controller: [
-            "$scope", "$log", "$uibModal", "CalendarOptions",
-            function($scope, $log, $uibModal, CalendarOptions) {
+            "$scope", "$log", "$uibModal", "CalendarOptions", "Collisions",
+            function($scope, $log, $uibModal, CalendarOptions, Collisions) {
                 $scope.opts = {};
 
                 CalendarOptions.get().then(function(response) {
@@ -21,31 +21,8 @@ angular.module("calendar").directive("dayView", [function() {
                     }
 
                     var events = $scope.days[$scope.currentDate.date() - 1].events;
-
-                    for (var eventIndex = 0; eventIndex < events.length; eventIndex++) {
-                        for (var otherEventIndex = 0; otherEventIndex  < events.length; otherEventIndex++) {
-                            if (eventIndex === otherEventIndex) {
-                                continue;
-                            }
-                            
-                            var event = events[eventIndex];
-                            var otherEvent = events[otherEventIndex];
-
-                            if (event.start.isBetween(otherEvent.start, otherEvent.finish, 'second', '[]')) {
-                                if (!event.collisions[otherEvent.id]) {
-                                    event.collisions.push(otherEvent.id);
-                                }
-
-                                if (!otherEvent.collisions[event.id]) {
-                                    otherEvent.collisions.push(event.id);
-                                }
-                            }
-
-                            console.log(event);
-                        }
-                    }
-
-                    $scope.appointments = events;
+                    $scope.appointments = Collisions.calculateCollisions(events);
+                    console.log($scope.appointments);
                 }
 
                 $scope.$watch(function() {

@@ -5,10 +5,6 @@
     position: absolute;
     height: auto;
 
-    @media screen and (max-width: $screen-xs-max) {
-        display: none;
-    }
-
     .note {
         $note-background-color: #FFFFA5;
 

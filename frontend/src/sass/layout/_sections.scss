@@ -17,6 +17,8 @@
 
         @media screen and (max-width: $screen-xs-max) {
             height: auto;
+            overflow-y: hidden;
+            min-height: 100%;
         }
     }
 
