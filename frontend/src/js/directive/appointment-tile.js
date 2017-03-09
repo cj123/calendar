@@ -38,8 +38,16 @@ angular.module("calendar").directive("appointmentTile", [function() {
 
                     if (args.height) {
                         $log.debug("Item resize, adjusting length/offset accordingly.");
+
+                        var length = args.height - (args.height % 5);
+
+                        if (length + $scope.info.offset > 1440) {
+                            // illegal resize, max it.
+                            length = 1440 - $scope.info.offset;
+                        }
+
                         // change the appointment
-                        $scope.info.length = args.height - (args.height % 5);
+                        $scope.info.length = length;
 
                         $scope.submit();
                     }

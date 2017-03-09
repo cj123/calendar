@@ -1,6 +1,6 @@
 angular.module("calendar").controller("NavigationController", [
-    "$scope", "$uibModal", "moment",
-    function($scope, $uibModal, moment) {
+    "$scope", "$uibModal", "$rootScope", "moment",
+    function($scope, $uibModal, $rootScope, moment) {
         console.log('nav control');
 
         $scope.listView = function(time, period, useBeginningOf) {
@@ -25,6 +25,10 @@ angular.module("calendar").controller("NavigationController", [
                     }
                 }
             });
+        };
+
+        $scope.refresh = function() {
+            $rootScope.$broadcast("refresh", true);
         };
     }
 ]);

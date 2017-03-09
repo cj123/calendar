@@ -8,4 +8,8 @@ body.modal-open {
     @media screen and (min-width: $screen-sm-min) {
         padding-right: 30px;
     }
+
+    a.nav-refresh {
+        cursor: pointer;
+    }
 }

@@ -49,16 +49,14 @@ angular.module("calendar").factory("Appointment", [ "$http", "moment", "API_BASE
         var hasUpdatedTime = false;
 
         if (!!a.startTime) {
-            var start = moment(a.startTime);
-
+            var start = moment().tz(item.startTime, "YYYY-MM-DDTHH:mm:ss", a.timezone);
             a.start.hours(start.hours()).minutes(start.minutes()).seconds(0);
 
             hasUpdatedTime = true;
         }
 
         if (!!a.finishTime) {
-            var finish = moment(a.finishTime);
-
+            var finish = moment().tz(item.finishTime, "YYYY-MM-DDTHH:mm:ss", a.timezone);
             a.finish.hours(finish.hours()).minutes(finish.minutes()).seconds(0);
 
             hasUpdatedTime = true;

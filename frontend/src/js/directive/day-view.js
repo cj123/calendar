@@ -22,7 +22,6 @@ angular.module("calendar").directive("dayView", [function() {
 
                     var events = $scope.days[$scope.currentDate.date() - 1].events;
                     $scope.appointments = Collisions.calculateCollisions(events);
-                    console.log($scope.appointments);
                 }
 
                 $scope.$watch(function() {
@@ -41,11 +40,7 @@ angular.module("calendar").directive("dayView", [function() {
                 $scope.createAppointment = function(event) {
                     var offset = event.offsetY - (event.offsetY % 30); // rounded to nearest 30min
 
-                    var start = $scope.currentDate.clone()
-                        .hour(0)
-                        .minute(0)
-                        .second(0)
-                        .add(offset, "minutes");
+                    var start =  moment.tz($scope.currentDate.format("YYYY-MM-DDTHH:mm:ss"), $scope.opts.Timezone).add(offset, "minutes");
 
                     $scope.appointments.push({
                         offset: offset,

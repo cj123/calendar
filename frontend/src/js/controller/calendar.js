@@ -1,7 +1,7 @@
 angular.module("calendar").controller("CalendarController", [
     "$scope", "$log", "$interval", "$uibModal", "$document", "$stateParams", "moment", "Item", "CalendarOptions",
     function($scope, $log, $interval, $uibModal, $document, $stateParams, moment, Item, CalendarOptions) {
-        $scope.currentDate = moment();
+        $scope.currentDate = moment().tz(moment.tz.guess());
         $scope.monthStart = null;
         $scope.days = [];
         $scope.alarms = []; // array of date and appointment

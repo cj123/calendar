@@ -17,10 +17,10 @@ angular.module("calendar").directive("monthView", [function() {
                 CalendarOptions.get().then(function(res) {
                     $scope.opts = res.data;
 
-                    updateDays();
-
                     $scope.$watch("days", function() {
-                        updateDays();
+                        if ($scope.days && $scope.monthStart) {
+                            updateDays();
+                        }
                     });
                 });
 

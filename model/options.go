@@ -47,7 +47,7 @@ var defaultCalendarOptions = CalendarOptions{
 func DefaultCalendarOptions() CalendarOptions {
 	opts := defaultCalendarOptions
 
-	opts.Timezone = time.Local.String()
+	opts.Timezone, _ = time.Now().In(time.Local).Zone()
 
 	return opts
 }

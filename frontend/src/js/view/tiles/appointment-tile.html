@@ -1,11 +1,17 @@
 <div
     class="appointment"
     ng-class="{ 'appointment--selected': active }"
-    ng-style="{ 'top': info.offset + 'px', 'height': info.length + 'px', 'width': (90 / info.collisions.length) + '%', 'margin-left': (90 / info.collisions.length * info.collisions.indexOf(info.id)) + '%'}"
+    ng-style="{
+        'top': info.offset + 'px',
+        'height': info.length + 'px',
+        'width': (90 / info.collisions.length) + '%',
+        'margin-left': (90 / info.collisions.length * info.collisions.indexOf(info.id)) + '%'
+    }"
     ng-dblclick="viewDetail(); $event.stopPropagation();"
     r-directions="['bottom', 'top']"
     ng-click="active = true"
     ng-blur="active = false"
+    r-centered-y="true"
     resizable
 >
     <textarea ng-change="submit(false)" ng-model="info.text" ng-model-options='{ debounce: 1000 }'></textarea>
