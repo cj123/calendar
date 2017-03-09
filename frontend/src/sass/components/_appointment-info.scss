@@ -1,6 +1,16 @@
 $middle-row-height: 170px;
 
 .appointment-info {
+    &--note {
+        .appointment-info__description {
+            @include make-md-column(12);
+        }
+
+        .appointment-info__time, .appointment-info__alarms {
+            display: none;
+        }
+    }
+
     &__description {
         @include make-md-column(6);
 
@@ -31,7 +41,7 @@ $middle-row-height: 170px;
     }
 
     &__highlight {
-        @include make-md-column(3);
+        @include make-md-column(6);
 
         height: $middle-row-height;
         border-right: 1px solid $gray-lighter;

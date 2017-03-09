@@ -12,9 +12,6 @@ angular.module("calendar").controller("NavigationController", [
 
             var end = start.clone().add(time, period);
 
-            // open list modal with start and end.
-            console.log(start, end);
-
             $uibModal.open({
                 animation: true,
                 templateUrl: "calendar/view/modals/list.html",

@@ -10,7 +10,7 @@
     <h4 class="modal-title">Information</h4>
 </div>
 
-<div class="modal-body appointment-info">
+<div class="modal-body appointment-info" ng-class="{'appointment-info--note': item.data_type == 'note'}">
     <div class="row">
         <textarea ng-model="item.text" class="appointment-info__description"></textarea>
 
@@ -78,7 +78,7 @@
             </label>
         </div>
 
-        <div class="appointment-info__early-warning">
+        <!--<div class="appointment-info__early-warning">
             <h4>Early Warning</h4>
 
             <label for="early-warning">
@@ -90,7 +90,7 @@
                 </ng-pluralize>
             </label>
             <input type="range" name="early-warning" id="early-warning" min="0" max="15" ng-model="item.remind_start">
-        </div>
+        </div>-->
     </div>
 
     <div class="row">

@@ -144,8 +144,10 @@ angular.module("calendar").factory("Item", [
 
         for (var next = iterator.next(); next; next = iterator.next()) {
             if (next.compare(setStart) < 0) {
+                // keep going till we hit start
                 continue;
             } else if (next.compare(setEnd) > 0) {
+                // stop if we get past the end
                 break;
             }
 

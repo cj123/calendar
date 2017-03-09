@@ -17,7 +17,7 @@ angular.module("calendar").controller("CalendarController", [
                 return $scope.currentDate.format("x");
             }
         }, function() {
-            resetDayView();
+            resetDayView(true);
         });
 
         $scope.$watch(function() {
@@ -30,17 +30,19 @@ angular.module("calendar").controller("CalendarController", [
 
         $scope.$on("refresh", function() {
             monthDays($scope.currentDate).then(function() {
-                resetDayView();
+                resetDayView(false);
             });
         });
 
-        function resetDayView() {
+        function resetDayView(scroll) {
             $document[0].title = "Calendar - " + $scope.currentDate.format("DD/MM/YYYY");
 
             CalendarOptions.get().then(function(response) {
                 $scope.opts = response.data;
 
-                angular.element(document.getElementById("day-view")).scrollTop(60 * $scope.opts.DayviewTimeStart, 0);
+                if (scroll) {
+                    angular.element(document.getElementById("day-view")).scrollTop(60 * $scope.opts.DayviewTimeStart, 0);
+                }
 
                 $log.debug("reloaded calendar options");
             });

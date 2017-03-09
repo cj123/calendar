@@ -33,6 +33,11 @@ angular.module("calendar").directive("dayView", [function() {
 
                 $scope.$watch("days", loadAppointments);
 
+                /**
+                 * Create an appointment at the position on the day view pane.
+                 *
+                 * @param event
+                 */
                 $scope.createAppointment = function(event) {
                     var offset = event.offsetY - (event.offsetY % 30); // rounded to nearest 30min
 
@@ -48,10 +53,15 @@ angular.module("calendar").directive("dayView", [function() {
                         start: start,
                         finish: start.clone().add(30, "minutes"),
                         data_type: "appointment",
-                        alarms: $scope.opts.DefaultAlarms
+                        alarms: $scope.opts.DefaultAlarms,
+                        hilite: 'always'
                     });
                 };
 
+                /**
+                 * Trigger create an appointment from a button, simulating the double click event
+                 * e.g. for mobile devices.
+                 */
                 $scope.createAppointmentButton = function() {
                     $scope.createAppointment({offsetY: 600});
 
