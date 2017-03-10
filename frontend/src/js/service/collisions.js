@@ -71,6 +71,18 @@ angular.module("calendar").factory("Collisions", function() {
         });
 
         events.forEach(function(event) {
+            event.collisions.forEach(function(collisionIndex) {
+                var collidingEvent = events[collisionIndex];
+
+                collidingEvent.collisions.forEach(function(collision) {
+                    if (event.collisions.indexOf(collision) === -1) {
+                        event.collisions.push(collision);
+                    }
+                });
+            });
+        });
+
+        events.forEach(function(event) {
             event.collisions.forEach(function(collisionIndex, i) {
                 event.collisions[i] = events[collisionIndex];
             });
