@@ -7,7 +7,6 @@ import (
 	"github.com/cj123/calendar/model"
 
 	"github.com/jinzhu/gorm"
-	"github.com/davecgh/go-spew/spew"
 )
 
 var (
@@ -112,10 +111,8 @@ func (r *AppointmentRepository) Update(calID, itemID uint, new Model) error {
 			alarmIDs = append(alarmIDs, alarm.ID)
 		}
 
-		spew.Dump(alarmIDs)
-
 		if len(alarmIDs) > 0 {
-			err := r.db.Where("id NOT IN (?)", alarmIDs).Delete(model.AppointmentAlarm{}).Error
+			err := r.db.Where("appointment_id = ? AND id NOT IN (?)", itemID, alarmIDs).Delete(model.AppointmentAlarm{}).Error
 
 			if err != nil {
 				return err

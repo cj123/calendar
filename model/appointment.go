@@ -25,6 +25,10 @@ func (a *Appointment) BeforeCreate(tx *gorm.DB) error {
 
 	a.Item.DataType = AppointmentItemType
 
+	return nil
+}
+
+func (a *Appointment) AfterCreate(tx *gorm.DB) error {
 	if !a.SkipDefaultAlarms && a.Alarms == nil {
 		log.Printf("Appointment uid: %s does not have any alarms associated with it. Adding...", a.UID)
 
@@ -47,10 +51,21 @@ func (a *Appointment) BeforeCreate(tx *gorm.DB) error {
 			return err
 		}
 
-		a.Alarms = make([]AppointmentAlarm, len(opts.DefaultAlarms))
+		alarms := make([]AppointmentAlarm, len(opts.DefaultAlarms))
 
 		for i, defaultAlarm := range opts.DefaultAlarms {
-			a.Alarms[i] = AppointmentAlarm{Alarm: Alarm{Time: defaultAlarm.Time}}
+			alarms[i] = AppointmentAlarm{Alarm: Alarm{Time: defaultAlarm.Time}}
+		}
+
+		app := *a
+
+		app.Alarms = alarms
+
+		// update the alarms
+		err = tx.Model(a).Updates(app).Error
+
+		if err != nil {
+			return err
 		}
 	}
 
