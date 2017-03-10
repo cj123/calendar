@@ -66,6 +66,10 @@ func (i *Item) BeforeCreate() error {
 		i.UID, i.UIDPersistent = generateUID(), true
 	}
 
+	if i.Hilite == "" {
+		i.Hilite = "always"
+	}
+
 	// validate recurrence rule
 	if i.RecurrenceRule != "" {
 		i.RecurrenceRule = strings.TrimSpace(strings.Replace(i.RecurrenceRule, "RRULE:", "", -1))

@@ -1,5 +1,16 @@
-angular.module("calendar").factory("Collisions", [ "moment", function(moment) {
+angular.module("calendar").factory("Collisions", function() {
     var collisionsFactory = {};
+
+    function compareEvents(a, b) {
+        if (a.length < b.length) {
+            return -1;
+        }
+        if (a.length > b.length) {
+            return 1;
+        }
+        // a must be equal to b
+        return 0;
+    }
 
     /**
      * Take a set of appointments and return their collision groups.
@@ -10,81 +21,78 @@ angular.module("calendar").factory("Collisions", [ "moment", function(moment) {
      * @returns Object
      */
     collisionsFactory.calculateCollisions = function(events) {
-        var groups = [];
+        var timeslots = {};
 
-        for (var eventIndex = 0; eventIndex < events.length; eventIndex++) {
-            var event1 = events[eventIndex];
+        for (var i = 0; i < 1440; i++) {
+            timeslots[i] = [];
+        }
 
-            for (var otherEventIndex = 0; otherEventIndex < events.length; otherEventIndex++) {
-                if (eventIndex === otherEventIndex) {
+        events.forEach(function(event, eventIndex) {
+            var start = event.start.minute() + (event.start.hour() * 60);
+            var finish = event.finish.minute() + (event.finish.hour() * 60);
+
+            for (var slot = start; slot < finish; slot++) {
+                timeslots[slot].push(eventIndex);
+            }
+        });
+
+        /*for (i = 0; i < 1440; i++) {
+            timeslots[i].sort();
+        }*/
+
+        events.forEach(function(event) {
+            var start = event.start.minute() + (event.start.hour() * 60);
+            var finish = event.finish.minute() + (event.finish.hour() * 60);
+
+            event.collisions = [];
+            event.maxCollisions = 0;
+
+            for (var slot = start; slot < finish; slot++) {
+                var numCollisions = timeslots[slot].length;
+
+                if (numCollisions === 0) {
                     continue;
                 }
 
-                var event2 = events[otherEventIndex];
+                if (numCollisions > event.maxCollisions) {
+                    event.maxCollisions = numCollisions;
 
-                if (this.hasCollision(event1, event2)) {
-                    // find a group index with event1 in it, add event 2 to it
-                    var groupIndex = this.findGroupIndex(groups, event1.id);
-
-                    if (!(groups[groupIndex] instanceof Array)) {
-                        // if we don't find anything with event 1 in it,
-                        // try using groupIndex of event2 instead
-                        groupIndex = this.findGroupIndex(groups, event2.id);
-
-                        // group index using event2 failed as well
-                        if (!(groups[groupIndex] instanceof Array)) {
-                            groups[groupIndex] = [];
+                    for (var eventIndex = 0; eventIndex < timeslots[slot].length; eventIndex++) {
+                        if (event.collisions.indexOf(timeslots[slot][eventIndex]) === -1) {
+                            event.collisions.push(timeslots[slot][eventIndex]);
                         }
                     }
-
-                    if (groups[groupIndex].indexOf(event1.id) === -1) {
-                        groups[groupIndex].push(event1.id);
-                        events[eventIndex].collisions = groups[groupIndex];
-                    }
-                    if (groups[groupIndex].indexOf(event2.id) === -1) {
-                        groups[groupIndex].push(event2.id);
-                        events[otherEventIndex].collisions = groups[groupIndex];
-                    }
-
                 }
             }
-        }
+        });
+
+        // go through and look at each conflicting appointment and which it conflicts with.
+        /*events.forEach(function(event) {
+            event.collisions.forEach(function(collisionIndex) {
+                var collidingEvent = events[collisionIndex];
+
+                collidingEvent.collisions.forEach(function(collision) {
+                    if (event.collisions.indexOf(collision) === -1) {
+                        event.collisions.push(collision);
+                    }
+                });
+            });
+        });*/
+
+        events.forEach(function(event) {
+            event.collisions.forEach(function(collisionIndex, i) {
+                event.collisions[i] = events[collisionIndex];
+            });
+
+            event.collisions.sort(compareEvents);
+
+            event.collisions.forEach(function(collisionEvent, i) {
+                event.collisions[i] = collisionEvent.id;
+            });
+        });
 
         return events;
     };
 
-    /**
-     * Find the group for an appointment, or create it if it doesn't exist.
-     *
-     * @param groups
-     * @param appointmentID
-     *
-     * @returns int
-     */
-    collisionsFactory.findGroupIndex = function(groups, appointmentID) {
-        if (groups.length < 1) {
-            return 0;
-        }
-
-        for (var i = groups.length - 1; i >= 0; i--) {
-            if (groups[i].indexOf(appointmentID) !== -1) {
-                return i;
-            }
-        }
-
-        return groups.length; // new group
-    };
-
-    /**
-     * Check if event1 collides with event 2
-     *
-     * @param event1
-     * @param event2
-     * @returns {boolean}
-     */
-    collisionsFactory.hasCollision = function(event1, event2) {
-        return event1.start.isBetween(event2.start, event2.finish, 'minute', '[)');
-    };
-
     return collisionsFactory;
-}]);
+});

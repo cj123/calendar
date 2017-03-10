@@ -39,8 +39,10 @@ angular.module("calendar").directive("dayView", [function() {
                  */
                 $scope.createAppointment = function(event) {
                     var offset = event.offsetY - (event.offsetY % 30); // rounded to nearest 30min
+                    console.log($scope.currentDate);
 
-                    var start =  moment.tz($scope.currentDate.format("YYYY-MM-DDTHH:mm:ss"), $scope.opts.Timezone).add(offset, "minutes");
+                    var start = moment.tz($scope.currentDate, $scope.opts.Timezone).hour(0).minute(0).second(0).millisecond(0).add(offset, "minutes");
+                    console.log($scope.opts.DefaultAlarms);
 
                     $scope.appointments.push({
                         offset: offset,

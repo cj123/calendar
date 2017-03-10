@@ -7,6 +7,7 @@ import (
 	"github.com/cj123/calendar/model"
 
 	"github.com/jinzhu/gorm"
+	"github.com/davecgh/go-spew/spew"
 )
 
 var (
@@ -42,6 +43,11 @@ func (r *AppointmentRepository) modelSlice(appointments []*model.Appointment) []
 func (r *AppointmentRepository) Create(calID uint, m Model) error {
 	if appointment, ok := m.(*model.Appointment); ok {
 		appointment.CalendarID = calID
+
+		for i := range appointment.Alarms {
+			// zero out IDs so that they can be created in the db
+			appointment.Alarms[i].ID = 0
+		}
 
 		return r.db.Create(&appointment).Error
 	}
@@ -105,6 +111,8 @@ func (r *AppointmentRepository) Update(calID, itemID uint, new Model) error {
 		for _, alarm := range updates.Alarms {
 			alarmIDs = append(alarmIDs, alarm.ID)
 		}
+
+		spew.Dump(alarmIDs)
 
 		if len(alarmIDs) > 0 {
 			err := r.db.Where("id NOT IN (?)", alarmIDs).Delete(model.AppointmentAlarm{}).Error

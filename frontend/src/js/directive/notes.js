@@ -42,6 +42,7 @@ angular.module("calendar").directive("notes", [function() {
                     $scope.notes.push({
                         start: start,
                         finish: start,
+                        hilite: "always",
                         data_type: "note"
                     });
                 };

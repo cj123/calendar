@@ -32,10 +32,6 @@ angular.module("calendar").directive("appointmentTile", [function() {
                 };
 
                 $scope.$on("angular-resizable.resizeEnd", function(evt, args) {
-                    if (args.width) {
-                        // @TODO dunno yet, probably save this and xOffset somewhere
-                    }
-
                     if (args.height) {
                         $log.debug("Item resize, adjusting length/offset accordingly.");
 
@@ -49,7 +45,7 @@ angular.module("calendar").directive("appointmentTile", [function() {
                         // change the appointment
                         $scope.info.length = length;
 
-                        $scope.submit();
+                        $scope.submit(false);
                     }
                 });
 
@@ -79,8 +75,6 @@ angular.module("calendar").directive("appointmentTile", [function() {
 
                             if (reload) {
                                 $scope.$emit("refresh", true);
-                            } else {
-
                             }
                         }).catch(function(err) {
                             $log.error(err);

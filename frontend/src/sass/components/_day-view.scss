@@ -69,7 +69,8 @@ $time-cell-width: 50px;
             border: 1px solid darken($blue, 5%);
             background: $blue;
             color: $white;
-            width: calc(100% - #{$time-cell-width});
+            //width: calc(100% - #{$time-cell-width});
+            width: 90%;
             opacity: 0.9;
             resize: both;
 
@@ -128,11 +129,17 @@ $time-cell-width: 50px;
 
             a.view-detail {
                 position: absolute;
-                bottom: 5px;
-                right: 5px;
+                top: 0;
+                right: 75px;
                 padding: 4px;
 
                 color: $white;
+
+                display: none;
+
+                @media screen and (max-width: $screen-xs-max) {
+                    display: block;
+                }
             }
         }
     }

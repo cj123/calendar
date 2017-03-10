@@ -1,7 +1,7 @@
 angular.module("calendar").controller("CalendarController", [
     "$scope", "$log", "$interval", "$uibModal", "$document", "$stateParams", "moment", "Item", "CalendarOptions",
     function($scope, $log, $interval, $uibModal, $document, $stateParams, moment, Item, CalendarOptions) {
-        $scope.currentDate = moment().tz(moment.tz.guess());
+        $scope.currentDate = moment();
         $scope.monthStart = null;
         $scope.days = [];
         $scope.alarms = []; // array of date and appointment
@@ -97,8 +97,6 @@ angular.module("calendar").controller("CalendarController", [
                 }
             }).then(function() {
                 $scope.days = days;
-
-                $log.debug($scope.alarms);
             });
         }
 
@@ -124,7 +122,6 @@ angular.module("calendar").controller("CalendarController", [
         // watch for alarms
         $interval(function() {
             if (!$scope.alarms) {
-                console.log('no alarms');
                 return;
             }
 

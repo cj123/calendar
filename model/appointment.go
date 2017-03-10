@@ -25,16 +25,12 @@ func (a *Appointment) BeforeCreate(tx *gorm.DB) error {
 
 	a.Item.DataType = AppointmentItemType
 
-	return nil
-}
-
-func (a *Appointment) AfterCreate(tx *gorm.DB) error {
 	if !a.SkipDefaultAlarms && a.Alarms == nil {
 		log.Printf("Appointment uid: %s does not have any alarms associated with it. Adding...", a.UID)
 
 		var opts CalendarOptions
 
-		err := tx.Model(CalendarOptions{}).Where("calendar_id = ?", a.CalendarID).First(&opts).Error
+		err := tx.Preload("DefaultAlarms").Model(CalendarOptions{}).Where("calendar_id = ?", a.CalendarID).First(&opts).Error
 
 		if err == gorm.ErrRecordNotFound {
 			// calendar options don't exist for some reason, create them
@@ -51,21 +47,10 @@ func (a *Appointment) AfterCreate(tx *gorm.DB) error {
 			return err
 		}
 
-		alarms := make([]AppointmentAlarm, len(opts.DefaultAlarms))
+		a.Alarms = make([]AppointmentAlarm, len(opts.DefaultAlarms))
 
 		for i, defaultAlarm := range opts.DefaultAlarms {
-			alarms[i] = AppointmentAlarm{Alarm: defaultAlarm.Alarm, AppointmentID: a.ID}
-		}
-
-		app := *a
-
-		app.Alarms = alarms
-
-		// update the alarms
-		err = tx.Model(a).Updates(app).Error
-
-		if err != nil {
-			return err
+			a.Alarms[i] = AppointmentAlarm{Alarm: Alarm{Time: defaultAlarm.Time}}
 		}
 	}
 
