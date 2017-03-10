@@ -4,21 +4,19 @@ angular.module("calendar").factory("Collisions", function() {
     function compareEvents(a, b) {
         if (a.length < b.length) {
             return -1;
-        }
-        if (a.length > b.length) {
+        } else if (a.length > b.length) {
             return 1;
         }
-        // a must be equal to b
+
         return 0;
     }
 
+    function eventTime(momentDate) {
+        return momentDate.minute() + (momentDate.hour() * 60);
+    }
+
     /**
-     * Take a set of appointments and return their collision groups.
-     * Each appointment in a given collision group should be treated as the same width in the frontend.
-     *
-     * @param events
-     *
-     * @returns Object
+     * Takes a set of appointments and calculates which other appointments they collide with
      */
     collisionsFactory.calculateCollisions = function(events) {
         var timeslots = {};
@@ -28,21 +26,27 @@ angular.module("calendar").factory("Collisions", function() {
         }
 
         events.forEach(function(event, eventIndex) {
-            var start = event.start.minute() + (event.start.hour() * 60);
-            var finish = event.finish.minute() + (event.finish.hour() * 60);
+            var start = eventTime(event.start);
+            var finish = eventTime(event.finish);
+
+            if (start === finish && finish === 0) {
+                // appointments which continue entire day
+                finish = 1440;
+            }
 
             for (var slot = start; slot < finish; slot++) {
                 timeslots[slot].push(eventIndex);
             }
         });
 
-        /*for (i = 0; i < 1440; i++) {
-            timeslots[i].sort();
-        }*/
-
         events.forEach(function(event) {
-            var start = event.start.minute() + (event.start.hour() * 60);
-            var finish = event.finish.minute() + (event.finish.hour() * 60);
+            var start = eventTime(event.start);
+            var finish = eventTime(event.finish);
+
+            if (start === finish && finish === 0) {
+                // appointments which continue entire day
+                finish = 1440;
+            }
 
             event.collisions = [];
             event.maxCollisions = 0;
@@ -65,19 +69,6 @@ angular.module("calendar").factory("Collisions", function() {
                 }
             }
         });
-
-        // go through and look at each conflicting appointment and which it conflicts with.
-        /*events.forEach(function(event) {
-            event.collisions.forEach(function(collisionIndex) {
-                var collidingEvent = events[collisionIndex];
-
-                collidingEvent.collisions.forEach(function(collision) {
-                    if (event.collisions.indexOf(collision) === -1) {
-                        event.collisions.push(collision);
-                    }
-                });
-            });
-        });*/
 
         events.forEach(function(event) {
             event.collisions.forEach(function(collisionIndex, i) {
