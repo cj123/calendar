@@ -75,7 +75,7 @@ angular.module("calendar").factory("Collisions", function() {
                 var collidingEvent = events[collisionIndex];
 
                 collidingEvent.collisions.forEach(function(collision) {
-                    if (event.collisions.indexOf(collision) === -1) {
+                    if (event.collisions.indexOf(collision) === -1 && collisionsFactory.hasCollision(events[collision], event)) {
                         event.collisions.push(collision);
                     }
                 });
@@ -89,12 +89,18 @@ angular.module("calendar").factory("Collisions", function() {
 
             event.collisions.sort(compareEvents);
 
+            event.maxCollisions = event.collisions.length;
+
             event.collisions.forEach(function(collisionEvent, i) {
                 event.collisions[i] = collisionEvent.id;
             });
         });
 
         return events;
+    };
+
+    collisionsFactory.hasCollision = function(event1, event2) {
+        return event1.start.isBetween(event2.start, event2.finish, 'minute', '[)');
     };
 
     return collisionsFactory;
