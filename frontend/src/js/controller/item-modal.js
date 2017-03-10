@@ -76,6 +76,10 @@ angular.module("calendar").controller("ItemModal", [
                 $scope.item.recurrence_rule = "";
                 $scope.item.uid = ""; // unset UID, allow it to be recreated
 
+                // set the date of the appointment to today since we've cleared out the recurrence rule
+                $scope.item.start.year(currentDate.year()).month(currentDate.month()).date(currentDate.date());
+                $scope.item.finish.year(currentDate.year()).month(currentDate.month()).date(currentDate.date());
+
                 // create a new appointment with the current item, then
                 // delete the recurrence of the old one.
                 Item.create($scope.item.data_type, $scope.item).then(function(newItem) {
