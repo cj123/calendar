@@ -111,6 +111,10 @@ angular.module("calendar").factory("Item", [
                 try {
                     item.recurrences = recurrencesBetween(item.recurrence_rule, item.start, startDate, endDate);
 
+                    if (!item.recurrences) {
+                        throw "invalid recurrence count";
+                    }
+
                     if (item.recurrences.length > 0) {
                         filtered.push(item);
                     }
@@ -198,9 +202,13 @@ angular.module("calendar").factory("Item", [
         item.offset = Math.abs((item.start.hour() * 60) + item.start.minute());
 
         if (!!item.recurrence_rule) {
-            item.rule = rrulestr(itemFactory.stripExDate(item.recurrence_rule), {
-                dtstart: item.start.toDate()
-            });
+            try {
+                item.rule = rrulestr(itemFactory.stripExDate(item.recurrence_rule), {
+                    dtstart: item.start.toDate()
+                });
+            } catch (err) {
+                $log.debug(err);
+            }
         }
 
         return item;

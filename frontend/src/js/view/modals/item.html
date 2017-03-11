@@ -52,7 +52,7 @@
     <div class="row">
         <div class="appointment-info__calendars">
             <h4>Calendar</h4>
-            <strong>Main Calendar</strong><!-- @TODO calendar selection -->
+            <label ng-repeat="calendar in calendars"><input type="radio" name="calendarID" ng-model="item.calendar_id" ng-value="calendar.id" checked> {{calendar.Name}}</label>
         </div>
 
         <div class="appointment-info__highlight">

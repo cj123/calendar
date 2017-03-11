@@ -8,7 +8,11 @@ angular.module("calendar").directive("repeats", [function() {
         controller: [
             "$scope", "Item",
             function($scope, Item) {
-                $scope.recurRule = ICAL.Recur.fromData(ICAL.Recur._stringToData($scope.item.recurrence_rule, true));
+                if ($scope.item.recurrence_rule !== "FREQ=null") {
+                    $scope.recurRule = ICAL.Recur.fromData(ICAL.Recur._stringToData($scope.item.recurrence_rule, true));
+                } else {
+                    $scope.recurRule = ICAL.Recur.fromData({});
+                }
 
                 if (!$scope.recurRule.interval) {
                     $scope.recurRule.interval = 1;

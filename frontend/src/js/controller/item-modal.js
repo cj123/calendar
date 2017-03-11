@@ -10,6 +10,10 @@ angular.module("calendar").controller("ItemModal", [
             $scope.item = mergedItem;
         });
 
+        UserOptions.getAllCalendars().then(function(response) {
+            $scope.calendars = response.data;
+        });
+
         $scope.cancel = function() {
             $scope.item = itemClone;
             $uibModalInstance.dismiss("close");
@@ -49,6 +53,11 @@ angular.module("calendar").controller("ItemModal", [
 
         $scope.update = function(updateAllItems) {
             console.log($scope.item);
+
+            if ($scope.item.recurrence_rule === 'FREQ=null') {
+                $scope.item.recurrence_rule = "";
+            }
+
 
             if (!$scope.item.id) {
                 $log.debug("creating item from modal");
