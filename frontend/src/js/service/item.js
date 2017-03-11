@@ -163,14 +163,14 @@ angular.module("calendar").factory("Item", [
      * @param rule
      * @returns {string}
      */
-    function stripExDate(rule) {
+    itemFactory.stripExDate = function(rule) {
         // strip exclusion dates from the recurrence rule, because despite the library saying it
         // supports them, it does not.
         if (rule.indexOf(";EXDATE") !== -1) {
             rule = rule.substring(0, rule.indexOf(';EXDATE'));
         }
         return "RRULE:" + rule;
-    }
+    };
 
     /**
      * Given an item, assign it a length, offset and start and end moment objects.
@@ -188,8 +188,8 @@ angular.module("calendar").factory("Item", [
         item.offset = Math.abs((item.start.hour() * 60) + item.start.minute());
 
         if (!!item.recurrence_rule) {
-            item.rule = rrulestr(stripExDate(item.recurrence_rule), {
-                dtstart: item.start.toDate(),
+            item.rule = rrulestr(itemFactory.stripExDate(item.recurrence_rule), {
+                dtstart: item.start.toDate()
             });
         }
 

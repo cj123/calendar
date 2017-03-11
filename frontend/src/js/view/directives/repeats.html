@@ -1,0 +1,47 @@
+<button class="btn btn-sm btn-default" ng-class="{'active': recurRule.freq == ''}" ng-click="setFrequency('NONE')">None</button>
+<button class="btn btn-sm btn-default" ng-class="{'active': recurRule.freq == 'DAILY'}" ng-click="setFrequency('DAILY')">Daily</button>
+<button class="btn btn-sm btn-default" ng-class="{'active': recurRule.freq == 'WEEKLY'}" ng-click="setFrequency('WEEKLY')">Weekly</button>
+<button class="btn btn-sm btn-default" ng-class="{'active': recurRule.freq == 'MONTHLY'}" ng-click="setFrequency('MONTHLY')">Monthly</button>
+<button class="btn btn-sm btn-default" ng-class="{'active': recurRule.freq == 'YEARLY'}" ng-click="setFrequency('YEARLY')">Annually</button>
+
+
+<button class="btn btn-sm btn-default" ng-show="recurRule.freq == 'WEEKLY'" ng-click="customiseWeekly = !customiseWeekly" ng-class="{'active': customiseWeekly}">Customise Weekly...</button>
+<button class="btn btn-sm btn-default" ng-show="recurRule.freq == 'MONTHLY'" ng-click="customiseMonthly = !customiseMonthly" ng-class="{'active': customiseMonthly}">Customise Monthly...</button>
+
+<div class="customise-weekly" ng-show="recurRule.freq == 'WEEKLY' && customiseWeekly">
+    <div class="col-md-6">
+        <label><input type="radio" ng-model="recurRule.interval" value="1" ng-checked="recurRule.interval == 1" name="week-repeat">Weekly</label>
+        <label><input type="radio" ng-model="recurRule.interval" value="2" ng-checked="recurRule.interval == 2" name="week-repeat">Every Two Weeks</label>
+        <label><input type="radio" ng-model="recurRule.interval" value="3" ng-checked="recurRule.interval == 3" name="week-repeat">Every Three Weeks</label>
+        <label><input type="radio" ng-model="recurRule.interval" value="4" ng-checked="recurRule.interval == 4" name="week-repeat">Every Four Weeks</label>
+    </div>
+    <div class="col-md-6">
+        <label><input type="checkbox" ng-click="toggleIndex(byDay, 'MO')" ng-checked="byDay.indexOf('MO') !== -1">Monday</label>
+        <label><input type="checkbox" ng-click="toggleIndex(byDay, 'TU')" ng-checked="byDay.indexOf('TU') !== -1">Tuesday</label>
+        <label><input type="checkbox" ng-click="toggleIndex(byDay, 'WE')" ng-checked="byDay.indexOf('WE') !== -1">Wednesday</label>
+        <label><input type="checkbox" ng-click="toggleIndex(byDay, 'TH')" ng-checked="byDay.indexOf('TH') !== -1">Thursday</label>
+        <label><input type="checkbox" ng-click="toggleIndex(byDay, 'FR')" ng-checked="byDay.indexOf('FR') !== -1">Friday</label>
+        <label><input type="checkbox" ng-click="toggleIndex(byDay, 'SA')" ng-checked="byDay.indexOf('SA') !== -1">Saturday</label>
+        <label><input type="checkbox" ng-click="toggleIndex(byDay, 'SU')" ng-checked="byDay.indexOf('SU') !== -1">Sunday</label>
+    </div>
+</div>
+
+<div class="customise-monthly" ng-show="recurRule.freq == 'MONTHLY' && customiseMonthly">
+    <div class="col-md-6">
+        <label><input type="radio" ng-model="recurRule.interval" value="1" ng-checked="recurRule.interval == 1" name="month-repeat">Monthly</label>
+        <label><input type="radio" ng-model="recurRule.interval" value="2" ng-checked="recurRule.interval == 2" name="month-repeat">Every Two Months</label>
+        <label><input type="radio" ng-model="recurRule.interval" value="3" ng-checked="recurRule.interval == 3" name="month-repeat">Every Three Months</label>
+        <label><input type="radio" ng-model="recurRule.interval" value="4" ng-checked="recurRule.interval == 4" name="month-repeat">Every Four Months</label>
+        <label><input type="radio" ng-model="recurRule.interval" value="6" ng-checked="recurRule.interval == 6" name="month-repeat">Every Six Months</label>
+    </div>
+    <div class="col-md-6">
+    </div>
+</div>
+
+<br><br>
+<div ng-show="!!recurRule">
+    <small ng-show="description">repeat {{ description }}</small>
+    <small ng-show="!description">never repeat</small><br>
+
+    <small><code>{{ item.recurrence_rule }}</code></small>
+</div>

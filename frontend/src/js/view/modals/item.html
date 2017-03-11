@@ -46,10 +46,6 @@
                 {{ item.timezone }}
             </div>
             <br>
-
-            <strong>Repeats</strong> -
-            {{ item.rule.toText() || "none" }}
-            <br>
         </div>
     </div>
 
@@ -91,6 +87,16 @@
             </label>
             <input type="range" name="early-warning" id="early-warning" min="0" max="15" ng-model="item.remind_start">
         </div>-->
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <h4>Repeats</h4>
+
+            <repeats item="item"></repeats>
+
+            <br><br>
+        </div>
     </div>
 
     <div class="row">
