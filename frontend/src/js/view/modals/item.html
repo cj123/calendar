@@ -138,7 +138,7 @@
                 <a href="#" ng-click="delete(false)">This event</a>
             </li>
             <li>
-                <a href="#" ng-click="delete(true)">All future events</a>
+                <a href="#" ng-click="delete(true)">All events</a>
             </li>
         </ul>
     </div>
@@ -152,7 +152,7 @@
         Delete
     </button>
 
-    <div uib-dropdown class="pull-right" ng-if="!!item.recurrence_rule">
+    <div uib-dropdown class="pull-right" ng-if="!!item.recurrence_rule && itemClone.recurrence_rule == item.recurrence_rule">
         <a href="#" class="btn btn-primary" uib-dropdown-toggle ng-disabled="!item.id">
             Save changes <span class="caret"></span>
         </a>
@@ -161,7 +161,7 @@
                 <a href="#" ng-click="update(false)">This event</a>
             </li>
             <li>
-                <a href="#" ng-click="update(true)">All future events</a>
+                <a href="#" ng-click="update(true)">All events</a>
             </li>
         </ul>
     </div>
@@ -170,7 +170,7 @@
 
     <button
         type="button"
-        ng-if="!item.recurrence_rule"
+        ng-if="!item.recurrence_rule || itemClone.recurrence_rule != item.recurrence_rule"
         ng-click="update(true)"
         class="btn btn-primary"
         ng-disabled="!item.text"

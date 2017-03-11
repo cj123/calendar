@@ -4,6 +4,7 @@ angular.module("calendar").controller("ItemModal", [
         $scope.item = item;
 
         var itemClone = JSON.parse(JSON.stringify(item));
+        $scope.itemClone = itemClone;
 
         UserOptions.getAndMergeWithItem(item).then(function(mergedItem) {
             $scope.item = mergedItem;

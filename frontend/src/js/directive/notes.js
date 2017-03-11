@@ -41,9 +41,10 @@ angular.module("calendar").directive("notes", [function() {
 
                     $scope.notes.push({
                         start: start,
-                        finish: start,
+                        finish: start.clone().hour(1).minute(0).second(0),
                         hilite: "always",
-                        data_type: "note"
+                        data_type: "note",
+                        recurrence_rule: "",
                     });
                 };
             }

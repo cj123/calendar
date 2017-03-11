@@ -40,7 +40,7 @@ angular.module("calendar").directive("repeats", [function() {
                  */
                 $scope.setFrequency = function(frequencyString) {
                     if (frequencyString === 'NONE') {
-                        $scope.recurRule = null;
+                        $scope.clearRule();
                         return;
                     }
 
@@ -48,7 +48,19 @@ angular.module("calendar").directive("repeats", [function() {
                         $scope.recurRule = ICAL.Recur.fromData({});
                     }
 
+                    $scope.byDay = [];
+                    delete $scope.recurRule.parts.BYDAY;
+                    $scope.byMonth = [];
+                    delete $scope.recurRule.parts.BYMONTH;
+
                     $scope.recurRule.freq = frequencyString;
+                };
+
+                /**
+                 * Empty the recurrence rule
+                 */
+                $scope.clearRule = function() {
+                    $scope.recurRule = null;
                 };
 
 
@@ -60,7 +72,7 @@ angular.module("calendar").directive("repeats", [function() {
                 $scope.$watch("byDay", function() {
                     console.log('da');
                     if ($scope.byDay.length < 1) {
-                        //delete $scope.recurRule.parts.BYDAY;
+                        delete $scope.recurRule.parts.BYDAY;
                     } else {
                         $scope.recurRule.parts.BYDAY = $scope.byDay;
                     }
@@ -71,7 +83,7 @@ angular.module("calendar").directive("repeats", [function() {
                 $scope.$watch("byMonth", function() {
                     console.log('mo');
                     if ($scope.byMonth.length < 1) {
-                        //delete $scope.recurRule.parts.BYDAY;
+
                     } else {
                         $scope.recurRule.parts.BYMONTH = $scope.byMonth;
                     }
@@ -88,11 +100,15 @@ angular.module("calendar").directive("repeats", [function() {
                     if ($scope.recurRule) {
                         $scope.item.recurrence_rule = $scope.recurRule.toString();
 
-                        $scope.item.rule = rrulestr(Item.stripExDate($scope.item.recurrence_rule), {
-                            dtstart: $scope.item.start.toDate()
-                        });
+                        if ($scope.item.recurrence_rule && $scope.item.recurrence_rule !== "FREQ=null") {
+                            $scope.item.rule = rrulestr(Item.stripExDate($scope.item.recurrence_rule), {
+                                dtstart: $scope.item.start.toDate()
+                            });
 
-                        $scope.description = $scope.item.rule.toText();
+                            $scope.description = $scope.item.rule.toText();
+                        }
+                    } else {
+                        $scope.item.recurrence_rule = "";
                     }
                 });
             }

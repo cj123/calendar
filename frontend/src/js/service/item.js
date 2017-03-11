@@ -108,11 +108,20 @@ angular.module("calendar").factory("Item", [
             item.collisions = [];
 
             if (!!item.recurrence_rule) {
-                item.recurrences = recurrencesBetween(item.recurrence_rule, item.start, startDate, endDate);
+                try {
+                    item.recurrences = recurrencesBetween(item.recurrence_rule, item.start, startDate, endDate);
 
-                if (item.recurrences.length > 0) {
+                    if (item.recurrences.length > 0) {
+                        filtered.push(item);
+                    }
+                } catch (err) {
+                    $log.debug("recurrence error: " + err + " on item: " + item.text);
+
+                    // add to filtered w/o rule
+                    item.recurrences = [];
                     filtered.push(item);
                 }
+
             } else {
                 item.recurrences = [];
                 filtered.push(item);
@@ -135,6 +144,7 @@ angular.module("calendar").factory("Item", [
 
         // hack: https://github.com/mozilla-comm/ical.js/issues/243
         var rule = ICAL.Recur.fromData(ICAL.Recur._stringToData(rrulestr, true));
+
         var iterator = rule.iterator(start);
 
         setStart = ICAL.Time.fromJSDate(setStart.toDate());

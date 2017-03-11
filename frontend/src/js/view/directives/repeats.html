@@ -1,4 +1,4 @@
-<button class="btn btn-sm btn-default" ng-class="{'active': recurRule.freq == ''}" ng-click="setFrequency('NONE')">None</button>
+<button class="btn btn-sm btn-default" ng-class="{'active': recurRule.freq == '' || item.recurrence_rule == 'FREQ=null'}" ng-click="setFrequency('NONE')">None</button>
 <button class="btn btn-sm btn-default" ng-class="{'active': recurRule.freq == 'DAILY'}" ng-click="setFrequency('DAILY')">Daily</button>
 <button class="btn btn-sm btn-default" ng-class="{'active': recurRule.freq == 'WEEKLY'}" ng-click="setFrequency('WEEKLY')">Weekly</button>
 <button class="btn btn-sm btn-default" ng-class="{'active': recurRule.freq == 'MONTHLY'}" ng-click="setFrequency('MONTHLY')">Monthly</button>
@@ -43,5 +43,5 @@
     <small ng-show="description">repeat {{ description }}</small>
     <small ng-show="!description">never repeat</small><br>
 
-    <small><code>{{ item.recurrence_rule }}</code></small>
+    <small ng-show="item.recurrence_rule !== 'FREQ=null'"><code>{{ item.recurrence_rule }}</code></small>
 </div>

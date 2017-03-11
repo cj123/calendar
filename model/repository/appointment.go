@@ -105,6 +105,8 @@ func (r *AppointmentRepository) Update(calID, itemID uint, new Model) error {
 	}
 
 	if updates, ok := new.(*model.Appointment); ok {
+		tx := r.db.Begin()
+
 		var alarmIDs []uint
 
 		for _, alarm := range updates.Alarms {
@@ -112,14 +114,24 @@ func (r *AppointmentRepository) Update(calID, itemID uint, new Model) error {
 		}
 
 		if len(alarmIDs) > 0 {
-			err := r.db.Where("appointment_id = ? AND id NOT IN (?)", itemID, alarmIDs).Delete(model.AppointmentAlarm{}).Error
+			err := tx.Where("appointment_id = ? AND id NOT IN (?)", itemID, alarmIDs).Delete(model.AppointmentAlarm{}).Error
 
 			if err != nil {
+				tx.Rollback()
 				return err
 			}
 		}
 
-		return r.db.Model(&appointment).Updates(updates).Error
+		if updates.RecurrenceRule == "" {
+			err = tx.Model(&appointment).Update("recurrence_rule", updates.RecurrenceRule).Error
+
+			if err != nil {
+				tx.Rollback()
+				return err
+			}
+		}
+
+		return tx.Model(&appointment).Updates(updates).Commit().Error
 	}
 
 	return InvalidAppointmentAssertionError

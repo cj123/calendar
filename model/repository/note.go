@@ -94,7 +94,18 @@ func (r *NoteRepository) Update(calID, itemID uint, new Model) error {
 	}
 
 	if updates, ok := new.(*model.Note); ok {
-		return r.db.Model(&note).Updates(updates).Error
+		tx := r.db.Begin()
+
+		if updates.RecurrenceRule == "" {
+			err = tx.Model(&note).Update("recurrence_rule", updates.RecurrenceRule).Error
+
+			if err != nil {
+				tx.Rollback()
+				return err
+			}
+		}
+
+		return tx.Model(&note).Updates(updates).Commit().Error
 	}
 
 	return InvalidAppointmentAssertionError
