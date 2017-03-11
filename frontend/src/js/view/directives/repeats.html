@@ -10,7 +10,7 @@
 
 <div class="customise-weekly" ng-show="recurRule.freq == 'WEEKLY' && customiseWeekly">
     <div class="col-md-6">
-        <label><input type="radio" ng-model="recurRule.interval" value="1" ng-checked="recurRule.interval == 1" name="week-repeat">Weekly</label>
+        <label><input type="radio" ng-model="recurRule.interval" value="1" ng-checked="recurRule.interval == 1 || !recurRule.interval" name="week-repeat">Weekly</label>
         <label><input type="radio" ng-model="recurRule.interval" value="2" ng-checked="recurRule.interval == 2" name="week-repeat">Every Two Weeks</label>
         <label><input type="radio" ng-model="recurRule.interval" value="3" ng-checked="recurRule.interval == 3" name="week-repeat">Every Three Weeks</label>
         <label><input type="radio" ng-model="recurRule.interval" value="4" ng-checked="recurRule.interval == 4" name="week-repeat">Every Four Weeks</label>
@@ -28,16 +28,19 @@
 
 <div class="customise-monthly" ng-show="recurRule.freq == 'MONTHLY' && customiseMonthly">
     <div class="col-md-6">
-        <label><input type="radio" ng-model="recurRule.interval" value="1" ng-checked="recurRule.interval == 1" name="month-repeat">Monthly</label>
+        <label><input type="radio" ng-model="recurRule.interval" value="1" ng-checked="recurRule.interval == 1 || !recurRule.interval" name="month-repeat">Monthly</label>
         <label><input type="radio" ng-model="recurRule.interval" value="2" ng-checked="recurRule.interval == 2" name="month-repeat">Every Two Months</label>
         <label><input type="radio" ng-model="recurRule.interval" value="3" ng-checked="recurRule.interval == 3" name="month-repeat">Every Three Months</label>
         <label><input type="radio" ng-model="recurRule.interval" value="4" ng-checked="recurRule.interval == 4" name="month-repeat">Every Four Months</label>
         <label><input type="radio" ng-model="recurRule.interval" value="6" ng-checked="recurRule.interval == 6" name="month-repeat">Every Six Months</label>
     </div>
-    <div class="col-md-6">
-    </div>
+    <!--<div class="col-md-6">
+        <label><input type="radio" name="month-special">{{ item.start.date()|ordinal }} Day</label>
+        <label><input type="radio" name="month-special">{{ (item.start.clone().endOf('month').date() - item.start.date() + 1)|ordinal }}-Last Day</label>
+    </div>-->
 </div>
 
+<div class="clearfix"></div>
 <br><br>
 <div ng-show="!!recurRule">
     <small ng-show="description">repeat {{ description }}</small>

@@ -50,6 +50,8 @@ func (h *Handler) ImportHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err == gorm.ErrRecordNotFound {
 		log.Println("Creating new calendar")
+		cal.Name = "Imported Calendar"
+
 		err = h.db.Create(cal).Error
 	} else if err == nil {
 		for _, appt := range cal.Appointments {
@@ -75,4 +77,22 @@ func (h *Handler) ImportHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
+}
+
+func (h *Handler) calendarGetHandler(w http.ResponseWriter, r *http.Request) {
+	cals, err := h.calendarRepository.AllCalendars()
+
+	if err != nil {
+		http.Error(w, "Could not get calendars", http.StatusInternalServerError)
+		return
+	}
+
+	data, err := marshalResponse(cals)
+
+	if err != nil {
+		http.Error(w, "Could not get calendars", http.StatusInternalServerError)
+		return
+	}
+
+	w.Write(data)
 }

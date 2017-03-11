@@ -24,6 +24,7 @@ type CalendarOptions struct {
 	IgnoreAlarms        bool           // ignore alarm notifications
 	Color               string         // default color
 	Timezone            string         // timezone of calendar (by default)
+	SoftDelete          bool           // actually delete appointments or just move them to a different calendar?
 }
 
 var defaultCalendarOptions = CalendarOptions{
@@ -38,8 +39,9 @@ var defaultCalendarOptions = CalendarOptions{
 	AllowOverflow:       true,
 	Visible:             true,
 	IgnoreAlarms:        false,
-	Color:               "<Default> <Default>",
-	Timezone:            "<Local>",
+	Color:               "#016FB9",
+	Timezone:            "<Local>", // is changed below
+	SoftDelete:          false,
 }
 
 // DefaultCalendarOptions returns the default options with the current timezone (system time) patched in

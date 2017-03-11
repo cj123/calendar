@@ -7,6 +7,7 @@ import (
 	"github.com/cj123/calendar/model"
 
 	"github.com/jinzhu/gorm"
+	"log"
 )
 
 var (
@@ -15,6 +16,9 @@ var (
 
 type AppointmentRepository struct {
 	Repository
+
+	opts OptionsRepository
+	cal  CalendarRepository
 }
 
 func NewAppointmentRepository(db *gorm.DB) *AppointmentRepository {
@@ -22,6 +26,8 @@ func NewAppointmentRepository(db *gorm.DB) *AppointmentRepository {
 		Repository{
 			db: db,
 		},
+		NewOptionsRepository(db),
+		NewCalendarRepository(db),
 	}
 }
 
@@ -83,7 +89,25 @@ func (r *AppointmentRepository) FindByID(calID, uid uint) (model.Appointment, er
 }
 
 func (r *AppointmentRepository) DeleteItem(calID, uid uint) error {
-	return r.db.Delete(model.Appointment{}, "id = ? AND calendar_id = ?", uid, calID).Error
+	opts, err := r.opts.FindByCalendarID(calID)
+
+	if err != nil {
+		return err
+	}
+
+	if opts.SoftDelete {
+		delCal, err := r.cal.FindOrCreateForDeletedID(calID)
+
+		if err != nil {
+			return err
+		}
+
+		log.Printf("Performing soft delete on appointment uid: %d to cal: %d", uid, delCal.ID)
+
+		return r.db.Model(&model.Appointment{}).Where("id = ?", uid).Update("calendar_id", delCal.ID).Error
+	} else {
+		return r.db.Delete(model.Appointment{}, "id = ? AND calendar_id = ?", uid, calID).Error
+	}
 }
 
 func (r *AppointmentRepository) DeleteRecurrence(itemID uint, date time.Time) error {

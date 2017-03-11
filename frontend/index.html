@@ -29,6 +29,14 @@
     <div id="navbar" class="navbar-collapse collapse" uib-collapse="isCollapsed">
         <ul class="nav navbar-nav navbar-right">
             <li><a class="nav-refresh" ng-click="refresh()"><i class="fa fa-fw fa-refresh"></i></a></li>
+            <li ng-show="calendars.length > 0" class="dropdown" uib-dropdown>
+                <a href="#" class="dropdown-toggle" role="button" uib-dropdown-toggle>
+                    Calendars <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" uib-dropdown-menu>
+                    <li ng-repeat="calendar in calendars"><a ng-href="/#!/{{calendar.id}}">{{calendar.Name}}</a></li>
+                </ul>
+            </li>
             <li class="dropdown" uib-dropdown>
                 <a href="#" class="dropdown-toggle" role="button" uib-dropdown-toggle>
                     List <span class="caret"></span>

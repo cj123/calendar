@@ -129,7 +129,7 @@
 </div>
 
 <div class="modal-footer">
-    <div uib-dropdown class="pull-left" ng-if="!!item.recurrence_rule">
+    <div uib-dropdown class="pull-left" ng-if="!!item.recurrence_rule && item.recurrence_rule != 'FREQ=null'">
         <a href="#" class="btn btn-danger" ng-disabled="!item.text" uib-dropdown-toggle>
             Delete <span class="caret"></span>
         </a>
@@ -145,7 +145,7 @@
 
     <button
         type="button"
-        ng-if="!item.recurrence_rule"
+        ng-if="!item.recurrence_rule|| item.recurrence_rule == 'FREQ=null'"
         class="btn btn-danger pull-left"
         ng-click="delete(true)"
     >

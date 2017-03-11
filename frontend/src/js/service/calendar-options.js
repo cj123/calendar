@@ -47,5 +47,12 @@ angular.module("calendar").factory("CalendarOptions", [ "$http", "$cacheFactory"
         });
     };
 
+    /**
+     * Get all calendars
+     */
+    calendarOptions.getAllCalendars = function() {
+        return $http.get(API_BASE + "calendars");
+    };
+
     return calendarOptions;
 }]);

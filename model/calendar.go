@@ -134,6 +134,8 @@ type NoteDeletedDate struct {
 
 type Calendar struct {
 	Model
+	Name         string
+	DeletedFor   uint      // which calendar is this the deleted calendar for?
 	Version      float64
 	Appointments []Appointment
 	Notes        []Note

@@ -54,6 +54,7 @@ angular.module("calendar").directive("repeats", [function() {
                     delete $scope.recurRule.parts.BYMONTH;
 
                     $scope.recurRule.freq = frequencyString;
+                    $scope.recurRule.interval = 1;
                 };
 
                 /**

@@ -51,7 +51,8 @@ angular.module("calendar").directive("dayView", [function() {
                         finish: start.clone().add(30, "minutes"),
                         data_type: "appointment",
                         alarms: $scope.opts.DefaultAlarms,
-                        hilite: 'always'
+                        hilite: 'always',
+                        recurrence_rule: ''
                     });
                 };
 

@@ -31,6 +31,7 @@ func NewHandler(db *gorm.DB) *Handler {
 func (h *Handler) Router() *mux.Router {
 	r := mux.NewRouter()
 
+	r.Path("/calendars").Methods("GET").HandlerFunc(h.calendarGetHandler)
 	r.Path("/calendar/{calID}/options").Methods("GET").HandlerFunc(h.optionsGetHandler)
 	r.Path("/calendar/{calID}/options").Methods("PUT").HandlerFunc(h.optionsUpdateHandler)
 	r.HandleFunc("/calendar/{calID}/import", h.ImportHandler)

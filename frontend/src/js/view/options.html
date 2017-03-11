@@ -42,6 +42,14 @@
 
     <div class="option">
         <label>
+            <strong>Soft Delete?</strong>
+            <input type="checkbox" ng-model="opts.SoftDelete">
+        </label>
+        <small>If enabled, appointments are moved to a different calendar, rather than being deleted outright (does not work with deleting recurrence dates).</small>
+    </div>
+
+    <div class="option">
+        <label>
             <strong>Default Timezone</strong>
             <input type="text" ng-model="opts.Timezone">
         </label>
