@@ -1,10 +1,14 @@
 <div class="day-view" id="day-view" ng-cloak du-scroll-container>
+    <hr class="timeline" ng-show="timelinePosition" ng-style="{'top': timelinePosition + 'px'}">
+
     <div class="day-view__appointments" ng-dblclick="createAppointment($event);">
-        <appointment-tile
-            ng-repeat="appointment in appointments"
-            info="appointment"
-            current-date="currentDate"
-        ></appointment-tile>
+        <div class="day-view-wrapper" style="position: relative;">
+            <appointment-tile
+                ng-repeat="appointment in appointments"
+                info="appointment"
+                current-date="currentDate"
+            ></appointment-tile>
+        </div>
     </div>
 
     <table ng-show="!opts.AmPm" class="day-view__grid">
@@ -14,6 +18,8 @@
             </td>
 
             <td></td>
+
+            <td class="time"></td>
         </tr>
     </table>
 
@@ -24,6 +30,8 @@
             </td>
 
             <td></td>
+
+            <td class="time"></td>
         </tr>
         <tr class="time-slot" ng-repeat="hour in [1, 11] | range">
             <td class="time">
@@ -31,6 +39,8 @@
             </td>
 
             <td></td>
+
+            <td class="time"></td>
         </tr>
         <tr class="time-slot">
             <td class="time">
@@ -38,6 +48,8 @@
             </td>
 
             <td></td>
+
+            <td class="time"></td>
         </tr>
         <tr class="time-slot" ng-repeat="hour in [1, 11] | range">
             <td class="time">
@@ -45,6 +57,8 @@
             </td>
 
             <td></td>
+
+            <td class="time"></td>
         </tr>
     </table>
 

@@ -4,8 +4,8 @@
     ng-style="{
         'top': info.offset + 'px',
         'height': info.length + 'px',
-        'width': (90 / info.collisions.length) + '%',
-        'margin-left': (90 / info.collisions.length * info.collisions.indexOf(info.id)) + '%'
+        'width': (100 / info.maxCollisions) + '%',
+        'margin-left': (100 / info.collisions.length * info.collisions.indexOf(info.id)) + '%'
     }"
     ng-dblclick="viewDetail(); $event.stopPropagation();"
     r-directions="['bottom', 'top']"
@@ -14,7 +14,7 @@
     r-centered-y="true"
     resizable
 >
-    <textarea ng-change="submit(false)" ng-model="info.text" ng-model-options='{ debounce: 1000 }'></textarea>
+    <textarea ng-change="submit(false)" ng-model="info.text" ng-model-options='{ debounce: 1000 }' autofocus></textarea>
     <time>{{ info.start.format("HH:mm") }} - {{ info.finish.format("HH:mm") }}</time>
     <a class="view-detail" ng-click="viewDetail();"><i class="fa fa-fw fa-info-circle"></i></a>
 </div>

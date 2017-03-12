@@ -4,9 +4,11 @@ import (
 	"net/http"
 	"testing"
 	"time"
+	"reflect"
 
 	"github.com/cj123/calendar/model"
 	"github.com/jinzhu/gorm"
+	"github.com/cj123/calendar/model/repository"
 )
 
 func TestHandler_GetAppointmentsHandler(t *testing.T) {
@@ -172,4 +174,94 @@ func TestHandler_DeleteAppointmentHandler(t *testing.T) {
 			t.Fail()
 		}
 	})
+}
+
+func TestHandler_AppointmentUpdateHandler(t *testing.T) {
+	t.Run("Valid update", func(t *testing.T) {
+		repo := repository.NewAppointmentRepository(db)
+		appt, err := repo.FindByID(1, 5)
+
+		if err != nil {
+			t.Error(err)
+		}
+
+		// make some modifications to appointment
+		appt.Alarms = appt.Alarms[2:len(appt.Alarms)] // remove first 2 alarms
+		appt.Text = "updated appointment test"
+		appt.Todo = true
+
+		res, err := makeRequest("PUT", "/calendar/1/appointment/5", appt, nil, nil)
+
+		if err != nil {
+			t.Error(err)
+		}
+
+		if res.StatusCode != http.StatusOK {
+			t.Fail()
+		}
+
+		// get the appointment back
+		updatedAppt, err := repo.FindByID(1, 5)
+
+		if err != nil {
+			t.Error(err)
+		}
+
+		// clear out the gorm fields on both so we know we're checking identically
+		appt.UpdatedAt = time.Now()
+		updatedAppt.UpdatedAt = appt.UpdatedAt
+
+		for i := range appt.Alarms {
+			alarmTime := time.Now()
+			appt.Alarms[i].UpdatedAt = alarmTime
+			updatedAppt.Alarms[i].UpdatedAt = alarmTime
+		}
+
+		if !reflect.DeepEqual(appt, updatedAppt) {
+			t.Fail()
+		}
+	})
+
+	t.Run("Invalid text value", func(t *testing.T) {
+		repo := repository.NewAppointmentRepository(db)
+		appt, err := repo.FindByID(1, 10)
+
+		if err != nil {
+			t.Error(err)
+		}
+
+		// make some modifications to appointment
+		appt.Text = "" // this should fail
+		appt.Todo = true
+		appt.Start = time.Now()
+
+		res, err := makeRequest("PUT", "/calendar/1/appointment/10", appt, nil, nil)
+
+		if err != nil {
+			t.Error(err)
+		}
+
+		if res.StatusCode != http.StatusBadRequest {
+			t.Fail()
+		}
+	})
+}
+
+
+func TestHandler_NotesHandler(t *testing.T) {
+	var notes []model.Note
+
+	res, err := makeRequest("GET", "/calendar/1/notes?start=2016-09-30&finish=2016-09-30", nil, &notes, nil)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if res.StatusCode != http.StatusOK {
+		t.Fail()
+	}
+
+	if len(notes) < 1 {
+		t.Fail()
+	}
 }

@@ -6,7 +6,7 @@ import (
 )
 
 type OptionsRepository interface {
-	FindByCalendarID(uid uint) (*model.CalendarOptions, error)
+	FindByCalendarID(uid uint, create bool) (*model.CalendarOptions, error)
 	Update(calID uint, new *model.CalendarOptions) error
 }
 
@@ -20,12 +20,12 @@ type dbOptionsRepository struct {
 	db *gorm.DB
 }
 
-func (r *dbOptionsRepository) FindByCalendarID(uid uint) (*model.CalendarOptions, error) {
+func (r *dbOptionsRepository) FindByCalendarID(uid uint, create bool) (*model.CalendarOptions, error) {
 	var opts model.CalendarOptions
 
 	err := r.db.Preload("DefaultAlarms").First(&opts, "calendar_id = ?", uid).Error
 
-	if err == gorm.ErrRecordNotFound {
+	if err == gorm.ErrRecordNotFound && create {
 		defaults := model.DefaultCalendarOptions()
 		defaults.CalendarID = uid
 
@@ -36,7 +36,7 @@ func (r *dbOptionsRepository) FindByCalendarID(uid uint) (*model.CalendarOptions
 }
 
 func (r *dbOptionsRepository) Update(calID uint, new *model.CalendarOptions) error {
-	opts, err := r.FindByCalendarID(calID)
+	opts, err := r.FindByCalendarID(calID, false)
 
 	if err != nil {
 		return err

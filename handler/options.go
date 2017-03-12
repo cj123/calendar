@@ -12,7 +12,7 @@ import (
 func (h *Handler) optionsGetHandler(w http.ResponseWriter, r *http.Request) {
 	calID := muxVarAsUint(r, "calID")
 
-	opts, err := h.optionsRepository.FindByCalendarID(calID)
+	opts, err := h.optionsRepository.FindByCalendarID(calID, true)
 
 	if err != nil {
 		http.Error(w, "internal server error", http.StatusInternalServerError)

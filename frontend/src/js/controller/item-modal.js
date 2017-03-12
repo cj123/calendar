@@ -2,6 +2,8 @@ angular.module("calendar").controller("ItemModal", [
     "$scope", "$rootScope", "$uibModalInstance", "$log", "item", "currentDate", "Item", "CalendarOptions", "moment",
     function($scope, $rootScope, $uibModalInstance, $log, item, currentDate, Item, UserOptions, moment) {
         $scope.item = item;
+        $scope.item.startTime = $scope.item.start.toDate();
+        $scope.item.finishTime = $scope.item.finish.toDate();
 
         var itemClone = JSON.parse(JSON.stringify(item));
         $scope.itemClone = itemClone;

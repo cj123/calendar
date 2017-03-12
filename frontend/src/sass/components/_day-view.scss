@@ -53,6 +53,7 @@ $time-cell-width: 50px;
         height: 24 * 60px;
 
         padding-left: ($time-cell-width);
+        padding-right: ($time-cell-width);
 
         a {
             cursor: pointer;
@@ -70,7 +71,7 @@ $time-cell-width: 50px;
             background: $blue;
             color: $white;
             //width: calc(100% - #{$time-cell-width});
-            width: 90%;
+            width: 100%;
             opacity: 0.9;
             resize: both;
 
@@ -153,5 +154,15 @@ $time-cell-width: 50px;
         bottom: 10px;
         right: 10px;
         z-index: 1000;
+    }
+
+    .timeline {
+        position: absolute;
+        color: $brand-primary;
+        width: 100%;
+        border: 1px dashed $brand-primary;
+        z-index: 1000;
+        margin-bottom: 0;
+        margin-top: 10px;
     }
 }

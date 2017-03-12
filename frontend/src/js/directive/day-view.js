@@ -7,9 +7,10 @@ angular.module("calendar").directive("dayView", [function() {
         },
         templateUrl: "calendar/view/directives/day-view.html",
         controller: [
-            "$scope", "$log", "$uibModal", "CalendarOptions", "Collisions",
-            function($scope, $log, $uibModal, CalendarOptions, Collisions) {
+            "$scope", "$log", "$interval", "$uibModal", "CalendarOptions", "Collisions",
+            function($scope, $log, $interval, $uibModal, CalendarOptions, Collisions) {
                 $scope.opts = {};
+                $scope.timelinePosition = null;
 
                 CalendarOptions.get().then(function(response) {
                     $scope.opts = response.data;
@@ -79,6 +80,17 @@ angular.module("calendar").directive("dayView", [function() {
                         }
                     });
                 };
+
+                $interval(function() {
+                    var d = moment();
+
+                    if (!d.isSame($scope.currentDate, "day")) {
+                        $scope.timelinePosition = null;
+                        return;
+                    }
+
+                    $scope.timelinePosition = d.minutes() + (d.hour() * 60);
+                }, 1000); // 1 minute
             }
         ]
     };

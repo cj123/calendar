@@ -49,15 +49,18 @@ angular.module("calendar").factory("Appointment", [ "$http", "moment", "API_BASE
         var hasUpdatedTime = false;
 
         if (!!a.startTime) {
-            console.log(a.startTime);
-            a.start.hours(a.startTime.getHours()).minutes(a.startTime.getMinutes()).seconds(0);
+            a.start = moment(a.startTime).local().utcOffset(0, true);
+            //a.start = a.start.clone().hours(a.startTime.getHours()).minutes(a.startTime.getMinutes()).seconds(0).utc();
 
             hasUpdatedTime = true;
         }
 
         if (!!a.finishTime) {
-            console.log(a.finishTime);
-            a.finish.hours(a.finishTime.getHours()).minutes(a.finishTime.getMinutes()).seconds(0);
+            console.log("finish", a.finishTime.getHours(), a.finishTime.getMinutes());
+
+            //a.finish = a.finish.clone().hours(a.finishTime.getHours()).minutes(a.finishTime.getMinutes()).seconds(0).utc();
+            a.finish = moment(a.finishTime).local().utcOffset(0, true);
+
 
             hasUpdatedTime = true;
         }
@@ -70,11 +73,14 @@ angular.module("calendar").factory("Appointment", [ "$http", "moment", "API_BASE
                 .hour(0)
                 .minute(0)
                 .second(0)
-                .add(a.offset, "minutes");
+                .add(a.offset, "minutes").utcOffset(0, true);
 
             // set the end as the start plus the length of appointment
             a.finish = a.start.clone().add(a.length, "minutes");
         }
+
+        console.log(a.start);
+        console.log(a.finish);
 
         // @TODO: all day appointment check here.
         if (a.finish.isBefore(a.start) || a.finish.hour() !== 0 && a.finish.minute() !== 0 && a.start.date() !== a.finish.date()) {

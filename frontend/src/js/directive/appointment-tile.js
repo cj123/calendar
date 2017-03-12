@@ -45,6 +45,11 @@ angular.module("calendar").directive("appointmentTile", [function() {
                         // change the appointment
                         $scope.info.length = length;
 
+                        $scope.info.start = $scope.info.start.hour(0).minute(0).second(0).add($scope.info.offset, 'minutes');
+                        $scope.info.finish = $scope.info.start.clone().add(length, 'minutes');
+
+                        console.log($scope.info);
+
                         $scope.submit(false);
                     }
                 });

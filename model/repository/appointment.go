@@ -89,7 +89,7 @@ func (r *AppointmentRepository) FindByID(calID, uid uint) (model.Appointment, er
 }
 
 func (r *AppointmentRepository) DeleteItem(calID, uid uint) error {
-	opts, err := r.opts.FindByCalendarID(calID)
+	opts, err := r.opts.FindByCalendarID(calID, true)
 
 	if err != nil {
 		return err
