@@ -30,7 +30,8 @@ var paths = {
                 "./node_modules/rrule/lib/rrule.js",
                 "./node_modules/ical.js/build/ical.js",
                 "./node_modules/angular-moment/angular-moment.min.js",
-                "./node_modules/ng-file-upload/dist/ng-file-upload-all.min.js"
+                "./node_modules/ng-file-upload/dist/ng-file-upload-all.min.js",
+                "./node_modules/ng-focus-if/focusIf.js"
             ]
         },
         fonts: "./node_modules/font-awesome/fonts/*",

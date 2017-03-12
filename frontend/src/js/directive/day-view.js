@@ -7,8 +7,8 @@ angular.module("calendar").directive("dayView", [function() {
         },
         templateUrl: "calendar/view/directives/day-view.html",
         controller: [
-            "$scope", "$log", "$interval", "$uibModal", "CalendarOptions", "Collisions",
-            function($scope, $log, $interval, $uibModal, CalendarOptions, Collisions) {
+            "$scope", "$log", "$interval", "$uibModal", "$stateParams", "CalendarOptions", "Collisions",
+            function($scope, $log, $interval, $uibModal, $stateParams, CalendarOptions, Collisions) {
                 $scope.opts = {};
                 $scope.timelinePosition = null;
 
@@ -53,7 +53,8 @@ angular.module("calendar").directive("dayView", [function() {
                         data_type: "appointment",
                         alarms: $scope.opts.DefaultAlarms,
                         hilite: 'always',
-                        recurrence_rule: ''
+                        recurrence_rule: '',
+                        calendar_id: parseInt($stateParams.calendarID)
                     });
                 };
 

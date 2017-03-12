@@ -43,6 +43,7 @@
     "moment": "^2.15.1",
     "moment-timezone": "^0.5.10",
     "ng-file-upload": "^12.2.13",
+    "ng-focus-if": "^1.0.7",
     "normalize-scss": "^5.0.3",
     "rrule": "https://github.com/cj123/rrule.git",
     "vinyl-buffer": "^1.0.0",

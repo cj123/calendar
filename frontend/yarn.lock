@@ -1759,6 +1759,10 @@ ng-file-upload@^12.2.13:
   version "12.2.13"
   resolved "https://registry.yarnpkg.com/ng-file-upload/-/ng-file-upload-12.2.13.tgz#01800f3872e526f95310f8477e99e4f12d0d8d14"
 
+ng-focus-if:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/ng-focus-if/-/ng-focus-if-1.0.7.tgz#79945fd4b6c97f329aec8fa7ca43ffa456e49bc7"
+
 node-gyp@^3.3.1:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/node-gyp/-/node-gyp-3.4.0.tgz#dda558393b3ecbbe24c9e6b8703c71194c63fa36"

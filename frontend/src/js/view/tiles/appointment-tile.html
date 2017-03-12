@@ -14,7 +14,7 @@
     r-centered-y="true"
     resizable
 >
-    <textarea ng-change="submit(false)" ng-model="info.text" ng-model-options='{ debounce: 1000 }' autofocus></textarea>
+    <textarea ng-change="submit(false)" ng-model="info.text" ng-model-options='{ debounce: 1000 }' ng-focus-if="info.text == ''"></textarea>
     <time>{{ info.start.format("HH:mm") }} - {{ info.finish.format("HH:mm") }}</time>
     <a class="view-detail" ng-click="viewDetail();"><i class="fa fa-fw fa-info-circle"></i></a>
 </div>
