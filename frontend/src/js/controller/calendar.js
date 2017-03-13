@@ -77,7 +77,7 @@ angular.module("calendar").controller("CalendarController", [
                                 for (var deletedIndex = 0; deletedIndex < appt.deleted.length; deletedIndex++) {
                                     var deletedDate = moment(appt.deleted[deletedIndex].date, "YYYY-MM-DDTHH:mm:ss");
 
-                                    if (deletedDate.diff(recurrenceDate) === 0) {
+                                    if (deletedDate.isSame(recurrenceDate, 'day')) {
                                         isDeleted = true;
                                     }
                                 }
