@@ -12,11 +12,7 @@ A modern calendar application in the style of [ical-tcl](https://launchpad.net/i
 
 ## Building (Development)
 
-Frontend:
-
-Install
-
-```
+```sh
 # install yarn for package management
 $ npm install -g yarnpkg
 $ cd frontend/
@@ -26,9 +22,7 @@ $ yarn install
 
 # run the gulp build task. "build" can be replaced with "watch" to watch & recompile files as they change
 $ node_modules/.bin/gulp build
-```
 
-```sh
 $ go generate
 $ go build .
 $ ./calendar
@@ -38,13 +32,13 @@ Also, see `config.yml` for configuration
 
 ## Building (Deployment)
 
-```
+```sh
 $ make clean
 $ make
 ```
 
 ## Testing
-```
+```sh
 $ make test
 ```
 
