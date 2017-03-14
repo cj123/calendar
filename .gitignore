@@ -34,3 +34,6 @@ _testmain.go
 vendor/
 cmd/web/web
 cmd/import/import
+calendar
+static.go
+*.db

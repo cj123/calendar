@@ -6,26 +6,49 @@ A modern calendar application in the style of [ical-tcl](https://launchpad.net/i
 ## Requirements
 
 * Go 1.7+
-* NodeJS 4.x and yarnpkg
+* NodeJS 4.x (stable) (recommended install via [nvm (node version manager)](https://github.com/creationix/nvm))
+* Make
 * A browser :P
 
-## Installation
+## Building (Development)
 
 Frontend:
 
+Install
+
 ```
-$ nvm use 4
+# install yarn for package management
 $ npm install -g yarnpkg
 $ cd frontend/
+
+# install node dependencies
 $ yarn install
+
+# run the gulp build task. "build" can be replaced with "watch" to watch & recompile files as they change
 $ node_modules/.bin/gulp build
 ```
 
 ```sh
-$ cd cmd/web
+$ go generate
 $ go build .
-$ ./web
+$ ./calendar
 ```
+
+Also, see `config.yml` for configuration
+
+## Building (Deployment)
+
+```
+$ make clean
+$ make
+```
+
+## Testing
+```
+$ make test
+```
+
+This will compile a single binary output at `./calendar` which includes all frontend assets in `frontend/` (with some sensible exclusions)
 
 ## Example data files
 

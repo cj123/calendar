@@ -1,5 +1,8 @@
 package main
 
+// build files in frontend/ (excluding non-compiled dependencies) into static.go
+//go:generate esc -o static.go -ignore=".npm|node_modules" -prefix="frontend" frontend
+
 import (
 	"flag"
 	"fmt"
@@ -45,12 +48,23 @@ func main() {
 		log.Fatalf("Could not migrate entities: %s\n", err.Error())
 	}
 
-	log.Printf("Successfully connected to database and ran migrations\n")
+	log.Println("Successfully connected to database and ran migrations")
 
 	router := handler.NewHandler(db).Router()
 
 	// create a file server for the static files on the frontend
-	fs := http.FileServer(http.Dir(filepath.Join(filepath.Dir(configLocation), c.Web.StaticFiles)))
+	var dir http.FileSystem
+
+	if c.Web.StaticFiles == "" {
+		// use inbuilt files (esc)
+		dir = FS(false)
+	} else {
+		// dev mode?
+		dir = http.Dir(filepath.Join(filepath.Dir(configLocation), c.Web.StaticFiles))
+	}
+
+
+	fs := http.FileServer(dir)
 
 	router.PathPrefix("/").Handler(fs)
 

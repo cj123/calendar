@@ -7,47 +7,15 @@ addons:
   ssh_known_hosts: $DEPLOY_SERVER
 
 before_install:
+  - make clean
   - nvm install 4
   - nvm use 4
-  - npm install -g yarn
-
-  - go get -u github.com/Masterminds/glide
-  - glide install
 
 install:
   - git --version
   - go version
   - node -v
 
-  - pushd frontend
-  - yarn install
-  - popd
 
 script:
-  - pushd frontend
-  - ./node_modules/.bin/gulp build
-  - popd
-
-  - go vet $(glide novendor)
-  - go test -cover $(glide novendor)
-
-  - pushd cmd/import
-  - go build
-  - popd
-
-  - pushd cmd/web
-  - go build
-  - popd
-#
-# before_deploy:
-#  - tar czf ./calendar-$TRAVIS_BUILD_NUMBER.tar.gz -C ./ ./api/app ./api/bin ./api/src ./api/vendor ./api/web ./api/var ./frontend/index.html ./frontend/assets
-#  - ssh-keyscan $DEPLOY_SERVER >> ~/.ssh/known_hosts
-#
-#deploy:
-#  provider: script
-#  skip_cleanup: true
-#  script: scripts/deploy ./calendar-$TRAVIS_BUILD_NUMBER.tar.gz $DEPLOY_USER $DEPLOY_SERVER $DEPLOY_PATH $TRAVIS_BUILD_NUMBER
-#  on:
-#    branch: development
-
-
+  - make all
