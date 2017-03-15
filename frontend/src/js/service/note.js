@@ -27,6 +27,7 @@ angular.module("calendar").factory("Note", [ "$http", "API_BASE", function($http
      */
     noteFactory.create = function(calID, note) {
         note.id = 0; // in the case we're duplicating notes, don't pre-set the ID.
+        note.uid = "";
         return $http.post(API_BASE + "calendar/" + calID + "/notes", note);
     };
 

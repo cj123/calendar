@@ -63,7 +63,6 @@ func main() {
 		dir = http.Dir(filepath.Join(filepath.Dir(configLocation), c.Web.StaticFiles))
 	}
 
-
 	fs := http.FileServer(dir)
 
 	router.PathPrefix("/").Handler(fs)

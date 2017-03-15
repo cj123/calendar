@@ -6,7 +6,8 @@ var calendar = angular.module("calendar", [
     "duScroll",
     "ngFileUpload",
     "angularResizable",
-    "focus-if"
+    "focus-if",
+    "cfp.hotkeys"
 ]);
 
 // routing

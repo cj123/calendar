@@ -8,8 +8,8 @@ angular.module("calendar").directive("monthView", [function() {
         },
         templateUrl: "calendar/view/directives/month-view.html",
         controller: [
-            "$scope", "moment", "CalendarOptions",
-            function ($scope, moment, CalendarOptions) {
+            "$scope", "moment", "CalendarOptions", "hotkeys",
+            function ($scope, moment, CalendarOptions, hotkeys) {
                 $scope.dayIndex = 0;
                 $scope.today = moment();
                 $scope.opts = [];
@@ -54,6 +54,45 @@ angular.module("calendar").directive("monthView", [function() {
 
                     $scope.weeks = dayGrid;
                 }
+
+                // hotkeys
+                hotkeys.bindTo($scope)
+                    .add({
+                        combo: 'up',
+                        description: 'previous week',
+                        callback: function() {
+                            $scope.currentDate.subtract(1, 'week');
+                        }
+                    })
+                    .add({
+                        combo: 'down',
+                        description: 'next week',
+                        callback: function() {
+                            $scope.currentDate.add(1, 'week');
+                        }
+                    })
+                    .add({
+                        combo: 'right',
+                        description: 'next day',
+                        callback: function() {
+                            $scope.currentDate.add(1, 'day');
+                        }
+                    })
+                    .add({
+                        combo: 'left',
+                        description: 'previous day',
+                        callback: function() {
+                            $scope.currentDate.subtract(1, 'day');
+                        }
+                    })
+                    .add({
+                        combo: 't',
+                        description: 'jump to today',
+                        callback: function() {
+                            $scope.currentDate = moment();
+                        }
+                    })
+                ;
             }
         ]
     };

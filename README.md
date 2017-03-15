@@ -37,12 +37,12 @@ $ make clean
 $ make
 ```
 
+This will compile a single binary output at `./calendar` which includes all frontend assets in `frontend/` (with some sensible exclusions)
+
 ## Testing
 ```sh
 $ make test
 ```
-
-This will compile a single binary output at `./calendar` which includes all frontend assets in `frontend/` (with some sensible exclusions)
 
 ## Example data files
 

@@ -30,6 +30,7 @@ angular.module("calendar").factory("Appointment", [ "$http", "moment", "API_BASE
      */
     appointmentFactory.create = function(calID, appointment) {
         appointment.id = 0; // in the case we're duplicating appointments, don't pre-set the ID.
+        appointment.uid = "";
         return $http.post(API_BASE + "calendar/" + calID + "/appointments", prepareAppointment(appointment));
     };
 

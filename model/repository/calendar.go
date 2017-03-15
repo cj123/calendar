@@ -37,9 +37,9 @@ func (r *dbCalendarRepository) FindOrCreateForDeletedID(uid uint) (*model.Calend
 	if err == gorm.ErrRecordNotFound {
 		deletedCal := model.Calendar{
 			DeletedFor: uid,
-			Options: model.DefaultCalendarOptions(),
-			Version: 2.0,
-			Name: "Deleted Appointments",
+			Options:    model.DefaultCalendarOptions(),
+			Version:    2.0,
+			Name:       "Deleted Appointments",
 		}
 
 		err = r.db.Create(&deletedCal).Error

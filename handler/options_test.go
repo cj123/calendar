@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"testing"
-	"net/http"
 	"github.com/cj123/calendar/model/repository"
+	"net/http"
+	"testing"
 	//"github.com/cj123/calendar/model"
 	"reflect"
 

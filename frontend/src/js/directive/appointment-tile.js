@@ -8,9 +8,9 @@ angular.module("calendar").directive("appointmentTile", [function() {
         },
         templateUrl: "calendar/view/tiles/appointment-tile.html",
         controller: [
-            "$scope", "$document", "$uibModal", "$log", "Item",
-            function($scope, $document, $uibModal, $log, Item) {
-                $scope.active = false;
+            "$scope", "$rootScope", "$document", "$uibModal", "$log", "Item", "Clipboard", "hotkeys",
+            function($scope, $rootScope, $document, $uibModal, $log, Item, Clipboard, hotkeys) {
+                $scope.info.active = false;
                 $scope.calendarID = $scope.$parent.calendarID;
 
                 $scope.viewDetail = function() {
@@ -84,6 +84,68 @@ angular.module("calendar").directive("appointmentTile", [function() {
                         });
                     }
                 };
+
+                // hotkeys
+                hotkeys.bindTo($scope)
+                    .add({
+                        combo: 'ctrl+x',
+                        description: 'delete item',
+                        allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                        callback: function(event, hotkey) {
+                            if (!$scope.info.active) {
+                                return;
+                            }
+
+                            event.preventDefault();
+
+                            Clipboard.put($scope.info);
+
+                            var dateToDelete = null;
+
+                            if ($scope.info.recurrences && $scope.info.recurrences.length > 0) {
+                                dateToDelete = $scope.currentDate
+                                    .clone()
+                                    .hour($scope.info.start.hour())
+                                    .minute($scope.info.start.minute())
+                                    .second($scope.info.start.second())
+                                    .millisecond(0)
+                                ;
+                            }
+
+                            Item.delete($scope.info, dateToDelete).then(function() {
+                                $rootScope.$broadcast("refresh", true);
+                            });
+                        }
+                    })
+                    .add({
+                        combo: 'ctrl+c',
+                        description: 'copy selected item',
+                        allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                        callback: function(event, hotkey) {
+                            if (!$scope.info.active) {
+                                return;
+                            }
+
+                            event.preventDefault();
+
+                            Clipboard.put($scope.info);
+                        }
+                    })
+                    .add({
+                        combo: 'esc',
+                        description: 'de-select item',
+                        allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                        callback: function(event, hotkey) {
+                            if (!$scope.info.active) {
+                                return;
+                            }
+
+                            event.preventDefault();
+
+                            $scope.info.active = false;
+                        }
+                    })
+                ;
             }
         ]
     };

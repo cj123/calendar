@@ -32,6 +32,7 @@ angular.module("calendar").controller("ItemModal", [
 
             if (!deleteRecurrences) {
                 dateToDelete = currentDate
+                    .clone()
                     .hour(item.start.hour())
                     .minute(item.start.minute())
                     .second(item.start.second())

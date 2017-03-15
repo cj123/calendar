@@ -31,7 +31,8 @@ var paths = {
                 "./node_modules/ical.js/build/ical.js",
                 "./node_modules/angular-moment/angular-moment.min.js",
                 "./node_modules/ng-file-upload/dist/ng-file-upload-all.min.js",
-                "./node_modules/ng-focus-if/focusIf.js"
+                "./node_modules/ng-focus-if/focusIf.js",
+                "./node_modules/angular-hotkeys/build/hotkeys.js"
             ]
         },
         fonts: "./node_modules/font-awesome/fonts/*",
@@ -67,6 +68,7 @@ gulp.task("compile-sass", function() {
                 "./node_modules/normalize-scss/sass",
                 "./node_modules/font-awesome/scss",
                 "./node_modules/angular-resizable/",
+                "./node_modules/angular-hotkeys/build"
             ]
         }))
         .pipe(sourcemaps.write())

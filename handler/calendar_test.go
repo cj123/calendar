@@ -32,7 +32,6 @@ func TestHandler_ImportHandler(t *testing.T) {
 	})
 }
 
-
 func TestHandler_calendarGetHandler(t *testing.T) {
 	var calendars []model.Calendar
 

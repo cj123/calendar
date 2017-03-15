@@ -7,8 +7,8 @@ angular.module("calendar").directive("dayView", [function() {
         },
         templateUrl: "calendar/view/directives/day-view.html",
         controller: [
-            "$scope", "$log", "$interval", "$uibModal", "$stateParams", "CalendarOptions", "Collisions",
-            function($scope, $log, $interval, $uibModal, $stateParams, CalendarOptions, Collisions) {
+            "$scope", "$log", "$interval", "$uibModal", "$stateParams", "Item", "CalendarOptions", "Collisions", "Clipboard", "hotkeys",
+            function($scope, $log, $interval, $uibModal, $stateParams, Item, CalendarOptions, Collisions, Clipboard, hotkeys) {
                 $scope.opts = {};
                 $scope.timelinePosition = null;
 
@@ -20,6 +20,7 @@ angular.module("calendar").directive("dayView", [function() {
                     if ($scope.days.length === 0) {
                         return;
                     }
+                    lastIndex = null;
 
                     var events = $scope.days[$scope.currentDate.date() - 1].events;
                     $scope.appointments = Collisions.calculateCollisions(events);
@@ -92,6 +93,48 @@ angular.module("calendar").directive("dayView", [function() {
 
                     $scope.timelinePosition = d.minutes() + (d.hour() * 60);
                 }, 1000); // 1 minute
+
+                var lastIndex = null;
+
+                // hotkeys
+                hotkeys.bindTo($scope)
+                    .add({
+                        combo: 'ctrl+v',
+                        description: 'paste item',
+                        callback: function() {
+                            var item = Clipboard.get();
+
+                            if (item.data_type != "appointment") {
+                                return;
+                            }
+
+                            item.id = 0;
+                            item.uid = "";
+                            item.start.year($scope.currentDate.year()).month($scope.currentDate.month()).date($scope.currentDate.date());
+                            item.finish.year($scope.currentDate.year()).month($scope.currentDate.month()).date($scope.currentDate.date());
+
+                            Item.create(item.data_type, item).then(function(data) {
+                                $scope.appointments.push(data);
+                            });
+                        }
+                    })
+                    .add({
+                        combo: 'n',
+                        description: 'cycle through items',
+                        callback: function(event, a) {
+                            event.preventDefault();
+
+                            if (lastIndex === null) {
+                                lastIndex = 0;
+                            } else {
+                                $scope.appointments[lastIndex].active = false;
+                                lastIndex = (lastIndex + 1) % $scope.appointments.length;
+                            }
+
+                            $scope.appointments[lastIndex].active = true;
+                        }
+                    })
+                ;
             }
         ]
     };

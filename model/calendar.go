@@ -44,7 +44,7 @@ type Item struct {
 	Model
 	Text           string    `json:"text" validate:"required" gorm:"type:text"`
 	Owner          string    `json:"owner"`
-	UID            string    `json:"uid" gorm:"unique_index:idx_calid_uid"`
+	UID            string    `json:"uid"`
 	UIDPersistent  bool      `json:"uid_persistent" gorm:"column:uid_persistent"`
 	RemindStart    int64     `json:"remind_start"`
 	Hilite         string    `json:"hilite"`
@@ -53,7 +53,7 @@ type Item struct {
 	Start          time.Time `json:"start"`
 	Finish         time.Time `json:"finish"`
 	RecurrenceRule string    `json:"recurrence_rule"`
-	CalendarID     uint      `json:"calendar_id" gorm:"unique_index:idx_calid_uid"`
+	CalendarID     uint      `json:"calendar_id"`
 	DataType       string    `json:"data_type"`
 }
 
@@ -135,7 +135,7 @@ type NoteDeletedDate struct {
 type Calendar struct {
 	Model
 	Name         string
-	DeletedFor   uint      // which calendar is this the deleted calendar for?
+	DeletedFor   uint // which calendar is this the deleted calendar for?
 	Version      float64
 	Appointments []Appointment
 	Notes        []Note

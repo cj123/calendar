@@ -1,6 +1,6 @@
 <div
     class="appointment"
-    ng-class="{ 'appointment--selected': active }"
+    ng-class="{ 'appointment--selected': info.active }"
     ng-style="{
         'top': info.offset + 'px',
         'height': info.length + 'px',
@@ -9,8 +9,8 @@
     }"
     ng-dblclick="viewDetail(); $event.stopPropagation();"
     r-directions="['bottom', 'top']"
-    ng-click="active = true"
-    ng-blur="active = false"
+    ng-click="info.active = true"
+    ng-blur="info.active = false"
     r-centered-y="true"
     resizable
 >

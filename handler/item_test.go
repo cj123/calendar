@@ -2,13 +2,13 @@ package handler
 
 import (
 	"net/http"
+	"reflect"
 	"testing"
 	"time"
-	"reflect"
 
 	"github.com/cj123/calendar/model"
-	"github.com/jinzhu/gorm"
 	"github.com/cj123/calendar/model/repository"
+	"github.com/jinzhu/gorm"
 )
 
 func TestHandler_GetAppointmentsHandler(t *testing.T) {
@@ -246,7 +246,6 @@ func TestHandler_AppointmentUpdateHandler(t *testing.T) {
 		}
 	})
 }
-
 
 func TestHandler_NotesHandler(t *testing.T) {
 	var notes []model.Note
