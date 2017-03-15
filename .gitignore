@@ -37,3 +37,4 @@ cmd/import/import
 calendar
 static.go
 *.db
+coverage.html
