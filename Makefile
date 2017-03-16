@@ -20,4 +20,7 @@ test: .deps
 	go test -cover $$(glide novendor)
 
 cross: all
+	docker pull karalabe/xgo-latest
+	go get github.com/karalabe/xgo
 	xgo --targets=windows/amd64,windows/386,linux/386,linux/amd64,darwin/386,darwin/amd64 .
+
