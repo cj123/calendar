@@ -183,7 +183,8 @@ angular.module("calendar").factory("Item", [
         if (rule.indexOf(";EXDATE") !== -1) {
             rule = rule.substring(0, rule.indexOf(';EXDATE'));
         }
-        return "RRULE:" + rule;
+
+        return "RRULE:" + rule.replace("UNTIL:", "UNTIL=");
     };
 
     /**

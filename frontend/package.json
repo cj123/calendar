@@ -39,7 +39,7 @@
     "gulp-sass": "^2.3.2",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^2.0.0",
-    "ical.js": "^1.2.2",
+    "ical.js": "https://github.com/mozilla-comm/ical.js.git#984a590",
     "jshint": "^2.9.3",
     "moment": "^2.15.1",
     "moment-timezone": "^0.5.10",

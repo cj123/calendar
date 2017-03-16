@@ -21,6 +21,12 @@ angular.module("calendar").directive("repeats", [function() {
                 $scope.byDay = $scope.recurRule.parts.BYDAY || [];
                 $scope.byMonth = $scope.recurRule.parts.BYMONTH || [];
 
+                $scope.untilDate = null;
+
+                if ($scope.recurRule.until) {
+                    $scope.untilDate = moment($scope.recurRule.until.toJSDate()).toDate();
+                }
+
                 /**
                  * Add value to array if it doesn't exist, remove it if it does.
                  * @param arr
@@ -75,7 +81,6 @@ angular.module("calendar").directive("repeats", [function() {
                  *
                  **********************************************************************/
                 $scope.$watch("byDay", function() {
-                    console.log('da');
                     if ($scope.byDay.length < 1) {
                         delete $scope.recurRule.parts.BYDAY;
                     } else {
@@ -86,9 +91,8 @@ angular.module("calendar").directive("repeats", [function() {
                 }, true);
 
                 $scope.$watch("byMonth", function() {
-                    console.log('mo');
                     if ($scope.byMonth.length < 1) {
-
+                        delete $scope.recurRule.parts.BYMONTH;
                     } else {
                         $scope.recurRule.parts.BYMONTH = $scope.byMonth;
                     }
@@ -115,6 +119,17 @@ angular.module("calendar").directive("repeats", [function() {
                     } else {
                         $scope.item.recurrence_rule = "";
                     }
+                });
+
+                $scope.$watch("untilDate", function() {
+                    if ($scope.untilDate === null) {
+                        return;
+                    }
+
+                    var d = moment($scope.untilDate);
+                    d.hours($scope.item.start.hour()).minute($scope.item.start.minute()).second($scope.item.start.second());
+
+                    $scope.recurRule.until = ICAL.Time.fromJSDate(d.toDate());
                 });
             }
         ]

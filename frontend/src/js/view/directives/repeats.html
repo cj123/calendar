@@ -40,6 +40,14 @@
     </div>-->
 </div>
 
+<div ng-show="recurRule.freq != '' && item.recurrence_rule != 'FREQ=null'">
+    <br><br>
+    <label>Repeat until: <input type="date" ng-model="untilDate" name="until-date"></label>
+
+    <br><br>
+    <label>Repeat <input type="number" ng-model="recurRule.count" name="until-count" style="width: 40px;"> times</label>
+</div>
+
 <div class="clearfix"></div>
 <br><br>
 <div ng-show="!!recurRule">
