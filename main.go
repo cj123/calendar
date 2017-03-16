@@ -1,8 +1,5 @@
 package main
 
-// build files in frontend/ (excluding non-compiled dependencies) into static.go
-//go:generate esc -o static.go -ignore=".npm|node_modules" -prefix="frontend" frontend
-
 import (
 	"flag"
 	"fmt"
@@ -12,6 +9,7 @@ import (
 	"time"
 
 	"github.com/cj123/calendar/config"
+	"github.com/cj123/calendar/frontend"
 	"github.com/cj123/calendar/handler"
 	"github.com/cj123/calendar/model"
 )
@@ -57,7 +55,7 @@ func main() {
 
 	if c.Web.StaticFiles == "" {
 		// use inbuilt files (esc)
-		dir = FS(false)
+		dir = frontend.FS(false)
 	} else {
 		// dev mode?
 		dir = http.Dir(filepath.Join(filepath.Dir(configLocation), c.Web.StaticFiles))
