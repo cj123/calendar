@@ -36,6 +36,6 @@ deploy:
   - calendar-linux-amd64
   - calendar-windows-4.0-386.exe
   - calendar-windows-4.0-amd64.exe
+  skip_cleanup: true
   on:
-    repo: cj123/calendar
-    branch: development
+    tags: true
