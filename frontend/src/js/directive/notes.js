@@ -6,8 +6,8 @@ angular.module("calendar").directive("notes", [function() {
         },
         templateUrl: "calendar/view/directives/notes.html",
         controller: [
-            "$scope", "$uibModal", "Item",
-            function($scope, $uibModal, Item) {
+            "$scope", "$uibModal", "Item", "hotkeys",
+            function($scope, $uibModal, Item, hotkeys) {
                 $scope.notes = [];
 
                 // watch the current date of the view for changes.
@@ -29,7 +29,7 @@ angular.module("calendar").directive("notes", [function() {
                     }
 
                     Item.get("note", date.clone(), date.clone()).then(function(notes) {
-                        $scope.notes = notes;
+                        $scope.notes = Item.removeDeletedDates(notes);
                     });
                 }
 

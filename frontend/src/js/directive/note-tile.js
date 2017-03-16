@@ -8,8 +8,8 @@ angular.module("calendar").directive("noteTile", [function() {
         },
         templateUrl: "calendar/view/tiles/note-tile.html",
         controller: [
-            "$scope", "$document", "$uibModal", "Item",
-            function($scope, $document, $uibModal, Item) {
+            "$scope", "$rootScope", "$document", "$uibModal", "Item", "Clipboard", "hotkeys",
+            function($scope, $rootScope, $document, $uibModal, Item, Clipboard, hotkeys) {
                 $scope.viewDetail = function() {
                     $uibModal.open({
                         animation: true,
@@ -54,6 +54,55 @@ angular.module("calendar").directive("noteTile", [function() {
                         $scope.$emit("refresh", true);
                     });
                 };
+
+
+                // hotkeys
+                hotkeys.bindTo($scope)
+                    .add({
+                        combo: 'ctrl+x',
+                        description: 'delete item',
+                        allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                        callback: function(event, hotkey) {
+                            if (!$scope.info.active) {
+                                return;
+                            }
+
+                            event.preventDefault();
+
+                            Clipboard.put($scope.info);
+
+                            var dateToDelete = null;
+
+                            if ($scope.info.recurrences && $scope.info.recurrences.length > 0) {
+                                dateToDelete = $scope.currentDate
+                                    .clone()
+                                    .hour($scope.info.start.hour())
+                                    .minute($scope.info.start.minute())
+                                    .second($scope.info.start.second())
+                                    .millisecond(0)
+                                ;
+                            }
+
+                            Item.delete($scope.info, dateToDelete).then(function() {
+                                $rootScope.$broadcast("refresh", true);
+                            });
+
+                        }
+                    })
+                    .add({
+                        combo: 'ctrl+c',
+                        description: 'copy selected item',
+                        allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                        callback: function(event, hotkey) {
+                            if (!$scope.info.active) {
+                                return;
+                            }
+                            event.preventDefault();
+
+                            Clipboard.put($scope.info);
+                        }
+                    })
+                ;
             }
         ]
     };

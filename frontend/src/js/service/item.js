@@ -171,6 +171,42 @@ angular.module("calendar").factory("Item", [
         return recurrences;
     }
 
+    itemFactory.removeDeletedDates = function(items) {
+        var filtered = [];
+
+        for (var index = 0; index < items.length; index++) {
+            var item = items[index];
+
+            if (item.recurrences.length > 0) {
+                for (var recurrIndex = 0; recurrIndex < item.recurrences.length; recurrIndex++) {
+                    var recurrence = item.recurrences[recurrIndex];
+                    var recurrenceDate = moment(recurrence);
+                    var isDeleted = false;
+
+                    if (item.deleted && item.deleted.length) {
+                        for (var deletedIndex = 0; deletedIndex < item.deleted.length; deletedIndex++) {
+                            var deletedDate = moment(item.deleted[deletedIndex].date, "YYYY-MM-DDTHH:mm:ss");
+
+                            if (deletedDate.isSame(recurrenceDate, 'day')) {
+                                isDeleted = true;
+                            }
+                        }
+
+                        if (isDeleted) {
+                            continue;
+                        }
+                    }
+
+                    filtered.push(item);
+                }
+            } else {
+                filtered.push(item);
+            }
+        }
+
+        return filtered;
+    };
+
     /**
      * Remove exdate from recurrence rule.
      *
@@ -197,8 +233,8 @@ angular.module("calendar").factory("Item", [
             item.timezone = moment.tz.guess();
         }
 
-        item.start = moment.tz(item.start, "YYYY-MM-DDTHH:mm:ss", item.timezone);
-        item.finish = moment.tz(item.finish, "YYYY-MM-DDTHH:mm:ss", item.timezone);
+        item.start = moment.tz(item.start, "YYYY-MM-DDTHH:mm:ss", item.timezone).seconds(0);
+        item.finish = moment.tz(item.finish, "YYYY-MM-DDTHH:mm:ss", item.timezone).seconds(0);
         item.length = Math.abs(moment.duration(item.finish.diff(item.start)).asMinutes());
         item.offset = Math.abs((item.start.hour() * 60) + item.start.minute());
 

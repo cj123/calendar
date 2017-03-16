@@ -1,13 +1,9 @@
 package model
 
 import (
-	"errors"
 	"math/rand"
 	"strings"
 	"time"
-
-	"github.com/heindl/caldav-go/icalendar"
-	"github.com/heindl/caldav-go/icalendar/values"
 )
 
 const (
@@ -21,8 +17,6 @@ func init() {
 
 var (
 	letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890")
-
-	invalidRecurrenceRuleError = errors.New("invalid recurrence rule")
 )
 
 type Model struct {
@@ -73,14 +67,6 @@ func (i *Item) BeforeCreate() error {
 	// validate recurrence rule
 	if i.RecurrenceRule != "" {
 		i.RecurrenceRule = strings.TrimSpace(strings.Replace(i.RecurrenceRule, "RRULE:", "", -1))
-
-		var rrule values.RecurrenceRule
-
-		err := icalendar.Unmarshal("RRULE:"+i.RecurrenceRule, &rrule)
-
-		if err != nil {
-			return invalidRecurrenceRuleError
-		}
 	}
 
 	return nil

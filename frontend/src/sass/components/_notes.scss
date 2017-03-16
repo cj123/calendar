@@ -59,6 +59,10 @@
                 position: relative;
             }
         }
+
+        &--selected {
+            border: 1px solid $black;
+        }
     }
 
     .add-note {

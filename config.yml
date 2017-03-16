@@ -1,7 +1,12 @@
 database:
   # dialect can either be "sqlite3" or "mysql"
   # mysql has more parameters, see config/parse.go for details.
-  dialect: sqlite3
+  dialect: mysql
+  hostname: localhost
+  port: 3306
+  username: root
+  password: abcd1234
+  database: calendar
 
   # where to store the calendar database.
   location: ./cal-db.db

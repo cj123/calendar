@@ -1,4 +1,10 @@
-<div class="note" ng-dblclick="viewDetail()">
+<div
+    class="note"
+    ng-dblclick="viewDetail()"
+    ng-click="info.active = true"
+    ng-blur="info.active = false"
+    ng-class="{ 'note--selected': info.active }"
+>
     <div class="note__body">
         <textarea ng-model="info.text" ng-change="update(false)" ng-model-options='{ debounce: 1000 }'></textarea>
     </div>

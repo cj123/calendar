@@ -17,8 +17,6 @@ angular.module("calendar").factory("Appointment", [ "$http", "moment", "API_BASE
                 finish: endDate.format("YYYY-MM-DD")
             }
         });
-
-        // @TODO here: mark conflicting appointments?
     };
     
     /**
@@ -79,9 +77,6 @@ angular.module("calendar").factory("Appointment", [ "$http", "moment", "API_BASE
             // set the end as the start plus the length of appointment
             a.finish = a.start.clone().add(a.length, "minutes");
         }
-
-        console.log(a.start);
-        console.log(a.finish);
 
         // @TODO: all day appointment check here.
         if (a.finish.isBefore(a.start) || a.finish.hour() !== 0 && a.finish.minute() !== 0 && a.start.date() !== a.finish.date()) {

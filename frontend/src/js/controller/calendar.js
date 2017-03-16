@@ -1,6 +1,6 @@
 angular.module("calendar").controller("CalendarController", [
-    "$scope", "$log", "$interval", "$uibModal", "$document", "$stateParams", "moment", "Item", "CalendarOptions",
-    function($scope, $log, $interval, $uibModal, $document, $stateParams, moment, Item, CalendarOptions) {
+    "$scope", "$log", "$interval", "$uibModal", "$document", "$stateParams", "moment", "Item", "CalendarOptions", "Clipboard", "hotkeys",
+    function($scope, $log, $interval, $uibModal, $document, $stateParams, moment, Item, CalendarOptions, Clipboard, hotkeys) {
         $scope.currentDate = moment.tz(moment.tz.guess());
         $scope.monthStart = null;
         $scope.days = [];
@@ -164,5 +164,30 @@ angular.module("calendar").controller("CalendarController", [
                 }
             });
         }
+
+
+        // hotkeys
+        hotkeys.bindTo($scope)
+            .add({
+                combo: 'ctrl+v',
+                description: 'paste item',
+                callback: function() {
+                    var item = Clipboard.get();
+
+                    if (!item) {
+                        return;
+                    }
+
+                    item.id = 0;
+                    item.uid = "";
+                    item.start.year($scope.currentDate.year()).month($scope.currentDate.month()).date($scope.currentDate.date());
+                    item.finish.year($scope.currentDate.year()).month($scope.currentDate.month()).date($scope.currentDate.date());
+
+                    Item.create(item.data_type, item).then(function(data) {
+                        $scope.$broadcast("refresh", true);
+                    });
+                }
+            })
+        ;
     }
 ]);

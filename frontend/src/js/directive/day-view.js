@@ -99,26 +99,6 @@ angular.module("calendar").directive("dayView", [function() {
                 // hotkeys
                 hotkeys.bindTo($scope)
                     .add({
-                        combo: 'ctrl+v',
-                        description: 'paste item',
-                        callback: function() {
-                            var item = Clipboard.get();
-
-                            if (item.data_type != "appointment") {
-                                return;
-                            }
-
-                            item.id = 0;
-                            item.uid = "";
-                            item.start.year($scope.currentDate.year()).month($scope.currentDate.month()).date($scope.currentDate.date());
-                            item.finish.year($scope.currentDate.year()).month($scope.currentDate.month()).date($scope.currentDate.date());
-
-                            Item.create(item.data_type, item).then(function(data) {
-                                $scope.appointments.push(data);
-                            });
-                        }
-                    })
-                    .add({
                         combo: 'n',
                         description: 'cycle through items',
                         callback: function(event, a) {
