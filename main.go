@@ -12,6 +12,8 @@ import (
 	"github.com/cj123/calendar/frontend"
 	"github.com/cj123/calendar/handler"
 	"github.com/cj123/calendar/model"
+	"io/ioutil"
+	"os"
 )
 
 var (
@@ -19,7 +21,7 @@ var (
 )
 
 func init() {
-	flag.StringVar(&configLocation, "c", "./config.yml", "the configuration file location")
+	flag.StringVar(&configLocation, "c", "~/.calendar.yml", "the configuration file location")
 	flag.Parse()
 }
 
@@ -28,6 +30,24 @@ func main() {
 
 	if err != nil {
 		log.Fatalf("Could not read config, %s\n", err.Error())
+	}
+
+	if c.LogOutput == "stdout" {
+		log.SetOutput(os.Stdout)
+	} else if c.LogOutput != "" {
+		// log to file
+		file, err := os.OpenFile(c.LogOutput, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
+
+		if err != nil {
+			log.Fatalf("Could not open log output at %s, error: %s\n", c.LogOutput, err.Error())
+		}
+
+		defer file.Close()
+
+		log.SetOutput(file)
+	} else {
+		// log to /dev/null
+		log.SetOutput(ioutil.Discard)
 	}
 
 	log.Printf("Read configuration file at %s\n", configLocation)

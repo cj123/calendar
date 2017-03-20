@@ -11,11 +11,14 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/mattn/go-sqlite3"
+	"os/user"
+	"strings"
 )
 
 type Config struct {
-	Database Database `yaml:"database"`
-	Web      Web      `yaml:"web"`
+	Database  Database `yaml:"database"`
+	Web       Web      `yaml:"web"`
+	LogOutput string   `yaml:"log_output"`
 }
 
 type Database struct {
@@ -35,7 +38,13 @@ type Web struct {
 }
 
 func Parse(location string) (*Config, error) {
-	configFile, err := os.Open(location)
+	usr, err := user.Current()
+
+	if err != nil {
+		return nil, err
+	}
+
+	configFile, err := os.Open(strings.Replace(location, "~", usr.HomeDir, -1))
 
 	if err != nil {
 		return nil, err
@@ -53,6 +62,8 @@ func Parse(location string) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	conf.Database.Location = strings.Replace(conf.Database.Location, "~", usr.HomeDir, -1)
 
 	return conf, err
 }

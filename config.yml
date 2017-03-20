@@ -1,15 +1,20 @@
+# where to output logs to.
+# if not set, logs to /dev/null, "stdout" will log to stdout. anything else logs to the given file location
+log_output: stdout
+
 database:
   # dialect can either be "sqlite3" or "mysql"
-  # mysql has more parameters, see config/parse.go for details.
   dialect: sqlite3
-  hostname: localhost
-  port: 3306
-  username: root
-  password: abcd1234
-  database: calendar
 
   # where to store the calendar database.
-  location: ./cal-db.db
+  location: ~/.myCal.db
+
+  # mysql extra config opts
+  # hostname: localhost
+  # port: 3306
+  # username: root
+  # password: abcd1234
+  # database: calendar
 
 web:
   address: 0.0.0.0
@@ -17,4 +22,4 @@ web:
 
   # location of frontend code. to use inbuilt files (production)
   # comment this line out.
-  static_files: frontend/
+  # static_files: frontend/
