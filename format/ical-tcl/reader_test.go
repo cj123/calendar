@@ -97,6 +97,7 @@ func TestCalendarReader_GetVersion(t *testing.T) {
 const cal = `Calendar [v2.0]
 MondayFirst [1]
 DefaultAlarms [0 10 20 30 800]
+IncludeCalendar [/opt/mycal]
 Appt [
 Start [630]
 Length [30]

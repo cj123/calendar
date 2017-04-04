@@ -26,6 +26,8 @@ func (h *Handler) ImportHandler(w http.ResponseWriter, r *http.Request) {
 	file, _, err := r.FormFile("file")
 
 	if err != nil {
+		log.Printf("Calendar upload file error: %s", err)
+
 		http.Error(w, "Bad file", http.StatusBadRequest)
 		return
 	}
@@ -35,6 +37,7 @@ func (h *Handler) ImportHandler(w http.ResponseWriter, r *http.Request) {
 	b, err := ioutil.ReadAll(file)
 
 	if err != nil {
+		log.Printf("Calendar import error: %s", err)
 		http.Error(w, "Could not read calendar: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -42,6 +45,7 @@ func (h *Handler) ImportHandler(w http.ResponseWriter, r *http.Request) {
 	cal, err := format.ReadCalendar(b, format.CalendarType(calendarType))
 
 	if err != nil {
+		log.Printf("Calendar import error: %s", err)
 		http.Error(w, "Could not read calendar: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -72,6 +76,8 @@ func (h *Handler) ImportHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err != nil {
+		log.Printf("Calendar import error: %s", err)
+
 		http.Error(w, "Could not create calendar: "+err.Error(), http.StatusInternalServerError)
 		return
 	}

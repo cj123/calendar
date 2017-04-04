@@ -26,11 +26,11 @@ func init() {
 
 func main() {
 	if importPath == "" {
-		log.Printf("Import path cannot be empty\n")
+		log.Println("Import path cannot be empty")
 		flag.PrintDefaults()
 		os.Exit(1)
 	} else if calendarType != "ics" && calendarType != "ical-tcl" {
-		log.Printf("Select a calendar type, ical-tcl/ics\n")
+		log.Println("Select a calendar type, ical-tcl/ics")
 		flag.PrintDefaults()
 		os.Exit(1)
 	}

@@ -2,6 +2,7 @@ package icaltcl
 
 import (
 	"errors"
+	"log"
 	"strconv"
 
 	"github.com/cj123/calendar/model"
@@ -194,6 +195,9 @@ func (c *CalendarReader) Read() (*model.Calendar, error) {
 
 			break
 		case "IncludeCalendar":
+			log.Println("IncludeCalendar option found but not supported. skipping until ']'")
+
+			c.l.GetUntil(']')
 			break
 
 		case "Hide":

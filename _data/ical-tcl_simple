@@ -1,5 +1,10 @@
 Calendar [v2.0]
 MondayFirst [1]
+PreviewCommand [ghostview]
+PrintCommand [lpr]
+PrintPaperSize [SetA4Paper]
+SoundFile [/home/banach/W1.wav]
+WebBrowser [/bin/firefox]
 Appt [
 Start [870]
 Length [30]
