@@ -63,8 +63,6 @@ func (i *ItemParser) Parse(l Lexer, s interface{}, keyword string, set *dateSet)
 		r := newDateReader(l, set)
 		r.read()
 
-		l.GetUntil(CLOSE_STRING)
-
 		break
 
 	case "Hilite":

@@ -38,3 +38,4 @@ calendar
 static.go
 *.db
 coverage.html
+build

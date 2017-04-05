@@ -63,7 +63,8 @@ Contents [this is a weekday based repetition]
 Remind [1]
 Hilite [always]
 Dates [WeekDays  1 2 3 4 7 Months  1 2 3 4 5 6 7 8 9 10 11 12
-Start 8/10/2016 End
+Start 8/10/2016
+Deleted 5/4/2017 End
 ]
 ]
 Appt [
@@ -94,14 +95,15 @@ Finish 31/12/2016 End
 ]
 ]
 Appt [
-    Start [540]
-    Length [30]
-    Uid [vbox_7f0101_52ac_0]
-    Owner [callum]
-    Contents [Callum says hi]
-    Remind [1]
-    Hilite [always]
-    Dates [Single 20/9/2016 End]
+Start [540]
+Length [30]
+Uid [vbox_7f0101_52ac_0]
+Owner [callum]
+Contents [Callum says hi]
+Remind [1]
+Hilite [always]
+Dates [Single 20/9/2016 End
+]
 ]
 Appt [
 Start [660]
@@ -198,5 +200,16 @@ Contents [This is my note.]
 Remind [1]
 Hilite [always]
 Dates [Single 30/9/2016 End
+]
+]
+Appt [
+Start [780]
+Length [30]
+Uid [eskimo_0_2a30_21]
+Owner [cj]
+Contents [this is a weekday based repetition]
+Remind [1]
+Hilite [always]
+Dates [Single 5/4/2017 End
 ]
 ]

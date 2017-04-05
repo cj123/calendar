@@ -47,14 +47,21 @@ func (r *ItemReader) Read() error {
 		keyword, err := r.l.GetID()
 
 		if err != nil {
-			return err
+			r.l.GetUntil(CLOSE_STRING)
+			r.l.SkipClosingDelimiter()
+			log.Printf("Observed error: %s", err)
+			continue
 		}
 
 		r.l.SkipWhitespace()
 		r.l.SkipOpeningDelimiter()
 
 		// read property
-		r.p.Parse(r.l, r.i, keyword, r.set)
+		err = r.p.Parse(r.l, r.i, keyword, r.set)
+
+		if err != nil {
+			return err
+		}
 
 		r.l.SkipWhitespace()
 		r.l.SkipClosingDelimiter()
@@ -197,7 +204,7 @@ func (c *CalendarReader) Read() (*model.Calendar, error) {
 		case "IncludeCalendar":
 			log.Println("IncludeCalendar option found but not supported. skipping until ']'")
 
-			c.l.GetUntil(']')
+			c.l.GetUntil(CLOSE_STRING)
 			break
 
 		case "Hide":
